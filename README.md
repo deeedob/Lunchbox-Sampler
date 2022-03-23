@@ -5,4 +5,8 @@ We plan to develop and build a **mobile hardware Sampler** with the [Teensy](htt
 ## Steps
 Clone this repo :
 ```# git clone https://github.com/MobileHS/MHS.git ```
+Commit to this repo with :
+``` # git commit -m "<msg>" 
+    # git push origin main
+```
 
