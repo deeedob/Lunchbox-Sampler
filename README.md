@@ -10,6 +10,7 @@ Clone this repo :
 **Pull the repo before working!!**
 ```bash
     # git pull
+ or # git pull --rebase origin
 ```
 
 Commit to this repo with :
