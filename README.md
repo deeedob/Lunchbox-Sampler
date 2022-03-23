@@ -5,11 +5,11 @@ We plan to develop and build a **mobile hardware Sampler** with the [Teensy](htt
 ## How To
 Clone this repo :
 ```bash
-# git clone https://github.com/MobileHS/MHS.git 
+    # git clone https://github.com/MobileHS/MHS.git 
 ```
 **Pull the repo before working!!**
 ```bash
-# git pull
+    # git pull
 ```
 
 Commit to this repo with :
