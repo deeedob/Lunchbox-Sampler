@@ -4,4 +4,5 @@ We plan to develop and build a **mobile hardware Sampler** with the [Teensy](htt
 
 ## Steps
 Clone this repo :
-```# git clone ```
+```# git clone https://github.com/MobileHS/MHS.git ```
+
