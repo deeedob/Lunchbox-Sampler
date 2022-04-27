@@ -4,5 +4,6 @@
     <mapping directory="$PROJECT_DIR$/../.." vcs="Git" />
     <mapping directory="$PROJECT_DIR$/lib/Adafruit-GFX-Library" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/lib/Adafruit_SSD1327" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/Zilch" vcs="Git" />
   </component>
 </project>

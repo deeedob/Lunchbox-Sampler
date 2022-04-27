@@ -1,7 +1,6 @@
 #pragma once
 #include <Arduino.h>
 #include <Wire.h> // for i2c
-#include <define_t40.hpp>
 #include <window.hpp>
 
 namespace mhs {
@@ -16,6 +15,7 @@ namespace mhs {
             CLR_BG = 0x44
         };
         UI( uint8_t w, uint8_t h, TwoWire *twi = &Wire1, int8_t rst_pin = -1, u_int32_t preclk = 400000, uint32_t postclk = 10000);
+
         ~UI();
         void drawMenu();
 

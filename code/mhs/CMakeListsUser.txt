@@ -1,3 +1,7 @@
+# help clion and clang a bit ...
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/mhs-ui)
+
 
 add_custom_target(
     LIBS_UPDATE
@@ -5,7 +9,6 @@ add_custom_target(
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 add_custom_target(
     CLEAN_ALL
