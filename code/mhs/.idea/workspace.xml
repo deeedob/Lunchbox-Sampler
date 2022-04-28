@@ -18,7 +18,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dcb9558c-c484-4501-8875-e7baffb950a8" name="Changes" comment="" />
+    <list default="true" id="7c2617a0-3b9a-453c-99bf-660671f783cb" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -46,10 +46,8 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/platformio.ini" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/CMakeListsPrivate.txt" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/lib/README" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/.platformio/packages/framework-arduinoteensy/libraries/Wire/WireIMXRT.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/.platformio/packages/framework-arduinoteensy/cores/teensy4/yield.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/include/README" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/CMakeLists.txt" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
