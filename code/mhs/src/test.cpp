@@ -47,7 +47,7 @@ Bounce btn_rotary = Bounce(ROTARY_SW, 15);
 
 elapsedMillis ms = 0;
 
-char *wavFiles[]       = {"01.WAV", "02.WAV", "03.WAV", "04.WAV", "05.WAV", "06.WAV"};
+char *wavFiles[] = {"01.WAV", "02.WAV", "03.WAV", "04.WAV", "05.WAV", "06.WAV"};
 int wavNum = 0;
 
 void setup() {
