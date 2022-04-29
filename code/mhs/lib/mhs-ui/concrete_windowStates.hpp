@@ -5,6 +5,7 @@
 
 class WindowFullscreen : public AbstractWindowState
 {
+    friend class Window;
 public:
     std::pair<u_int8_t, u_int8_t> winSize;
     /* create some true Singletons */
@@ -19,8 +20,12 @@ public:
     void draw( Window *win... ) override;
     void exit( Window *win... ) override;
 
+    const std::pair<std::pair<u_int8_t, u_int8_t>, std::pair<u_int8_t, u_int8_t>> &getWindowArea() const;
+    void setWindowArea(const std::pair<std::pair<u_int8_t, u_int8_t>, std::pair<u_int8_t, u_int8_t>> &windowArea );
+
 private:
     WindowFullscreen() = default;
+    std::pair<std::pair<u_int8_t, u_int8_t>, std::pair<u_int8_t, u_int8_t>> windowArea;
 };
 
 class WindowVertSplit : public AbstractWindowState

@@ -1,14 +1,50 @@
 #include "concrete_windowStates.hpp"
 
+std::pair<u_int8_t, u_int8_t> operator+( const std::pair<u_int8_t,u_int8_t>& lhs, const std::pair<uint8_t, uint8_t>& rhs) {
+    return {lhs.first+rhs.first, lhs.second+rhs.second};
+}
+
+std::pair<u_int8_t, u_int8_t>& operator+=( std::pair<u_int8_t,u_int8_t>& lhs, const std::pair<uint8_t, uint8_t>& rhs) {
+    lhs = lhs + rhs;
+    return lhs;
+}
+
 /* ######################## Fullscreen ########################### */
 
 void WindowFullscreen::enter( Window *win... ) {
-
+    win->clearDisplay();
+    win->configs->setActiveWindow({{0,0},{win->width(), win->height()}});
 }
 
 void WindowFullscreen::draw( Window *win... ) {
     /* if delegating */
     //win->setState(WindowFullscreen::getInstance());
+
+    /* get optional arguments for window roundness and the iterations */
+    va_list args;
+    va_start(args, win);
+    u_int8_t roundness = static_cast<u_int8_t>(va_arg(args, int));
+    u_int8_t iterations = static_cast<u_int8_t>(va_arg(args, int));
+    va_end(args);
+    if (iterations <= 0) iterations = 1;
+
+    std::pair<u_int8_t, u_int8_t> globPad = win->configs->getWinPadding();
+    std::pair<std::pair<u_int8_t,u_int8_t>, std::pair<u_int8_t,u_int8_t>> activeWindow = win->configs->getActiveWindow();
+
+
+    std::pair<u_int8_t, u_int8_t> _p = globPad;
+    u_int8_t x0,y0,x1,y1;
+    for(int i = 0; i < iterations; i++) {
+        x0 = activeWindow.first.first + _p.first;
+        y0 = activeWindow.first.second + _p.second;
+        x1 = activeWindow.second.first - 2*_p.first;
+        y1 = activeWindow.second.second - 2*_p.second;
+        win->drawRoundRect( x0, y0, x1, y1,
+                            roundness,
+                            static_cast<uint16_t>(WindowConfigs::CLRS::CLR_ACTIVE)); // only one window to draw it active
+                            _p += globPad;
+    }
+    this->setWindowArea( {{x0, y0},{x1, y1}});
 }
 
 void WindowFullscreen::exit( Window *win... ) {
@@ -25,6 +61,14 @@ bool WindowFullscreen::equals( const AbstractWindowState &b ) {
         return true;
     }
     return false;
+}
+
+const std::pair<std::pair<u_int8_t, u_int8_t>, std::pair<u_int8_t, u_int8_t>> &WindowFullscreen::getWindowArea() const {
+    return windowArea;
+}
+
+void WindowFullscreen::setWindowArea(const std::pair<std::pair<u_int8_t, u_int8_t>, std::pair<u_int8_t, u_int8_t>> &windowArea ) {
+    WindowFullscreen::windowArea = windowArea;
 }
 
 /* ######################## Vertical Split ########################### */

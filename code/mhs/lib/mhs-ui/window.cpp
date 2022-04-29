@@ -1,7 +1,11 @@
 #include "window.hpp"
 #include "concrete_windowStates.hpp"
 
-Window::Window(const int16_t& w,const int16_t& h) : Adafruit_GFX(w, h) {
+Window::Window( const uint8_t &bpp, const uint16_t &w,
+                const u_int16_t &h, TwoWire *twi,
+                const int8_t &rst_pin, const uint32_t &clkDuring,
+                const uint32_t &clkAfter )
+                : Adafruit_GrayOLED(bpp, w, h, twi, rst_pin, clkDuring, clkAfter) {
     currentState = &WindowFullscreen::getInstance();
     configs = &WindowConfigs::getInstance();
 }
@@ -16,20 +20,35 @@ void Window::draw() {
     currentState->draw(this);
 }
 
+
 /*
  * if the current window doesn't equal Fullscreen we have 2 Windows available
  * accessed through the variadic arg
  */
-void Window::print( const String &s... ) {
+void Window::printToWindow( const String &s... ) {
     if( !getCurrentState()->equals(WindowFullscreen::getInstance())) {
         va_list args;
         va_start(args, s);
 
         bool firstWin = va_arg(args, bool);
 
+
         va_end(args);
 
     }
+}
+
+
+inline GFXglyph *pgm_read_glyph_ptr(const GFXfont *gfxFont, uint8_t c) {
+#ifdef __AVR__
+    return &(((GFXglyph *)pgm_read_pointer(&gfxFont->glyph))[c]);
+#else
+    // expression in __AVR__ section may generate "dereferencing type-punned
+    // pointer will break strict-aliasing rules" warning In fact, on other
+    // platforms (such as STM32) there is no need to do this pointer magic as
+    // program memory may be read in a usual way So expression may be simplified
+    return gfxFont->glyph + c;
+#endif //__AVR__
 }
 
 /* print / println -> write(u_int8, u_int8) -> write(u_int8) */
@@ -40,7 +59,7 @@ size_t Window::write( uint8_t c ) {
             cursor_x = configs->getWinPadding().first;               // Reset x to zero,
             cursor_y += (textsize_y * 8) + configs->getWinPadding().second; // advance y one line
         } else if (c != '\r') {       // Ignore carriage returns
-            if (wrap && ((cursor_x + textsize_x * 6) > ( configs.)) { // Off right?
+            if (wrap && ((cursor_x + textsize_x * 6) > ( 50))){ // Off right?
                 cursor_x = 0;                                       // Reset x to zero,
                 cursor_y += textsize_y * 8; // advance y one line
             }
