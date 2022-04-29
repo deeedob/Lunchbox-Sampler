@@ -10,6 +10,8 @@ set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_C_COMPILER_WORKS 1)
 set(CMAKE_CXX_COMPILER_WORKS 1)
 
+include_directories(lib/mhs-ui)
+
 project("mhs" C CXX)
 
 include(CMakeListsPrivate.txt)

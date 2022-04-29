@@ -1,13 +1,14 @@
 #include "window.hpp"
 #include "concrete_windowStates.hpp"
 
-Window::Window( const uint8_t &bpp, const uint16_t &w,
-                const u_int16_t &h, TwoWire *twi,
-                const int8_t &rst_pin, const uint32_t &clkDuring,
-                const uint32_t &clkAfter )
-                : Adafruit_GrayOLED(bpp, w, h, twi, rst_pin, clkDuring, clkAfter) {
+
+Window::Window( uint8_t w, uint8_t h, TwoWire *twi, int8_t rst_pin,
+                uint32_t preclk, uint32_t postclk )
+        : Adafruit_SSD1327(w, h, twi, rst_pin, preclk, postclk)
+{
     currentState = &WindowFullscreen::getInstance();
     configs = &WindowConfigs::getInstance();
+    configs->setActiveWindow({{0,0},{this->width(), this->height()}});
 }
 
 void Window::setState( AbstractWindowState &newState ) {
@@ -16,8 +17,8 @@ void Window::setState( AbstractWindowState &newState ) {
     currentState->enter(this);
 }
 
-void Window::draw() {
-    currentState->draw(this);
+void Window::draw(u_int8_t roundness, u_int8_t iteration) {
+    currentState->draw(this, roundness, iteration);
 }
 
 

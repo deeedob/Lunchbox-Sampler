@@ -28,9 +28,9 @@ void WindowFullscreen::draw( Window *win... ) {
     va_end(args);
     if (iterations <= 0) iterations = 1;
 
+    /* get global window settings */
     std::pair<u_int8_t, u_int8_t> globPad = win->configs->getWinPadding();
     std::pair<std::pair<u_int8_t,u_int8_t>, std::pair<u_int8_t,u_int8_t>> activeWindow = win->configs->getActiveWindow();
-
 
     std::pair<u_int8_t, u_int8_t> _p = globPad;
     u_int8_t x0,y0,x1,y1;
@@ -39,12 +39,14 @@ void WindowFullscreen::draw( Window *win... ) {
         y0 = activeWindow.first.second + _p.second;
         x1 = activeWindow.second.first - 2*_p.first;
         y1 = activeWindow.second.second - 2*_p.second;
+
         win->drawRoundRect( x0, y0, x1, y1,
                             roundness,
                             static_cast<uint16_t>(WindowConfigs::CLRS::CLR_ACTIVE)); // only one window to draw it active
                             _p += globPad;
     }
     this->setWindowArea( {{x0, y0},{x1, y1}});
+    win->display(); // render to screen
 }
 
 void WindowFullscreen::exit( Window *win... ) {
