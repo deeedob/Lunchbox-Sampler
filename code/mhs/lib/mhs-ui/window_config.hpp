@@ -1,7 +1,7 @@
 
 #pragma once
 
-class window
+class window_config
 {
 
 };
