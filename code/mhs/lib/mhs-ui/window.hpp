@@ -19,11 +19,11 @@ public:
             uint32_t postclk = 100000 );
 
     inline AbstractWindowState* getCurrentState() const { return currentState; }
-    void draw(u_int8_t roundness = 2, u_int8_t iteration = 1);
+    void draw(u_int8_t roundness = 2, u_int8_t iteration = 1, float split = 0.5f);
     void printToWindow( const String &s...);
     void setState(AbstractWindowState& newState);
 
-    size_t write( uint8_t uint8 ) override;
+    size_t write( uint8_t c ) override;
 
     /* TODO: is this possible when using in concrete_windowState? */
     //friend std::pair<u_int8_t, u_int8_t> operator+( const std::pair<u_int8_t,u_int8_t>& lhs, const std::pair<uint8_t, uint8_t>& rhs);

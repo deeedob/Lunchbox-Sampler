@@ -17,8 +17,8 @@ void Window::setState( AbstractWindowState &newState ) {
     currentState->enter(this);
 }
 
-void Window::draw(u_int8_t roundness, u_int8_t iteration) {
-    currentState->draw(this, roundness, iteration);
+void Window::draw(u_int8_t roundness, u_int8_t iteration, float split) {
+        currentState->draw(this, roundness, iteration); // it's fullscreen
 }
 
 
