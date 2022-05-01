@@ -52,7 +52,6 @@ int wavNum = 0;
 
 void setup() {
     Serial.begin(9600);
-    Wire.begin();
     SD.begin(SDCARD_CS_PIN);
     pinMode(ROTARY_SW, INPUT_PULLUP);
 
@@ -143,8 +142,7 @@ void testDisplay() {
     Serial.println("Testing the SSD1327 OLED in I2C mode");
     if ( ! display.begin(0x3D) ) {
         Serial.println("Unable to initialize OLED");
-        exit(1);
-        //while (1) yield();
+        while (1) yield();
     }
     display.clearDisplay();
     //display.setFont(&FreeMono12pt7b);
