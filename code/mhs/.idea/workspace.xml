@@ -18,7 +18,13 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c2617a0-3b9a-453c-99bf-660671f783cb" name="Changes" comment="" />
+    <list default="true" id="760d1796-c2e8-4b40-988b-f1b056103581" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/serialmonitor_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/serialmonitor_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Zilch/examples/memory_layout/memory_layout.ino" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Zilch/examples/memory_layout/memory_layout.ino" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Zilch/examples/restart_task/restart_task.ino" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Zilch/examples/restart_task/restart_task.ino" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/test.cpp" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -91,11 +97,6 @@
     </key>
   </component>
   <component name="RunManager" selected="PlatformIO.PlatformIO Upload">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="BUILD_ALL" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="mhs" TARGET_NAME="BUILD_ALL" CONFIG_NAME="teensy40">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -126,6 +127,11 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="PlatformIO Debug" type="platformio" factoryName="PlatformIO Debug" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="mhs" TARGET_NAME="Debug" CONFIG_NAME="teensy40" RUN_TARGET_PROJECT_NAME="mhs" RUN_TARGET_NAME="Debug">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -150,7 +156,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="dcb9558c-c484-4501-8875-e7baffb950a8" name="Changes" comment="" />
+      <changelist id="760d1796-c2e8-4b40-988b-f1b056103581" name="Changes" comment="" />
       <created>1649157312418</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -181,6 +187,7 @@
       <workItem from="1650936230212" duration="1982000" />
       <workItem from="1650969218303" duration="10871000" />
       <workItem from="1650989938571" duration="4727000" />
+      <workItem from="1651409134004" duration="523000" />
     </task>
     <servers />
   </component>
