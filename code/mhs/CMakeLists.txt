@@ -10,18 +10,6 @@ set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_C_COMPILER_WORKS 1)
 set(CMAKE_CXX_COMPILER_WORKS 1)
 
-include_directories(lib/mhs-ui)
-add_executable( test
-        lib/mhs-ui/concrete_windowStates.cpp
-        lib/mhs-ui/concrete_windowStates.hpp
-        lib/mhs-ui/abstract_windowState.hpp
-        lib/mhs-ui/window.hpp
-        lib/mhs-ui/window.cpp
-        lib/mhs-ui/window_config.cpp
-        lib/mhs-ui/window_config.hpp
-        )
-
-
 project("mhs" C CXX)
 
 include(CMakeListsPrivate.txt)

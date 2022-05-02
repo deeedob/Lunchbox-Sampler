@@ -1,12 +1,14 @@
 #include "window_config.hpp"
 
+std::pair<WindowConfigs::CLRS, WindowConfigs::CLRS> WindowConfigs::activeWinClrs = {CLRS::CLR_ACTIVE, CLRS::CLR_PASSIVE};
+
 WindowConfigs::WindowConfigs(
         const std::pair<u_int8_t, u_int8_t> &winPad,
         const std::pair<u_int8_t, u_int8_t> &txtPad,
-        const std::pair<CLRS, CLRS> &activeWinClrs,
         const std::pair<std::pair<u_int8_t, u_int8_t>, std::pair<u_int8_t, u_int8_t>> &activeWindow )
-        : winPadding(std::move(winPad)), txtPadding(std::move(txtPad)), activeWinClrs(std::move(activeWinClrs)), activeWindow(std::move(activeWindow))
-        { }
+        : winPadding(std::move(winPad)), txtPadding(std::move(txtPad)), activeWindow(std::move(activeWindow))
+{
+}
 
 WindowConfigs &WindowConfigs::getInstance() {
     static WindowConfigs* instance = new WindowConfigs();
@@ -29,7 +31,7 @@ void WindowConfigs::setTxtPadding(const std::pair<u_int8_t, u_int8_t> &txtPaddin
     WindowConfigs::txtPadding = txtPadding;
 }
 
-const std::pair<WindowConfigs::CLRS, WindowConfigs::CLRS> &WindowConfigs::getActiveWinClrs() const {
+const std::pair<WindowConfigs::CLRS, WindowConfigs::CLRS> &WindowConfigs::getActiveWinClrs() {
     return activeWinClrs;
 }
 
@@ -37,10 +39,19 @@ void WindowConfigs::setActiveWinClrs( const std::pair<CLRS, CLRS> &activeWinClrs
     WindowConfigs::activeWinClrs = activeWinClrs;
 }
 
-const std::pair<std::pair<u_int8_t, u_int8_t>, std::pair<u_int8_t, u_int8_t>> &WindowConfigs::getActiveWindow() const {
+const WindowConfigs::winArea &WindowConfigs::getActiveWindow() const {
     return activeWindow;
 }
 
-void WindowConfigs::setActiveWindow(const std::pair<std::pair<u_int8_t, u_int8_t>, std::pair<u_int8_t, u_int8_t>> &activeWindow ) {
+void WindowConfigs::setActiveWindow(const WindowConfigs::winArea &activeWindow ) {
     WindowConfigs::activeWindow = activeWindow;
 }
+
+const WindowConfigs::winArea &WindowConfigs::getActiveTxtWindow() const {
+    return activeTxtWindow;
+}
+
+void WindowConfigs::setActiveTxtWindow(const WindowConfigs::winArea &activeTxtWindow ) {
+    WindowConfigs::activeTxtWindow = activeTxtWindow;
+}
+

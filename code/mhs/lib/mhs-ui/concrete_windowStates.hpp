@@ -20,8 +20,9 @@ public:
     void draw( Window *win... ) override;
     void exit( Window *win... ) override;
 
-    const winArea &getWindowArea() const;
     void setWindowArea(const winArea &windowArea );
+
+    winArea getWindowTextArea( bool b ) const override;
 
 private:
     WindowFullscreen() = default;
@@ -31,7 +32,7 @@ private:
 class WindowVertSplit : public AbstractWindowState
 {
 public:
-    std::pair<u_int8_t, u_int8_t> winUpSize, winDownSize;
+    using winArea = std::pair<std::pair<u_int8_t, u_int8_t>, std::pair<u_int8_t, u_int8_t>>; //custom type for this pairing madness
 
     WindowVertSplit(WindowFullscreen const&) = delete;
     WindowVertSplit(WindowVertSplit &&) = delete;
@@ -40,12 +41,19 @@ public:
     static AbstractWindowState& getInstance();
 
     bool equals( const AbstractWindowState &b ) override;
+    winArea getWindowTextArea( bool b ) const override;
     void enter( Window *win... ) override;
     void draw( Window *win... ) override;
+
+    void setWindowAreaUp( const winArea &windowAreaUp );
+
+    void setWindowAreaDown( const winArea &windowAreaDown );
+
     void exit( Window *win... ) override;
 
 private:
     WindowVertSplit() = default;
+    winArea windowAreaUp, windowAreaDown;
 };
 
 class WindowHorizSplit : public AbstractWindowState
@@ -59,16 +67,16 @@ public:
     WindowHorizSplit& operator=(WindowHorizSplit &&) = delete;
     static AbstractWindowState& getInstance();
 
+    winArea getWindowTextArea( bool b ) const override;
+
+    void setWindowAreaLeft( const winArea &windowAreaLeft );
+
+    void setWindowAreaRight( const winArea &windowAreaRight );
 
     bool equals( const AbstractWindowState &b ) override;
     void enter( Window *win... ) override;
     void draw( Window *win... ) override;
     void exit( Window *win... ) override;
-
-    const winArea &getWindowAreaLeft() const;
-    void setWindowAreaLeft( const winArea &windowAreaLeft );
-    const winArea &getWindowAreaRight() const;
-    void setWindowAreaRight( const winArea &windowAreaRight );
 
 private:
     WindowHorizSplit() = default;

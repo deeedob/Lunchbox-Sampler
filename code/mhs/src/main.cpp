@@ -8,7 +8,6 @@ void setup() {
     Serial.begin(9600);
     Serial.println("<<<<<<<<<<<<Begin program>>>>>>>>>>>>>>>");
 
-    Wire1.begin();
     if(!w.begin(SSD1327_I2C_ADDRESS)) {
         Serial.println("unable to init OLED");
         exit(1);
@@ -21,10 +20,21 @@ void setup() {
 
     w.configs->setWinPadding({4,4});
     w.draw(2,2);
-    Serial.println("Here");
-    //w.setState(WindowHorizSplit::getInstance());
-    //w.draw(4,1);
+    w.clearDisplay();
+    w.setState(WindowHorizSplit::getInstance());
+    w.draw(2,3,0.6f);
+    w.setTextColor(0xff);
+    w.printToWindow("ASDKFJSADKFJSAKDFJSAKDFJSAKDJFKSAaſ&ÆẞDJASDÆẞÐAẞASDFSDFASDFASDFSDFDJFSDASDFASDFSDAFSADFSADFSDFSDAFSADFSADFSDAFSDFSDF", true);
+    w.display();
+
+    //w.printToWindow("sdkajfhsakdjfhskjdfhskldjfhskdjhfksldjhfksajdhfksdjhf", false);
+
 }
 
 void loop() {
+    w.draw(4,2, static_cast<float>(analogRead(POT0))/1024.f);
+    w.printToWindow("ASDKFJSADKFJSAKDFJSAKDFJSAKDJFKSAaſ&ÆẞDJASDÆẞÐAẞASDFSDFASDFASDFSDFDJFSDASDFASDFSDAFSADFSADFSDFSDAFSADFSADFSDAFSDFSDF", true);
+    w.display();
+    w.clearDisplay();
+    delay(200);
 }
