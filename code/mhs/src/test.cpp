@@ -52,6 +52,7 @@ int wavNum = 0;
 
 void setup() {
     Serial.begin(9600);
+    Serial.println("_________begin hw-test___________-");
     SD.begin(SDCARD_CS_PIN);
     pinMode(ROTARY_SW, INPUT_PULLUP);
 
@@ -147,7 +148,6 @@ void testDisplay() {
     display.clearDisplay();
     //display.setFont(&FreeMono12pt7b);
 
-
     // test display functionality
     display.setTextSize(2);
     display.setTextWrap(true);
@@ -173,6 +173,7 @@ void testDisplay() {
     display.display();
     delay(1000);
     display.clearDisplay();
+    display.fillScreen(0xFF);
 
     ms = 0;
     for( int i = 0; i < display.height() ; i++ ) {
