@@ -43,7 +43,7 @@ void WindowFullscreen::draw( Window *win... ) {
         win->drawRoundRect( x0, y0, x1, y1,
                             roundness,
                             static_cast<uint16_t>(WindowConfigs::CLRS::CLR_ACTIVE)); // only one window to draw it active
-                            _p += globPad;
+        _p += globPad;
     }
     this->setWindowArea( {{x0, y0},{x1, y1}});
     win->display(); // render to screen
@@ -142,8 +142,8 @@ void WindowVertSplit::draw( Window *win... ) {
 
         checkRange();
     }
-    this->setWindowAreaUp({{win1x0, win1y0},{ win1Width, win1Height}});
-    this->setWindowAreaDown({{win2x0, win2y0},{ win2Width, win2Height}});
+    this->setWindowAreaUp({{win1x0, win1y0},{ win1x0 + win1Width, win1y0 + win1Height}});
+    this->setWindowAreaDown({{win2x0, win2y0},{ win2x0 + win2Width, win2y0 + win2Height}});
     win->display(); // render to screen
 }
 
@@ -167,13 +167,11 @@ WindowVertSplit::winArea WindowVertSplit::getWindowTextArea( bool b ) const {
     return b ? windowAreaDown : windowAreaUp;
 }
 
-void WindowVertSplit::setWindowAreaUp(
-        const WindowVertSplit::winArea &windowAreaUp ) {
+void WindowVertSplit::setWindowAreaUp( const WindowVertSplit::winArea &windowAreaUp ) {
     WindowVertSplit::windowAreaUp = windowAreaUp;
 }
 
-void WindowVertSplit::setWindowAreaDown(
-        const WindowVertSplit::winArea &windowAreaDown ) {
+void WindowVertSplit::setWindowAreaDown( const WindowVertSplit::winArea &windowAreaDown ) {
     WindowVertSplit::windowAreaDown = windowAreaDown;
 }
 
@@ -248,8 +246,8 @@ void WindowHorizSplit::draw( Window *win... ) {
 
         checkRange();
     }
-    this->setWindowAreaLeft({{win1x0, win1y0},{ win1Width + win1x0, win1Height }});
-    this->setWindowAreaRight({{win2x0, win2y0},{ win->width() - globPad.first * iterations, win2Height}});
+    this->setWindowAreaLeft({{win1x0, win1y0},{ win1x0 + win1Width, win1y0 + win1Height}});
+    this->setWindowAreaRight({{win2x0, win2y0},{ win2x0 + win2Width, win2y0 + win2Height}});
     win->display(); // render to screen
 }
 
@@ -258,7 +256,7 @@ void WindowHorizSplit::exit( Window *win... ) {
 
 AbstractWindowState& WindowHorizSplit::getInstance() {
     static WindowHorizSplit singleton;
-    return singleton
+    return singleton;
 }
 
 bool WindowHorizSplit::equals( const AbstractWindowState &b ) {

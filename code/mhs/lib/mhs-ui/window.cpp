@@ -26,7 +26,6 @@ void Window::draw(u_int8_t roundness, u_int8_t iteration, float split) {
     }
 }
 
-
 /*
  * if the current window doesn't equal Fullscreen we have 2 Windows available
  * accessed through the variadic arg
@@ -34,20 +33,27 @@ void Window::draw(u_int8_t roundness, u_int8_t iteration, float split) {
 void Window::printToWindow( const String &s... ) {
     va_list args;
     va_start(args, s);
-    int secondWin = static_cast<int>(va_arg(args, int));
+    bool secondWin = static_cast<bool>(va_arg(args, int));
     va_end(args);
 
     configs->setActiveTxtWindow(currentState->getWindowTextArea(secondWin));
-    Serial.println("____________");
+
     Serial.println(configs->getActiveTxtWindow().first.first);
     Serial.println(configs->getActiveTxtWindow().first.second);
     Serial.println(configs->getActiveTxtWindow().second.first);
     Serial.println(configs->getActiveTxtWindow().second.second);
-    Serial.println(secondWin);
+    Serial.println();
 
-    cursor_x = configs->getActiveTxtWindow().first.first;
-    cursor_y = configs->getActiveTxtWindow().first.second;
+    cursor_x = configs->getActiveTxtWindow().first.first + configs->getTxtPadding().first;
+    cursor_y = configs->getActiveTxtWindow().first.second + configs->getTxtPadding().second;
+    /* TODO: add bg color*/
+    if ( secondWin )
+        setTextColor(static_cast<u_int8_t>(configs->getActiveWinClrs().second), static_cast<u_int8_t>(0x00));
+    else
+        setTextColor(static_cast<u_int8_t>(configs->getActiveWinClrs().first), static_cast<u_int8_t>(0x00));
+
     println(s);
+
 }
 
 
@@ -65,25 +71,23 @@ inline GFXglyph *pgm_read_glyph_ptr(const GFXfont *gfxFont, uint8_t c) {
 
 /* print / println -> write(u_int8, u_int8) -> write(u_int8) */
 size_t Window::write( uint8_t c ) {
-    if ( (cursor_y > configs->getActiveTxtWindow().second.second + textsize_y * 8) || (cursor_x > configs->getActiveTxtWindow().second.first))
-        return 1;
     if (!gfxFont) { // 'Classic' built-in font
 
         if (c == '\n') {              // Newline?
             cursor_x = configs->getActiveTxtWindow().first.first + configs->getTxtPadding().first;               // Reset x to zero,
-            cursor_y += (textsize_y * 8); // advance y one line
+            cursor_y += (textsize_y * 8) + configs->getTxtSpacing().second; // advance y one line
         } else if (c != '\r') {       // Ignore carriage returns
-            if (wrap && ((cursor_x + textsize_x * 6) > ( configs->getActiveTxtWindow().second.first))){ // Off right?
+            if (wrap && ((cursor_x + textsize_x * 6) > ( configs->getActiveTxtWindow().second.first - configs->getTxtPadding().first))){ // Off right?
                 cursor_x = configs->getActiveTxtWindow().first.first + configs->getTxtPadding().first;                                       // Reset x to zero,
-                cursor_y += textsize_y * 8; // advance y one line
+                cursor_y += (textsize_y * 8) + configs->getTxtSpacing().second; // advance y one line
             }
-            if ( (cursor_y > configs->getActiveTxtWindow().second.second + textsize_y * 8) || (cursor_x > configs->getActiveTxtWindow().second.first))
+            if ( cursor_y + (textsize_y * 8) > configs->getActiveTxtWindow().second.second - configs->getTxtPadding().second)
                 return 1;
             drawChar(cursor_x, cursor_y, c, textcolor, textbgcolor, textsize_x,
                      textsize_y);
-            cursor_x += textsize_x * 6; // Advance x one char
+            cursor_x += (textsize_x * 6) + configs->getTxtSpacing().first; // Advance x one char
         }
-
+    /* TODO: implement custom font */
     } else { // Custom font
         if (c == '\n') {
             cursor_x = 0;

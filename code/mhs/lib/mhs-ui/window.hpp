@@ -5,6 +5,7 @@
 #include <Adafruit_SSD1327.h>
 #include <gfxfont.h>
 #include <cstdarg>
+#include <memory>
 #include <typeinfo>
 
 class AbstractWindowState;
@@ -23,13 +24,10 @@ public:
     void printToWindow( const String &s...);
     void setState(AbstractWindowState& newState);
 
-    size_t write( uint8_t c ) override;
-
     /* TODO: is this possible when using in concrete_windowState? */
     //friend std::pair<u_int8_t, u_int8_t> operator+( const std::pair<u_int8_t,u_int8_t>& lhs, const std::pair<uint8_t, uint8_t>& rhs);
     //friend std::pair<u_int8_t, u_int8_t>& operator+=( std::pair<u_int8_t,u_int8_t>& lhs, const std::pair<uint8_t, uint8_t>& rhs);
-
-
 private:
+    size_t write( uint8_t c ) override;
     AbstractWindowState* currentState;
 };
