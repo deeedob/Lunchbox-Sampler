@@ -1,0 +1,90 @@
+\hypertarget{concrete__windowStates_8hpp_source}{}\doxysection{concrete\+\_\+window\+States.\+hpp}
+\label{concrete__windowStates_8hpp_source}\index{lib/mhs-\/ui/concrete\_windowStates.hpp@{lib/mhs-\/ui/concrete\_windowStates.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#include <cstdarg>}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include "{}abstract\_windowState.hpp"{}}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include "{}window.hpp"{}}}
+\DoxyCodeLine{5 }
+\DoxyCodeLine{6 \textcolor{keyword}{class }\mbox{\hyperlink{classWindowFullscreen}{WindowFullscreen}} : \textcolor{keyword}{public} \mbox{\hyperlink{classAbstractWindowState}{AbstractWindowState}}}
+\DoxyCodeLine{7 \{}
+\DoxyCodeLine{8 }
+\DoxyCodeLine{9 \textcolor{keyword}{public}:}
+\DoxyCodeLine{10     \textcolor{keyword}{using} winArea = std::pair<std::pair<u\_int8\_t, u\_int8\_t>, std::pair<u\_int8\_t, u\_int8\_t>>; \textcolor{comment}{//custom type for this pairing madness}}
+\DoxyCodeLine{11     \textcolor{comment}{/* create some true Singletons */}}
+\DoxyCodeLine{12     \mbox{\hyperlink{classWindowFullscreen}{WindowFullscreen}}(\mbox{\hyperlink{classWindowFullscreen}{WindowFullscreen}} \textcolor{keyword}{const}\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{13     \mbox{\hyperlink{classWindowFullscreen}{WindowFullscreen}}(\mbox{\hyperlink{classWindowFullscreen}{WindowFullscreen}} \&\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{14     \mbox{\hyperlink{classWindowFullscreen}{WindowFullscreen}}\& operator=(\mbox{\hyperlink{classWindowFullscreen}{WindowFullscreen}} \textcolor{keyword}{const}\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{15     \mbox{\hyperlink{classWindowFullscreen}{WindowFullscreen}}\& operator=(\mbox{\hyperlink{classWindowFullscreen}{WindowFullscreen}} \&\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{16     \textcolor{keyword}{static} \mbox{\hyperlink{classAbstractWindowState}{AbstractWindowState}}\& getInstance();}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18     \textcolor{keywordtype}{bool} equals( \textcolor{keyword}{const} \mbox{\hyperlink{classAbstractWindowState}{AbstractWindowState}} \&b ) \textcolor{keyword}{override};}
+\DoxyCodeLine{19     \textcolor{keywordtype}{void} enter( \mbox{\hyperlink{classWindow}{Window}} *win... ) \textcolor{keyword}{override};}
+\DoxyCodeLine{20     \textcolor{keywordtype}{void} draw( \mbox{\hyperlink{classWindow}{Window}} *win... ) \textcolor{keyword}{override};}
+\DoxyCodeLine{21     \textcolor{keywordtype}{void} exit( \mbox{\hyperlink{classWindow}{Window}} *win... ) \textcolor{keyword}{override};}
+\DoxyCodeLine{22 }
+\DoxyCodeLine{23     \textcolor{keywordtype}{void} setWindowArea(\textcolor{keyword}{const} winArea \&windowArea );}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{25     winArea getWindowTextArea( \textcolor{keywordtype}{bool} b ) \textcolor{keyword}{const override};}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{27 \textcolor{keyword}{private}:}
+\DoxyCodeLine{28     \mbox{\hyperlink{classWindowFullscreen}{WindowFullscreen}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{29     winArea windowArea;}
+\DoxyCodeLine{30 \};}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{32 \textcolor{keyword}{class }\mbox{\hyperlink{classWindowVertSplit}{WindowVertSplit}} : \textcolor{keyword}{public} \mbox{\hyperlink{classAbstractWindowState}{AbstractWindowState}}}
+\DoxyCodeLine{33 \{}
+\DoxyCodeLine{34 \textcolor{keyword}{public}:}
+\DoxyCodeLine{35     \textcolor{keyword}{using} winArea = std::pair<std::pair<u\_int8\_t, u\_int8\_t>, std::pair<u\_int8\_t, u\_int8\_t>>; \textcolor{comment}{//custom type for this pairing madness}}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37     \mbox{\hyperlink{classWindowVertSplit}{WindowVertSplit}}(\mbox{\hyperlink{classWindowFullscreen}{WindowFullscreen}} \textcolor{keyword}{const}\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{38     \mbox{\hyperlink{classWindowVertSplit}{WindowVertSplit}}(\mbox{\hyperlink{classWindowVertSplit}{WindowVertSplit}} \&\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{39     \mbox{\hyperlink{classWindowVertSplit}{WindowVertSplit}}\& operator=(\mbox{\hyperlink{classWindowVertSplit}{WindowVertSplit}} \textcolor{keyword}{const}\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{40     \mbox{\hyperlink{classWindowVertSplit}{WindowVertSplit}}\& operator=(\mbox{\hyperlink{classWindowVertSplit}{WindowVertSplit}} \&\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{41     \textcolor{keyword}{static} \mbox{\hyperlink{classAbstractWindowState}{AbstractWindowState}}\& getInstance();}
+\DoxyCodeLine{42 }
+\DoxyCodeLine{43     \textcolor{keywordtype}{bool} equals( \textcolor{keyword}{const} \mbox{\hyperlink{classAbstractWindowState}{AbstractWindowState}} \&b ) \textcolor{keyword}{override};}
+\DoxyCodeLine{44     winArea getWindowTextArea( \textcolor{keywordtype}{bool} b ) \textcolor{keyword}{const override};}
+\DoxyCodeLine{45     \textcolor{keywordtype}{void} enter( \mbox{\hyperlink{classWindow}{Window}} *win... ) \textcolor{keyword}{override};}
+\DoxyCodeLine{46     \textcolor{keywordtype}{void} draw( \mbox{\hyperlink{classWindow}{Window}} *win... ) \textcolor{keyword}{override};}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{48     \textcolor{keywordtype}{void} setWindowAreaUp( \textcolor{keyword}{const} winArea \&windowAreaUp );}
+\DoxyCodeLine{49 }
+\DoxyCodeLine{50     \textcolor{keywordtype}{void} setWindowAreaDown( \textcolor{keyword}{const} winArea \&windowAreaDown );}
+\DoxyCodeLine{51 }
+\DoxyCodeLine{52     \textcolor{keywordtype}{void} exit( \mbox{\hyperlink{classWindow}{Window}} *win... ) \textcolor{keyword}{override};}
+\DoxyCodeLine{53 }
+\DoxyCodeLine{54 \textcolor{keyword}{private}:}
+\DoxyCodeLine{55     \mbox{\hyperlink{classWindowVertSplit}{WindowVertSplit}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{56     winArea windowAreaUp, windowAreaDown;}
+\DoxyCodeLine{57 \};}
+\DoxyCodeLine{58 }
+\DoxyCodeLine{59 \textcolor{keyword}{class }\mbox{\hyperlink{classWindowHorizSplit}{WindowHorizSplit}} : \textcolor{keyword}{public} \mbox{\hyperlink{classAbstractWindowState}{AbstractWindowState}}}
+\DoxyCodeLine{60 \{}
+\DoxyCodeLine{61 \textcolor{keyword}{public}:}
+\DoxyCodeLine{62     \textcolor{keyword}{using} winArea = std::pair<std::pair<u\_int8\_t, u\_int8\_t>, std::pair<u\_int8\_t, u\_int8\_t>>; \textcolor{comment}{//custom type for this pairing madness}}
+\DoxyCodeLine{63 }
+\DoxyCodeLine{64     \mbox{\hyperlink{classWindowHorizSplit}{WindowHorizSplit}}(\mbox{\hyperlink{classWindowHorizSplit}{WindowHorizSplit}} \textcolor{keyword}{const}\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{65     \mbox{\hyperlink{classWindowHorizSplit}{WindowHorizSplit}}(\mbox{\hyperlink{classWindowHorizSplit}{WindowHorizSplit}} \&\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{66     \mbox{\hyperlink{classWindowHorizSplit}{WindowHorizSplit}}\& operator=(\mbox{\hyperlink{classWindowHorizSplit}{WindowHorizSplit}} \textcolor{keyword}{const}\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{67     \mbox{\hyperlink{classWindowHorizSplit}{WindowHorizSplit}}\& operator=(\mbox{\hyperlink{classWindowHorizSplit}{WindowHorizSplit}} \&\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{68     \textcolor{keyword}{static} \mbox{\hyperlink{classAbstractWindowState}{AbstractWindowState}}\& getInstance();}
+\DoxyCodeLine{69 }
+\DoxyCodeLine{70     winArea getWindowTextArea( \textcolor{keywordtype}{bool} b ) \textcolor{keyword}{const override};}
+\DoxyCodeLine{71 }
+\DoxyCodeLine{72     \textcolor{keywordtype}{void} setWindowAreaLeft( \textcolor{keyword}{const} winArea \&windowAreaLeft );}
+\DoxyCodeLine{73 }
+\DoxyCodeLine{74     \textcolor{keywordtype}{void} setWindowAreaRight( \textcolor{keyword}{const} winArea \&windowAreaRight );}
+\DoxyCodeLine{75 }
+\DoxyCodeLine{76     \textcolor{keywordtype}{bool} equals( \textcolor{keyword}{const} \mbox{\hyperlink{classAbstractWindowState}{AbstractWindowState}} \&b ) \textcolor{keyword}{override};}
+\DoxyCodeLine{77     \textcolor{keywordtype}{void} enter( \mbox{\hyperlink{classWindow}{Window}} *win... ) \textcolor{keyword}{override};}
+\DoxyCodeLine{78     \textcolor{keywordtype}{void} draw( \mbox{\hyperlink{classWindow}{Window}} *win... ) \textcolor{keyword}{override};}
+\DoxyCodeLine{79     \textcolor{keywordtype}{void} exit( \mbox{\hyperlink{classWindow}{Window}} *win... ) \textcolor{keyword}{override};}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{81 \textcolor{keyword}{private}:}
+\DoxyCodeLine{82     \mbox{\hyperlink{classWindowHorizSplit}{WindowHorizSplit}}() = \textcolor{keywordflow}{default};}
+\DoxyCodeLine{83     winArea windowAreaLeft, windowAreaRight;}
+\DoxyCodeLine{84 \};}
+
+\end{DoxyCode}

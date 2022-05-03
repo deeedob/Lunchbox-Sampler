@@ -10,6 +10,7 @@ class AbstractWindowState
 public:
     using winArea = std::pair<std::pair<u_int8_t, u_int8_t>, std::pair<u_int8_t, u_int8_t>>; //custom type for this pairing madness
     /* create variadic functions */
+
     virtual void enter(Window* win, ...) = 0;
     virtual void draw(Window* win, ...) = 0;
     virtual void exit(Window* win, ...) = 0;

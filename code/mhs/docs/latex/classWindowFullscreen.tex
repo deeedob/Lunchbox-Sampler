@@ -1,0 +1,80 @@
+\hypertarget{classWindowFullscreen}{}\doxysection{Window\+Fullscreen Class Reference}
+\label{classWindowFullscreen}\index{WindowFullscreen@{WindowFullscreen}}
+Inheritance diagram for Window\+Fullscreen\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classWindowFullscreen}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classWindowFullscreen_a1023995a1aa1ff594740beb35792c661}\label{classWindowFullscreen_a1023995a1aa1ff594740beb35792c661}} 
+using {\bfseries win\+Area} = std\+::pair$<$ std\+::pair$<$ u\+\_\+int8\+\_\+t, u\+\_\+int8\+\_\+t $>$, std\+::pair$<$ u\+\_\+int8\+\_\+t, u\+\_\+int8\+\_\+t $>$ $>$
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classWindowFullscreen_a306d1fd1c4fc8f7f6d9c97fe4bd5fd32}\label{classWindowFullscreen_a306d1fd1c4fc8f7f6d9c97fe4bd5fd32}} 
+{\bfseries Window\+Fullscreen} (\mbox{\hyperlink{classWindowFullscreen}{Window\+Fullscreen}} const \&)=delete
+\item 
+\mbox{\Hypertarget{classWindowFullscreen_a33f2530a31317c809f63c53dc8fd828c}\label{classWindowFullscreen_a33f2530a31317c809f63c53dc8fd828c}} 
+{\bfseries Window\+Fullscreen} (\mbox{\hyperlink{classWindowFullscreen}{Window\+Fullscreen}} \&\&)=delete
+\item 
+\mbox{\Hypertarget{classWindowFullscreen_ad76bb990cab1022e360145a9eb504df5}\label{classWindowFullscreen_ad76bb990cab1022e360145a9eb504df5}} 
+\mbox{\hyperlink{classWindowFullscreen}{Window\+Fullscreen}} \& {\bfseries operator=} (\mbox{\hyperlink{classWindowFullscreen}{Window\+Fullscreen}} const \&)=delete
+\item 
+\mbox{\Hypertarget{classWindowFullscreen_a6e6fc123b292d912a2f8c3d52acede57}\label{classWindowFullscreen_a6e6fc123b292d912a2f8c3d52acede57}} 
+\mbox{\hyperlink{classWindowFullscreen}{Window\+Fullscreen}} \& {\bfseries operator=} (\mbox{\hyperlink{classWindowFullscreen}{Window\+Fullscreen}} \&\&)=delete
+\item 
+bool \mbox{\hyperlink{classWindowFullscreen_aba53d569a94f58863f908aa9a1c3dbe3}{equals}} (const \mbox{\hyperlink{classAbstractWindowState}{Abstract\+Window\+State}} \&b) override
+\item 
+\mbox{\Hypertarget{classWindowFullscreen_ae129ed6047a28de5dd48f5766b1c134b}\label{classWindowFullscreen_ae129ed6047a28de5dd48f5766b1c134b}} 
+void {\bfseries enter} (\mbox{\hyperlink{classWindow}{Window}} $\ast$win...) override
+\item 
+\mbox{\Hypertarget{classWindowFullscreen_afd6f6d96bb1175ade4289aeb47bf5a21}\label{classWindowFullscreen_afd6f6d96bb1175ade4289aeb47bf5a21}} 
+void {\bfseries draw} (\mbox{\hyperlink{classWindow}{Window}} $\ast$win...) override
+\item 
+\mbox{\Hypertarget{classWindowFullscreen_aaaf8a7e7f755c3e84e0f5834d87449e3}\label{classWindowFullscreen_aaaf8a7e7f755c3e84e0f5834d87449e3}} 
+void {\bfseries exit} (\mbox{\hyperlink{classWindow}{Window}} $\ast$win...) override
+\item 
+\mbox{\Hypertarget{classWindowFullscreen_a4d7ab105860bab4a72af1c93fd081fab}\label{classWindowFullscreen_a4d7ab105860bab4a72af1c93fd081fab}} 
+void {\bfseries set\+Window\+Area} (const win\+Area \&window\+Area)
+\item 
+win\+Area \mbox{\hyperlink{classWindowFullscreen_afb396de9215ca6b2646e12fc84b570ab}{get\+Window\+Text\+Area}} (bool b) const override
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classWindowFullscreen_a08b3fa001bbf2456ea1d7c2b5f197633}\label{classWindowFullscreen_a08b3fa001bbf2456ea1d7c2b5f197633}} 
+static \mbox{\hyperlink{classAbstractWindowState}{Abstract\+Window\+State}} \& {\bfseries get\+Instance} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classWindowFullscreen_aba53d569a94f58863f908aa9a1c3dbe3}\label{classWindowFullscreen_aba53d569a94f58863f908aa9a1c3dbe3}} 
+\index{WindowFullscreen@{WindowFullscreen}!equals@{equals}}
+\index{equals@{equals}!WindowFullscreen@{WindowFullscreen}}
+\doxysubsubsection{\texorpdfstring{equals()}{equals()}}
+{\footnotesize\ttfamily bool Window\+Fullscreen\+::equals (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classAbstractWindowState}{Abstract\+Window\+State}} \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classAbstractWindowState}{Abstract\+Window\+State}}.
+
+\mbox{\Hypertarget{classWindowFullscreen_afb396de9215ca6b2646e12fc84b570ab}\label{classWindowFullscreen_afb396de9215ca6b2646e12fc84b570ab}} 
+\index{WindowFullscreen@{WindowFullscreen}!getWindowTextArea@{getWindowTextArea}}
+\index{getWindowTextArea@{getWindowTextArea}!WindowFullscreen@{WindowFullscreen}}
+\doxysubsubsection{\texorpdfstring{getWindowTextArea()}{getWindowTextArea()}}
+{\footnotesize\ttfamily Abstract\+Window\+State\+::win\+Area Window\+Fullscreen\+::get\+Window\+Text\+Area (\begin{DoxyParamCaption}\item[{bool}]{b }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classAbstractWindowState}{Abstract\+Window\+State}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+lib/mhs-\/ui/concrete\+\_\+window\+States.\+hpp\item 
+lib/mhs-\/ui/concrete\+\_\+window\+States.\+cpp\end{DoxyCompactItemize}
