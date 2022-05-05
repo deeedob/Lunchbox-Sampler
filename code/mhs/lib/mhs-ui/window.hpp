@@ -44,6 +44,7 @@ public:
     //friend std::pair<u_int8_t, u_int8_t> operator+( const std::pair<u_int8_t,u_int8_t>& lhs, const std::pair<uint8_t, uint8_t>& rhs);
     //friend std::pair<u_int8_t, u_int8_t>& operator+=( std::pair<u_int8_t,u_int8_t>& lhs, const std::pair<uint8_t, uint8_t>& rhs);
 private:
+
     size_t write( uint8_t c ) override;
     AbstractWindowState* currentState;
 };
