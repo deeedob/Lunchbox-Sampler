@@ -2,6 +2,13 @@
 #include <ADC.h>
 #include <ADC_Module.h>
 #include <Bounce.h>
+#include <TeensyThreads.h>
+#include <ui.hpp>
+
+volatile int count = 0;
+void thread_func(int data) {
+    while(1) count += data;
+}
 
 Bounce b(ROTARY_SW, 10);
 ADC adc;
@@ -47,6 +54,8 @@ void setup() {
         Serial.println("adc1 interrupted!");
     });
 
+
+    threads.addThread(thread_func, 1);
 }
 
 void loop() {
@@ -57,4 +66,6 @@ void loop() {
     /* interrupts disabled for critical section */
     //Serial.println("uninterruptable code");
     //interrupts(); // re-enable interrupts
+    Serial.println(count);
+    delay(500);
 }
