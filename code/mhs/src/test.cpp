@@ -7,6 +7,7 @@
 #include <Adafruit_SSD1327.h>
 #include <Encoder.h>
 #include <Bounce.h>
+#include <MIDI.h>
 
 #define POT0 A0
 #define POT1 A1
@@ -32,6 +33,10 @@
 void testDisplay();
 void testMicrophone();
 void playFile(const char *filename);
+
+
+MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDI);
+
 
 //Testing Flash
 void DeleteAllFilesOnFlash();
@@ -101,17 +106,22 @@ void setup() {
     Step 5: ListFiles;
     Step 6: DeleteAllFilesOnFlash */
 
-    //DeleteAllFilesOnFlash();
-    //rawHardwareTestFlash();
-    //DeleteAllFilesOnFlash();
+    /*DeleteAllFilesOnFlash();
+    rawHardwareTestFlash();
+    DeleteAllFilesOnFlash();
     testSDtoSPI();
     ListFiles();
-    DeleteAllFilesOnFlash();
+    DeleteAllFilesOnFlash();*/
 
     //testDisplay();
     //testMicrophone();
 
-    Serial.println("Testing the SD-Card");
+    //MIDI Test
+    MIDI.begin(MIDI_CHANNEL_OMNI);
+    Serial.begin(57600);
+    Serial.println("MIDI Input Test");
+
+    /*Serial.println("Testing the SD-Card");
     if (!(SD.begin(SDCARD_CS_PIN))) {
         // stop here, but print a message
         Serial.println("Unable to access the SD card.  Program halted.");
@@ -125,18 +135,18 @@ void setup() {
     // reset audio resource usage stats.
     // useful if tracking max usage in main program
     AudioProcessorUsageMaxReset();
-    AudioMemoryUsageMaxReset();
+    AudioMemoryUsageMaxReset();*/
 
 }
 void inBounds(int& id) {
     if(id < 0) id = 5;
     else if(id > 5) id = 0;
 }
-
+unsigned long t=0;
 long oldPos = -999;
 void loop() {
 
-    /*long newPos = enc.read();
+   /* long newPos = enc.read();
     delay(100);
     if(newPos != oldPos) {
         if(newPos > oldPos) {
@@ -172,7 +182,37 @@ void loop() {
 
     float volume = (float) analogRead(POT0);
     audioShield.volume(volume/1024.f);*/
-
+    int type, note, velocity, channel, d1, d2;
+    if (MIDI.read()) {                    // Is there a MIDI message incoming ?
+        byte type = MIDI.getType();
+        switch (type) {
+            case midi::NoteOn:
+                note = MIDI.getData1();
+                velocity = MIDI.getData2();
+                channel = MIDI.getChannel();
+                if (velocity > 0) {
+                    Serial.println(String("Note On:  ch=") + channel + ", note=" + note + ", velocity=" + velocity);
+                } else {
+                    Serial.println(String("Note Off: ch=") + channel + ", note=" + note);
+                }
+                break;
+            case midi::NoteOff:
+                note = MIDI.getData1();
+                velocity = MIDI.getData2();
+                channel = MIDI.getChannel();
+                Serial.println(String("Note Off: ch=") + channel + ", note=" + note + ", velocity=" + velocity);
+                break;
+            default:
+                d1 = MIDI.getData1();
+                d2 = MIDI.getData2();
+                Serial.println(String("Message, type=") + type + ", data = " + d1 + " " + d2);
+        }
+        t = millis();
+    }
+    if (millis() - t > 10000) {
+        t += 10000;
+        Serial.println("(inactivity)");
+    }
 }
 
 void testMicrophone() {
