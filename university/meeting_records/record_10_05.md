@@ -1,4 +1,4 @@
-# meeting record of Tue, 10.05.22, 09.30 -
+# meeting record of Tue, 10.05.22, 09.30 - 13.30
 
 - Making of project execution presentation
 - David reviewed meeting records for upload
