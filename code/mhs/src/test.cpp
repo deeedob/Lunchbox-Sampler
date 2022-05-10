@@ -24,7 +24,7 @@
 
 #define MIDI_IN 0
 #define MIDI_OUT 1
-
+const int channel = 1;
 #define SDCARD_CS_PIN   10
 #define SDCARD_MOSI_PIN 11
 #define SDCARD_SCK_PIN  13
@@ -33,7 +33,7 @@
 void testDisplay();
 void testMicrophone();
 void playFile(const char *filename);
-
+void testMidi();
 
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDI);
 
@@ -130,6 +130,7 @@ void setup() {
     AudioMemory(8);
     audioShield.enable();
     audioShield.volume(0.5);
+    audioShield.volume(0.5);
 
 
     // reset audio resource usage stats.
@@ -145,44 +146,64 @@ void inBounds(int& id) {
 unsigned long t=0;
 long oldPos = -999;
 void loop() {
+    /*----------------loop------------------*/
+    //void testDisplay();
+    //void testMicrophone();
+    testMidi();
+}
 
-   /* long newPos = enc.read();
-    delay(100);
-    if(newPos != oldPos) {
-        if(newPos > oldPos) {
-            inBounds(++wavNum);
-            Serial.println(wavNum);
-        }
-        else {
-            inBounds(--wavNum);
-            Serial.println(wavNum);
-        }
-        oldPos = newPos;
-        playSdWav.stop();
-        Serial.print("Start playing: ");
-        Serial.println(wavFiles[wavNum]);
-        playSdWav.play(wavFiles[wavNum]);
-        delay(10);
+void loopExecute(){
 
-        display.clearDisplay();
-        display.setTextSize(2);
-        display.setTextWrap(false);
-        display.setTextColor(SSD1327_WHITE);
+    long newPos = enc.read();
+     delay(100);
+     if(newPos != oldPos) {
+         if(newPos > oldPos) {
+             inBounds(++wavNum);
+             Serial.println(wavNum);
+         }
+         else {
+             inBounds(--wavNum);
+             Serial.println(wavNum);
+         }
+         oldPos = newPos;
+         playSdWav.stop();
+         Serial.print("Start playing: ");
+         Serial.println(wavFiles[wavNum]);
+         playSdWav.play(wavFiles[wavNum]);
+         delay(10);
 
-        display.setCursor(display.width()/2-50,display.height()/2);
-        display.write(wavFiles[wavNum]);
-        display.display();
+         display.clearDisplay();
+         display.setTextSize(2);
+         display.setTextWrap(false);
+         display.setTextColor(SSD1327_WHITE);
+
+         display.setCursor(display.width()/2-50,display.height()/2);
+         display.write(wavFiles[wavNum]);
+         display.display();
+     }
+     btn_rotary.update();
+     if(btn_rotary.fallingEdge()) {
+         playSdWav.togglePlayPause();
+         testMicrophone();
+     }
+     if(btn_rotary.risingEdge()) playSdWav.togglePlayPause();
+
+     float volume = (float) analogRead(POT0);
+     audioShield.volume(volume/1024.f);
+
+}
+void testMidi(){
+    Serial.println("midi");
+    int note;
+    for (note=10; note <= 127; note++) {
+        MIDI.sendNoteOn(note, 100, channel);
+        delay(200);
+        MIDI.sendNoteOff(note, 100, channel);
     }
-    btn_rotary.update();
-    if(btn_rotary.fallingEdge()) {
-        playSdWav.togglePlayPause();
-        testMicrophone();
-    }
-    if(btn_rotary.risingEdge()) playSdWav.togglePlayPause();
+    delay(2000);
 
-    float volume = (float) analogRead(POT0);
-    audioShield.volume(volume/1024.f);*/
-    int type, note, velocity, channel, d1, d2;
+    int type, velocity, channel, d1, d2;
+
     if (MIDI.read()) {                    // Is there a MIDI message incoming ?
         byte type = MIDI.getType();
         switch (type) {
@@ -214,7 +235,6 @@ void loop() {
         Serial.println("(inactivity)");
     }
 }
-
 void testMicrophone() {
     Serial.println("Testing the AOM-6738P-R mic");
     Serial.println("use your headphones!");
@@ -377,7 +397,7 @@ void testSDtoSPI()
         Serial.println(length);
 
         // check if this file is already on the Flash chip
-        if (SerialFlash.exists(filename)) {
+        if (SerialFlashChip::exists(filename)) {
             Serial.println(F("  already exists on the Flash chip"));
             SerialFlashFile ff = SerialFlash.open(filename);
             if (ff && ff.size() == f.size()) {
