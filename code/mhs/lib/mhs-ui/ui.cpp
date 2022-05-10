@@ -1,4 +1,5 @@
 #include "ui.hpp"
+#include "concrete_windowStates.hpp"
 
 UI::UI( u_int8_t w, u_int8_t h, TwoWire *wire, int8_t display_rst, uint32_t preclk, uint32_t postclk )
 {
@@ -32,12 +33,18 @@ void UI::start() {
     display->clearDisplay();
     display->setTextWrap(true);
 
-    display->configs->setTxtPadding({8,28});
-    display->configs->setWinPadding({4,4});
+    display->configs->setTxtPadding({8, 12});
+    display->configs->setTxtSpacing({4, 4});
+    display->configs->setWinPadding({4, 4});
 
+    display->setState(WindowFullscreen::getInstance());
     display->draw(10,4);
     display->setTextSize(3);
     display->printToWindow("MHS", false);
+    display->display();
 
+    display->setState(WindowVertSplit::getInstance());
+    display->printToWindow("Writing to the Left Screen", false);
+    display->printToWindow("Writing to the Right Screen", true);
     display->display();
 }
