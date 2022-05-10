@@ -10,10 +10,13 @@ void thread_func(int data) {
     while(1) count += data;
 }
 
-Bounce b(ROTARY_SW, 10);
+Bounce b(ROTARY_SW, 2);
 ADC adc;
 int pinAstateCurrent = LOW;
 int pinAStateLast = pinAstateCurrent;
+
+FLASHMEM void flashfunc() {};
+DMAMEM void otherMem(){};
 
 void setup() {
     Serial.begin(9600);
@@ -48,24 +51,34 @@ void setup() {
     }, CHANGE);
 
     adc.adc0->enableInterrupts([]() {
+
         Serial.println("adc0 interrupted!");
+        adc.adc1->startSingleRead(POT0);
+        Serial.println(adc.adc1->readSingle());
     });
     adc.adc1->enableInterrupts([]() {
         Serial.println("adc1 interrupted!");
     });
-
-
-    threads.addThread(thread_func, 1);
+    pinMode(POT0, INPUT_PULLDOWN);
+    //adc.setConversionSpeed(ADC_CONVERSION_SPEED::HIGH_SPEED); // change the conversion speed
+    //adc.setSamplingSpeed(ADC_SAMPLING_SPEED::HIGH_SPEED); // change the sampling speed
+    //adc.enableCompare(1.0/3.3*adc.getMaxValue(ADC_1), 0, ADC_1); // measurement will be ready if value < 1.0V
+    adc.adc1->enableCompareRange( 250, 700 , true, true); // ready if value lies out of [1.0,2.0] V
+    Serial.println("End setup");
+    //threads.addThread(thread_func, 1);
 }
 
+int value;
 void loop() {
 
     // A0 = 14 A1= 15,A3=24, A4=26
+    adc.analogRead(POT0, ADC_1);
+    adc.adc1->analogReadContinuous(POT0);
+    if (adc.adc1->isComplete()) {
 
+    }
     //noInterrupts();
     /* interrupts disabled for critical section */
     //Serial.println("uninterruptable code");
     //interrupts(); // re-enable interrupts
-    Serial.println(count);
-    delay(500);
 }
