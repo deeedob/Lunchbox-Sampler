@@ -33,6 +33,7 @@ void UI::start() {
     display->clearDisplay();
     display->setTextWrap(true);
 
+<<<<<<< HEAD
     display->configs->setWinPadding({4,4});
     display->setState(WindowHorizSplit::getInstance());
 
@@ -41,6 +42,20 @@ void UI::start() {
     display->printToWindow("MHSjghjgjhkgkjhgjhkgkhjgjhkgjhgjhghuoxhdfuidhfipshdfiusdf", false);
     display->printToWindow("MHSjghjgjhkgkjhgjhkgkhjgjhkgjhgjhghuoxhdfuidhfipshdfiusdf", true);
 
+=======
+    display->configs->setTxtPadding({8, 12});
+    display->configs->setTxtSpacing({4, 4});
+    display->configs->setWinPadding({4, 4});
 
+    display->setState(WindowFullscreen::getInstance());
+    display->draw(10,4);
+    display->setTextSize(3);
+    display->printToWindow("MHS", false);
+    display->display();
+>>>>>>> 7a204ae8c6ac44d8ba4ca6c7e6ba64afbb93ba91
+
+    display->setState(WindowVertSplit::getInstance());
+    display->printToWindow("Writing to the Left Screen", false);
+    display->printToWindow("Writing to the Right Screen", true);
     display->display();
 }
