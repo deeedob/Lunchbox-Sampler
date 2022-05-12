@@ -4,6 +4,8 @@
 #include <Bounce.h>
 #include <TeensyThreads.h>
 #include <ui.hpp>
+#include <define_t40.hpp>
+#include <inputHandler.hpp>
 
 Bounce b(ROTARY_SW, 2);
 ADC adc;
