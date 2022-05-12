@@ -70,7 +70,6 @@ void setup() {
 
 int value;
 void loop() {
-
     Serial.println("POT0");
     adc.adc1->startContinuous(POT0);
     delay(1000);
@@ -78,7 +77,6 @@ void loop() {
     Serial.println("POT1");
     adc.adc1->startContinuous(POT1);
     delay(1000);
-
     adc.adc1->stopContinuous();
 
     Serial.println("POT2");
@@ -88,5 +86,5 @@ void loop() {
     Serial.println("POT3");
     adc.adc0->startContinuous(POT3);
     delay(1000);
-    adc.adc1->stopContinuous();
+    adc.adc0->stopContinuous();
 }
