@@ -13,6 +13,10 @@ int pinAStateLast = pinAstateCurrent;
 FLASHMEM void flashfunc() {};
 DMAMEM void otherMem(){};
 
+
+u_int16_t delta = 10;
+u_int16_t old_pot0, old_pot1, old_pot2, old_pot3;
+
 void setup() {
     Serial.begin(9600);
     Serial.println("<<<<<<<<<<<<Begin program>>>>>>>>>>>>>>>");
@@ -45,11 +49,10 @@ void setup() {
         pinAStateLast = pinAstateCurrent;
     }, CHANGE);
 
-    u_int16_t delta = 10;
-    u_int16_t old_val = 0;
 
     adc.adc1->enableInterrupts([]() {
         Serial.println(adc.adc1->analogReadContinuous());
+        old_pot0 = adc.adc1->analogReadContinuous();
     });
 
     adc.adc0->enableInterrupts([]() {
@@ -60,20 +63,28 @@ void setup() {
     adc.adc0->enableCompareRange( 100, 800 , true, true); // ready if value lies out of [1.0,2.0] V
     //adc.adc1->enableCompare(500, true);
 
+    //old_pot0 = analogRead(POT0);
+    //old_pot1 = analogRead(POT1);
+    //old_pot2 = analogRead(POT2);
+    //old_pot3 = analogRead(POT3);
     /* continues */
     adc.adc1->analogReadContinuous();
     adc.adc0->analogReadContinuous();
     /* single */
-    //adc.adc1->startSingleRead(POT0);
-    //adc.adc1->readSingle();
+    adc.adc1->startSingleRead(POT0);
+    old_pot0 = adc.adc1->readSingle();
+    Serial.print("POT 0 INIT VAL : ");
+    Serial.println(old_pot0);
 }
 
 int value;
 void loop() {
+    adc.adc1->enableCompareRange( old_pot0 - delta, old_pot0 + delta , false, true);
     Serial.println("POT0");
     adc.adc1->startContinuous(POT0);
     delay(1000);
-
+    adc.adc1->disableCompare();
+/*
     Serial.println("POT1");
     adc.adc1->startContinuous(POT1);
     delay(1000);
@@ -87,4 +98,5 @@ void loop() {
     adc.adc0->startContinuous(POT3);
     delay(1000);
     adc.adc0->stopContinuous();
+    */
 }
