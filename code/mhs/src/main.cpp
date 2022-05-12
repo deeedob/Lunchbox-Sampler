@@ -15,7 +15,8 @@ DMAMEM void otherMem(){};
 
 
 u_int16_t delta = 10;
-u_int16_t old_pot0, old_pot1, old_pot2, old_pot3;
+u_int8_t cnt = 0;
+std::array<u_int16_t, 2> old_positions;
 
 void setup() {
     Serial.begin(9600);
@@ -51,8 +52,11 @@ void setup() {
 
 
     adc.adc1->enableInterrupts([]() {
-        Serial.println(adc.adc1->analogReadContinuous());
-        old_pot0 = adc.adc1->analogReadContinuous();
+        old_positions[cnt%2] = adc.adc1->analogReadContinuous();
+        Serial.print("ADC1: ");
+        Serial.print(adc.adc1->analogReadContinuous());
+        Serial.print(" POTI ");
+        Serial.println(cnt%2);
     });
 
     adc.adc0->enableInterrupts([]() {
@@ -72,31 +76,57 @@ void setup() {
     adc.adc0->analogReadContinuous();
     /* single */
     adc.adc1->startSingleRead(POT0);
-    old_pot0 = adc.adc1->readSingle();
+    old_positions[0] = adc.adc1->readSingle();
     Serial.print("POT 0 INIT VAL : ");
-    Serial.println(old_pot0);
+    Serial.println(old_positions[0]);
+
+    adc.adc1->startSingleRead(POT1);
+    old_positions[1] = adc.adc1->readSingle();
+    Serial.print("POT 1 INIT VAL : ");
+    Serial.println(old_positions[1]);
+/*
+    adc.adc1->startSingleRead(POT2);
+    old_positions[2] = adc.adc1->readSingle();
+    Serial.print("POT 2 INIT VAL : ");
+    Serial.println(old_positions[2]);
+
+    adc.adc1->startSingleRead(POT3);
+    old_positions[3] = adc.adc1->readSingle();
+    Serial.print("POT 03INIT VAL : ");
+    Serial.println(old_positions[3]);
+    */
 }
 
-int value;
 void loop() {
-    adc.adc1->enableCompareRange( old_pot0 - delta, old_pot0 + delta , false, true);
+
     Serial.println("POT0");
+    adc.adc1->enableCompareRange( old_positions[0] - delta, old_positions[0] + delta , false, true);
     adc.adc1->startContinuous(POT0);
     delay(1000);
     adc.adc1->disableCompare();
-/*
+    cnt++;
+
     Serial.println("POT1");
+    adc.adc1->enableCompareRange( old_positions[1] - delta, old_positions[1] + delta , false, true);
     adc.adc1->startContinuous(POT1);
     delay(1000);
     adc.adc1->stopContinuous();
-
-    Serial.println("POT2");
-    adc.adc0->startContinuous(POT2);
-    delay(1000);
+    adc.adc1->disableCompare();
+    cnt++;
 
     Serial.println("POT3");
-    adc.adc0->startContinuous(POT3);
+    adc.adc1->enableCompareRange( old_positions[1] - delta, old_positions[1] + delta , false, true);
+    adc.adc1->startContinuous(POT2);
+    delay(1000);
+    adc.adc1->stopContinuous();
+    adc.adc1->disableCompare();
+    cnt++;
+
+    Serial.println("POT2");
+    adc.adc0->enableCompareRange( old_positions[1] - delta, old_positions[1] + delta , false, true);
+    adc.adc0->startContinuous(POT2);
     delay(1000);
     adc.adc0->stopContinuous();
-    */
+    adc.adc0->disableCompare();
+    cnt++;
 }
