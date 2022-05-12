@@ -1,0 +1,83 @@
+\hypertarget{classWindowHorizSplit}{}\doxysection{Window\+Horiz\+Split Class Reference}
+\label{classWindowHorizSplit}\index{WindowHorizSplit@{WindowHorizSplit}}
+Inheritance diagram for Window\+Horiz\+Split\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classWindowHorizSplit}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classWindowHorizSplit_aca37f726985d4af91533664e5c1780fe}\label{classWindowHorizSplit_aca37f726985d4af91533664e5c1780fe}} 
+using {\bfseries win\+Area} = std\+::pair$<$ std\+::pair$<$ u\+\_\+int8\+\_\+t, u\+\_\+int8\+\_\+t $>$, std\+::pair$<$ u\+\_\+int8\+\_\+t, u\+\_\+int8\+\_\+t $>$ $>$
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classWindowHorizSplit_acff92ec2ccf57715a0d7c9180acc9929}\label{classWindowHorizSplit_acff92ec2ccf57715a0d7c9180acc9929}} 
+{\bfseries Window\+Horiz\+Split} (\mbox{\hyperlink{classWindowHorizSplit}{Window\+Horiz\+Split}} const \&)=delete
+\item 
+\mbox{\Hypertarget{classWindowHorizSplit_adf997854ccde6730593be132b4e0a2c4}\label{classWindowHorizSplit_adf997854ccde6730593be132b4e0a2c4}} 
+{\bfseries Window\+Horiz\+Split} (\mbox{\hyperlink{classWindowHorizSplit}{Window\+Horiz\+Split}} \&\&)=delete
+\item 
+\mbox{\Hypertarget{classWindowHorizSplit_a2f758e519b96c6979ce1b5cd20717a63}\label{classWindowHorizSplit_a2f758e519b96c6979ce1b5cd20717a63}} 
+\mbox{\hyperlink{classWindowHorizSplit}{Window\+Horiz\+Split}} \& {\bfseries operator=} (\mbox{\hyperlink{classWindowHorizSplit}{Window\+Horiz\+Split}} const \&)=delete
+\item 
+\mbox{\Hypertarget{classWindowHorizSplit_a996a8b9c362220e33340c8414f73999d}\label{classWindowHorizSplit_a996a8b9c362220e33340c8414f73999d}} 
+\mbox{\hyperlink{classWindowHorizSplit}{Window\+Horiz\+Split}} \& {\bfseries operator=} (\mbox{\hyperlink{classWindowHorizSplit}{Window\+Horiz\+Split}} \&\&)=delete
+\item 
+win\+Area \mbox{\hyperlink{classWindowHorizSplit_a83b65da3b2a1302fa3a1804be8aef338}{get\+Window\+Text\+Area}} (bool b) const override
+\item 
+\mbox{\Hypertarget{classWindowHorizSplit_a340f37fc9165f33f4e381fa6a29cdbef}\label{classWindowHorizSplit_a340f37fc9165f33f4e381fa6a29cdbef}} 
+void {\bfseries set\+Window\+Area\+Left} (const win\+Area \&window\+Area\+Left)
+\item 
+\mbox{\Hypertarget{classWindowHorizSplit_a434fae613b9a8a6351bd0456f4577331}\label{classWindowHorizSplit_a434fae613b9a8a6351bd0456f4577331}} 
+void {\bfseries set\+Window\+Area\+Right} (const win\+Area \&window\+Area\+Right)
+\item 
+bool \mbox{\hyperlink{classWindowHorizSplit_aa941e107b86ae9a35a8a3a4162426f7f}{equals}} (const \mbox{\hyperlink{classAbstractWindowState}{Abstract\+Window\+State}} \&b) override
+\item 
+\mbox{\Hypertarget{classWindowHorizSplit_aeb69206effa5ad7bc915f20dc926cc4e}\label{classWindowHorizSplit_aeb69206effa5ad7bc915f20dc926cc4e}} 
+void {\bfseries enter} (\mbox{\hyperlink{classWindow}{Window}} $\ast$win...) override
+\item 
+\mbox{\Hypertarget{classWindowHorizSplit_acf8da84082ecb39ff2ce4f3197496313}\label{classWindowHorizSplit_acf8da84082ecb39ff2ce4f3197496313}} 
+void {\bfseries draw} (\mbox{\hyperlink{classWindow}{Window}} $\ast$win...) override
+\item 
+\mbox{\Hypertarget{classWindowHorizSplit_a7fc7eec225ca36cc5a31be7af8665125}\label{classWindowHorizSplit_a7fc7eec225ca36cc5a31be7af8665125}} 
+void {\bfseries exit} (\mbox{\hyperlink{classWindow}{Window}} $\ast$win...) override
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classWindowHorizSplit_ab42015d67b87eb06e8f57b4563e2e865}\label{classWindowHorizSplit_ab42015d67b87eb06e8f57b4563e2e865}} 
+static \mbox{\hyperlink{classAbstractWindowState}{Abstract\+Window\+State}} \& {\bfseries get\+Instance} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classWindowHorizSplit_aa941e107b86ae9a35a8a3a4162426f7f}\label{classWindowHorizSplit_aa941e107b86ae9a35a8a3a4162426f7f}} 
+\index{WindowHorizSplit@{WindowHorizSplit}!equals@{equals}}
+\index{equals@{equals}!WindowHorizSplit@{WindowHorizSplit}}
+\doxysubsubsection{\texorpdfstring{equals()}{equals()}}
+{\footnotesize\ttfamily bool Window\+Horiz\+Split\+::equals (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classAbstractWindowState}{Abstract\+Window\+State}} \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classAbstractWindowState}{Abstract\+Window\+State}}.
+
+\mbox{\Hypertarget{classWindowHorizSplit_a83b65da3b2a1302fa3a1804be8aef338}\label{classWindowHorizSplit_a83b65da3b2a1302fa3a1804be8aef338}} 
+\index{WindowHorizSplit@{WindowHorizSplit}!getWindowTextArea@{getWindowTextArea}}
+\index{getWindowTextArea@{getWindowTextArea}!WindowHorizSplit@{WindowHorizSplit}}
+\doxysubsubsection{\texorpdfstring{getWindowTextArea()}{getWindowTextArea()}}
+{\footnotesize\ttfamily Abstract\+Window\+State\+::win\+Area Window\+Horiz\+Split\+::get\+Window\+Text\+Area (\begin{DoxyParamCaption}\item[{bool}]{b }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classAbstractWindowState}{Abstract\+Window\+State}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+lib/mhs-\/ui/concrete\+\_\+window\+States.\+hpp\item 
+lib/mhs-\/ui/concrete\+\_\+window\+States.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,5 @@
+## Disassembled the AkaiMPD18
+
+Main processor : STM32 32-bit Arm Cortex MCUs <br>
+
+Operational Amplifiers : LMV324M 

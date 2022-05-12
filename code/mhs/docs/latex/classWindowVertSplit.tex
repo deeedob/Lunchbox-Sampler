@@ -1,0 +1,83 @@
+\hypertarget{classWindowVertSplit}{}\doxysection{Window\+Vert\+Split Class Reference}
+\label{classWindowVertSplit}\index{WindowVertSplit@{WindowVertSplit}}
+Inheritance diagram for Window\+Vert\+Split\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classWindowVertSplit}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classWindowVertSplit_abce86eaf71945041885ff5a21d8a8c2c}\label{classWindowVertSplit_abce86eaf71945041885ff5a21d8a8c2c}} 
+using {\bfseries win\+Area} = std\+::pair$<$ std\+::pair$<$ u\+\_\+int8\+\_\+t, u\+\_\+int8\+\_\+t $>$, std\+::pair$<$ u\+\_\+int8\+\_\+t, u\+\_\+int8\+\_\+t $>$ $>$
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classWindowVertSplit_a54fe0134fb74db57cf444b516fb588ad}\label{classWindowVertSplit_a54fe0134fb74db57cf444b516fb588ad}} 
+{\bfseries Window\+Vert\+Split} (\mbox{\hyperlink{classWindowFullscreen}{Window\+Fullscreen}} const \&)=delete
+\item 
+\mbox{\Hypertarget{classWindowVertSplit_a53740ae8e56ee67aa0f4fff90e46d28c}\label{classWindowVertSplit_a53740ae8e56ee67aa0f4fff90e46d28c}} 
+{\bfseries Window\+Vert\+Split} (\mbox{\hyperlink{classWindowVertSplit}{Window\+Vert\+Split}} \&\&)=delete
+\item 
+\mbox{\Hypertarget{classWindowVertSplit_ae39bb035464a991c5f3f91c03f807baa}\label{classWindowVertSplit_ae39bb035464a991c5f3f91c03f807baa}} 
+\mbox{\hyperlink{classWindowVertSplit}{Window\+Vert\+Split}} \& {\bfseries operator=} (\mbox{\hyperlink{classWindowVertSplit}{Window\+Vert\+Split}} const \&)=delete
+\item 
+\mbox{\Hypertarget{classWindowVertSplit_a0e17327bce965b0f0527a78c63d09f08}\label{classWindowVertSplit_a0e17327bce965b0f0527a78c63d09f08}} 
+\mbox{\hyperlink{classWindowVertSplit}{Window\+Vert\+Split}} \& {\bfseries operator=} (\mbox{\hyperlink{classWindowVertSplit}{Window\+Vert\+Split}} \&\&)=delete
+\item 
+bool \mbox{\hyperlink{classWindowVertSplit_adf05f56d7f4c91238d73cc7a83da86bc}{equals}} (const \mbox{\hyperlink{classAbstractWindowState}{Abstract\+Window\+State}} \&b) override
+\item 
+win\+Area \mbox{\hyperlink{classWindowVertSplit_a0097f63ab7fd73c2f57e55e2dea65c14}{get\+Window\+Text\+Area}} (bool b) const override
+\item 
+\mbox{\Hypertarget{classWindowVertSplit_af8ca7345752ab9af80ea222b4add8c30}\label{classWindowVertSplit_af8ca7345752ab9af80ea222b4add8c30}} 
+void {\bfseries enter} (\mbox{\hyperlink{classWindow}{Window}} $\ast$win...) override
+\item 
+\mbox{\Hypertarget{classWindowVertSplit_ad46ac067eb35c3c12d95506c30b0d69b}\label{classWindowVertSplit_ad46ac067eb35c3c12d95506c30b0d69b}} 
+void {\bfseries draw} (\mbox{\hyperlink{classWindow}{Window}} $\ast$win...) override
+\item 
+\mbox{\Hypertarget{classWindowVertSplit_a443468a7b6cc1e462f7a69d21f6ac92f}\label{classWindowVertSplit_a443468a7b6cc1e462f7a69d21f6ac92f}} 
+void {\bfseries set\+Window\+Area\+Up} (const win\+Area \&window\+Area\+Up)
+\item 
+\mbox{\Hypertarget{classWindowVertSplit_acdec23e6ff19963a51a170c5c87e76ef}\label{classWindowVertSplit_acdec23e6ff19963a51a170c5c87e76ef}} 
+void {\bfseries set\+Window\+Area\+Down} (const win\+Area \&window\+Area\+Down)
+\item 
+\mbox{\Hypertarget{classWindowVertSplit_a0973685f2df8d3c47e1fd63c5dbacdd8}\label{classWindowVertSplit_a0973685f2df8d3c47e1fd63c5dbacdd8}} 
+void {\bfseries exit} (\mbox{\hyperlink{classWindow}{Window}} $\ast$win...) override
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classWindowVertSplit_af8153cc1e013346eee4224ba7f9fc968}\label{classWindowVertSplit_af8153cc1e013346eee4224ba7f9fc968}} 
+static \mbox{\hyperlink{classAbstractWindowState}{Abstract\+Window\+State}} \& {\bfseries get\+Instance} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classWindowVertSplit_adf05f56d7f4c91238d73cc7a83da86bc}\label{classWindowVertSplit_adf05f56d7f4c91238d73cc7a83da86bc}} 
+\index{WindowVertSplit@{WindowVertSplit}!equals@{equals}}
+\index{equals@{equals}!WindowVertSplit@{WindowVertSplit}}
+\doxysubsubsection{\texorpdfstring{equals()}{equals()}}
+{\footnotesize\ttfamily bool Window\+Vert\+Split\+::equals (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classAbstractWindowState}{Abstract\+Window\+State}} \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classAbstractWindowState}{Abstract\+Window\+State}}.
+
+\mbox{\Hypertarget{classWindowVertSplit_a0097f63ab7fd73c2f57e55e2dea65c14}\label{classWindowVertSplit_a0097f63ab7fd73c2f57e55e2dea65c14}} 
+\index{WindowVertSplit@{WindowVertSplit}!getWindowTextArea@{getWindowTextArea}}
+\index{getWindowTextArea@{getWindowTextArea}!WindowVertSplit@{WindowVertSplit}}
+\doxysubsubsection{\texorpdfstring{getWindowTextArea()}{getWindowTextArea()}}
+{\footnotesize\ttfamily Window\+Vert\+Split\+::win\+Area Window\+Vert\+Split\+::get\+Window\+Text\+Area (\begin{DoxyParamCaption}\item[{bool}]{b }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classAbstractWindowState}{Abstract\+Window\+State}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+lib/mhs-\/ui/concrete\+\_\+window\+States.\+hpp\item 
+lib/mhs-\/ui/concrete\+\_\+window\+States.\+cpp\end{DoxyCompactItemize}
