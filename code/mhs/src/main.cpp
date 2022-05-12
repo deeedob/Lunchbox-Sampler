@@ -5,11 +5,6 @@
 #include <TeensyThreads.h>
 #include <ui.hpp>
 
-volatile int count = 0;
-void thread_func(int data) {
-    while(1) count += data;
-}
-
 Bounce b(ROTARY_SW, 2);
 ADC adc;
 int pinAstateCurrent = LOW;
@@ -50,35 +45,48 @@ void setup() {
         pinAStateLast = pinAstateCurrent;
     }, CHANGE);
 
-    adc.adc0->enableInterrupts([]() {
+    u_int16_t delta = 10;
+    u_int16_t old_val = 0;
 
-        Serial.println("adc0 interrupted!");
-        adc.adc1->startSingleRead(POT0);
-        Serial.println(adc.adc1->readSingle());
-    });
     adc.adc1->enableInterrupts([]() {
-        Serial.println("adc1 interrupted!");
+        Serial.println(adc.adc1->analogReadContinuous());
     });
-    pinMode(POT0, INPUT_PULLDOWN);
-    //adc.setConversionSpeed(ADC_CONVERSION_SPEED::HIGH_SPEED); // change the conversion speed
-    //adc.setSamplingSpeed(ADC_SAMPLING_SPEED::HIGH_SPEED); // change the sampling speed
-    //adc.enableCompare(1.0/3.3*adc.getMaxValue(ADC_1), 0, ADC_1); // measurement will be ready if value < 1.0V
-    adc.adc1->enableCompareRange( 250, 700 , true, true); // ready if value lies out of [1.0,2.0] V
-    Serial.println("End setup");
-    //threads.addThread(thread_func, 1);
+
+    adc.adc0->enableInterrupts([]() {
+        Serial.println(adc.adc0->analogReadContinuous());
+    });
+
+    adc.adc1->enableCompareRange( 100, 800 , true, true); // ready if value lies out of [1.0,2.0] V
+    adc.adc0->enableCompareRange( 100, 800 , true, true); // ready if value lies out of [1.0,2.0] V
+    //adc.adc1->enableCompare(500, true);
+
+    /* continues */
+    adc.adc1->analogReadContinuous();
+    adc.adc0->analogReadContinuous();
+    /* single */
+    //adc.adc1->startSingleRead(POT0);
+    //adc.adc1->readSingle();
 }
 
 int value;
 void loop() {
 
-    // A0 = 14 A1= 15,A3=24, A4=26
-    adc.analogRead(POT0, ADC_1);
-    adc.adc1->analogReadContinuous(POT0);
-    if (adc.adc1->isComplete()) {
+    Serial.println("POT0");
+    adc.adc1->startContinuous(POT0);
+    delay(1000);
 
-    }
-    //noInterrupts();
-    /* interrupts disabled for critical section */
-    //Serial.println("uninterruptable code");
-    //interrupts(); // re-enable interrupts
+    Serial.println("POT1");
+    adc.adc1->startContinuous(POT1);
+    delay(1000);
+
+    adc.adc1->stopContinuous();
+
+    Serial.println("POT2");
+    adc.adc0->startContinuous(POT2);
+    delay(1000);
+
+    Serial.println("POT3");
+    adc.adc0->startContinuous(POT3);
+    delay(1000);
+    adc.adc1->stopContinuous();
 }
