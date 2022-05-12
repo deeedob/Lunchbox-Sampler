@@ -2,8 +2,8 @@
 
 #define POT0 A0
 #define POT1 A1
-#define POT2 A10
-#define POT3 A12
+#define POT2 A12
+#define POT3 A10
 
 #define DISPLAY_CLK 16
 #define DISPLAY_SDA 17
