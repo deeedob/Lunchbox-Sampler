@@ -58,9 +58,9 @@ void setup() {
     Serial.begin(9600);
     //loadSamplePack("SamplePack01");
     //deleteSamplePackFromFlash("SamplePack01");
-    //loadSample("SamplePack02/01.WAV");
+    loadSample("SamplePack02/01.WAV");
    //deleteSampleFromFlash("Rim.wav");
-    //deleteAllFilesOnFlash();
+    deleteAllFilesOnFlash();
     //triggerSample("01.WAV");
     directoryListing();
 }
@@ -75,8 +75,12 @@ void deleteAllFilesOnFlash()
             return;
         }
     }
-    Serial.println("deleting all Files");
+    Serial.println("deleting all Files. Please wait until 'ready' (ca.40s)");
     SerialFlash.eraseAll();
+    while (SerialFlash.ready() == false)
+    {
+
+    }
     Serial.println("ready");
 }
 // load Sample Pack from SD to Flash
