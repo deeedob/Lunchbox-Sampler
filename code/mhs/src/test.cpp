@@ -32,8 +32,9 @@
 
 bool loadSamplePack(const char*);
 bool loadSample(const char*);
-bool deleteSampleFromFlash(const char*);                            //worked;
-bool deleteSamplePackFromFlash(const char* path);                   //not working
+bool deleteSampleFromFlash(const char*);
+bool deleteSamplePackFromFlash(const char* path);
+void deleteAllFilesOnFlash();
 bool replaceSample(const char* oldPath, const char* newPath);
 File triggerSample(const char* path);
 
@@ -46,13 +47,28 @@ void setup() {
     SPI.setMOSI(SDCARD_MOSI_PIN);
 
     Serial.begin(9600);
-    loadSamplePack("SamplePack01");
+    //loadSamplePack("SamplePack01");
+    deleteSamplePackFromFlash("SamplePack01");
+    //loadSample("SamplePack01/Rim.wav");
+
+    //deleteAllFilesOnFlash();
     directoryListing();
 }
 void loop() {
 
 }
-
+void deleteAllFilesOnFlash()
+{
+    if (!SerialFlash.begin(FLASH_PIN)) {
+        while (1) {
+            Serial.println(F("Unable to access SPI Flash chip"));
+            return;
+        }
+    }
+    Serial.println("deleting all Files");
+    SerialFlash.eraseAll();
+    Serial.println("ready");
+}
 // load Sample Pack from SD to Flash
 bool loadSamplePack(const char* path)
 {
@@ -115,6 +131,14 @@ bool loadSamplePack(const char* path)
 }
 bool loadSample(const char* path)
 {
+    if (!SD.begin(SDCARD_CS_PIN)) {
+        Serial.println("Unable to access SPI Flash chip");
+        return false;
+    }
+    if (!SerialFlash.begin(FLASH_PIN)) {
+        Serial.println("Unable to access SPI Flash chip");
+        return false;
+    }
     File f = SD.open(path);
     const char *filename = f.name();
     unsigned long length = f.size();
@@ -136,6 +160,14 @@ bool loadSample(const char* path)
 }
 bool deleteSampleFromFlash(const char* path)
 {
+    if (!SD.begin(SDCARD_CS_PIN)) {
+        Serial.println("Unable to access SPI Flash chip");
+        return false;
+    }
+    if (!SerialFlash.begin(FLASH_PIN)) {
+        Serial.println("Unable to access SPI Flash chip");
+        return false;
+    }
     if(SerialFlash.remove(path))
     {
         Serial.println(path);
@@ -148,12 +180,19 @@ bool deleteSampleFromFlash(const char* path)
 }
 bool deleteSamplePackFromFlash(const char* path)
 {
+    if (!SD.begin(SDCARD_CS_PIN)) {
+        Serial.println("Unable to access SPI Flash chip");
+        return false;
+    }
+    if (!SerialFlash.begin(FLASH_PIN)) {
+        Serial.println("Unable to access SPI Flash chip");
+        return false;
+    }
     File dir=SD.open(path);
     while (1) {
-        File f = f.openNextFile();
+        File f = dir.openNextFile();
         if (!f) break;
         const char *filename = f.name();
-        Serial.println(f.name());
         unsigned long length = f.size();
         if (SerialFlash.exists(filename)) {
             Serial.println("file exists");
@@ -167,7 +206,6 @@ bool deleteSamplePackFromFlash(const char* path)
                 Serial.println( "unable to delete ");
                 Serial.println(filename);
             }
-
         }
         else
         {
@@ -180,6 +218,7 @@ bool deleteSamplePackFromFlash(const char* path)
 }
 bool replaceSample(const char* oldPath, const char* newPath)
 {
+
     return true;
 }
 void directoryListing()
