@@ -37,6 +37,7 @@ bool deleteSamplePackFromFlash(const char* path);
 void deleteAllFilesOnFlash();
 bool replaceSample(const char* oldPath, const char* newPath);
 File triggerSample(const char* path);
+void readBenchmark();
 
 void directoryListing();
 bool compareFiles(File &file, SerialFlashFile &ffile);
@@ -48,7 +49,8 @@ void setup() {
 
     Serial.begin(9600);
     //loadSamplePack("SamplePack01");
-    deleteSamplePackFromFlash("SamplePack01");
+    //deleteSamplePackFromFlash("SamplePack01");
+     readBenchmark();
     //loadSample("SamplePack01/Rim.wav");
 
     //deleteAllFilesOnFlash();
@@ -256,6 +258,10 @@ void directoryListing()
 }
 File triggerSample(const char* path)
 {
+    if(!SerialFlash.begin())
+    {
+        Serial.println("Couldnt open SerialFlash");
+    }
 
 }
 bool compareFiles(File &file, SerialFlashFile &ffile) {
