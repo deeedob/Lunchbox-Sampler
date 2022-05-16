@@ -29,6 +29,15 @@
 #define SDCARD_SCK_PIN  13
 #define FLASH_PIN 6
 
+AudioInputI2S audioInput;
+AudioPlaySdWav playSdWav;
+AudioOutputI2S audioOutput;
+AudioControlSGTL5000 audioShield;
+AudioConnection          patchCord1(playSdWav, 0, audioOutput, 0);
+AudioConnection          patchCord2(playSdWav, 1, audioOutput, 1);
+AudioPlaySerialflashRaw  playFlashRaw1;
+AudioPlaySerialflashRaw  playFlashRaw2;
+
 
 bool loadSamplePack(const char*);
 bool loadSample(const char*);
@@ -36,8 +45,7 @@ bool deleteSampleFromFlash(const char*);
 bool deleteSamplePackFromFlash(const char* path);
 void deleteAllFilesOnFlash();
 bool replaceSample(const char* oldPath, const char* newPath);
-File triggerSample(const char* path);
-void readBenchmark();
+SerialFlashFile triggerSample(const char* path);
 
 void directoryListing();
 bool compareFiles(File &file, SerialFlashFile &ffile);
@@ -50,10 +58,10 @@ void setup() {
     Serial.begin(9600);
     //loadSamplePack("SamplePack01");
     //deleteSamplePackFromFlash("SamplePack01");
-     readBenchmark();
-    //loadSample("SamplePack01/Rim.wav");
-
+    //loadSample("SamplePack02/01.WAV");
+   //deleteSampleFromFlash("Rim.wav");
     //deleteAllFilesOnFlash();
+    //triggerSample("01.WAV");
     directoryListing();
 }
 void loop() {
@@ -256,12 +264,19 @@ void directoryListing()
     }
 
 }
-File triggerSample(const char* path)
+SerialFlashFile triggerSample(const char* path)
 {
-    if(!SerialFlash.begin())
+    if(!SerialFlash.begin(FLASH_PIN))
     {
         Serial.println("Couldnt open SerialFlash");
     }
+    SerialFlashFile ff = SerialFlash.open(path);
+
+    while(1)
+    {
+        playFlashRaw1.play(path);
+    }
+    return ff;
 
 }
 bool compareFiles(File &file, SerialFlashFile &ffile) {
