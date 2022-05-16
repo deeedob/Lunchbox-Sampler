@@ -82,7 +82,6 @@ int wavNum = 0;
 void setup() {
     SPI.setSCK(SDCARD_SCK_PIN);
     SPI.setMOSI(SDCARD_MOSI_PIN);
-
     //uncomment for RawHardwareTest,if SDCard is in
     //pinMode(SDCARD_CS_PIN, INPUT_PULLUP);
     //pinMode(ROTARY_SW, INPUT_PULLUP);
@@ -104,9 +103,9 @@ void setup() {
     //DeleteAllFilesOnFlash();
     //rawHardwareTestFlash();
     //DeleteAllFilesOnFlash();
-    testSDtoSPI();
-    ListFiles();
-    DeleteAllFilesOnFlash();
+    //testSDtoSPI();
+    //ListFiles();
+    //DeleteAllFilesOnFlash();
 
     //testDisplay();
     //testMicrophone();
@@ -135,8 +134,7 @@ void inBounds(int& id) {
 
 long oldPos = -999;
 void loop() {
-
-    /*long newPos = enc.read();
+    long newPos = enc.read();
     delay(100);
     if(newPos != oldPos) {
         if(newPos > oldPos) {
@@ -171,8 +169,7 @@ void loop() {
     if(btn_rotary.risingEdge()) playSdWav.togglePlayPause();
 
     float volume = (float) analogRead(POT0);
-    audioShield.volume(volume/1024.f);*/
-
+    audioShield.volume(volume/1024.f);
 }
 
 void testMicrophone() {
