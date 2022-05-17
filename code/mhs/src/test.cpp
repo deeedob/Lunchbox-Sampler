@@ -7,38 +7,20 @@
 #include <Adafruit_SSD1327.h>
 #include <Encoder.h>
 #include <Bounce.h>
+#include <iostream>
+#include <fstream>
 
-#define POT0 A0
-#define POT1 A1
-#define POT2 A10
-#define POT3 A12
-
-#define DISPLAY_CLK 16
-#define DISPLAY_SDA 17
-#define DISPLAY_RST 9
-
-#define ROTARY_A 2
-#define ROTARY_B 3
-#define ROTARY_SW 4
-
-#define MIDI_IN 0
-#define MIDI_OUT 1
+using string = std::string ;
 
 #define SDCARD_CS_PIN   10
 #define SDCARD_MOSI_PIN 11
 #define SDCARD_SCK_PIN  13
 #define FLASH_PIN 6
 
-AudioInputI2S audioInput;
-AudioPlaySdWav playSdWav;
-AudioOutputI2S audioOutput;
-AudioControlSGTL5000 audioShield;
-AudioConnection          patchCord1(playSdWav, 0, audioOutput, 0);
-AudioConnection          patchCord2(playSdWav, 1, audioOutput, 1);
-AudioPlaySerialflashRaw  playFlashRaw1;
-AudioPlaySerialflashRaw  playFlashRaw2;
 
+String *settings;
 
+int searchFreeMidi();
 bool loadSamplePack(const char*);
 bool loadSample(const char*);
 bool deleteSampleFromFlash(const char*);
@@ -56,16 +38,36 @@ void setup() {
     SPI.setMOSI(SDCARD_MOSI_PIN);
 
     Serial.begin(9600);
+    Serial.println("Starting Memory Class");
+    String *settings = new String[127];
+
+    Serial.println(searchFreeMidi());
+    settings[0] = "Sample01";
+    settings[1] = "Sample02";
+    Serial.println(searchFreeMidi());
+
     //loadSamplePack("SamplePack01");
     //deleteSamplePackFromFlash("SamplePack01");
-    loadSample("SamplePack02/01.WAV");
-   //deleteSampleFromFlash("Rim.wav");
-    deleteAllFilesOnFlash();
+    //loadSample("SamplePack02/01.WAV");
+    //deleteSampleFromFlash("Rim.wav");
+    //deleteAllFilesOnFlash();
     //triggerSample("01.WAV");
-    directoryListing();
+    //directoryListing();
 }
 void loop() {
 
+}
+int searchFreeMidi(){
+    Serial.println(sizeof(settings));
+    /*for(int i=0;i<sizeof(settings);i++){
+        if (settings[i].equals("")){
+            Serial.println("gefunden!");
+            return i;
+        }
+    }*/
+    return 128;
+}
+void createArray(){
 }
 void deleteAllFilesOnFlash()
 {
@@ -95,8 +97,14 @@ bool loadSamplePack(const char* path)
         return false;
     }
     File dir=SD.open(path, FILE_READ);
+    if(!dir)
+    {
+        Serial.println("Directory nicht gefunden");
+        return false;
+    }
     while (1) {
         File f = dir.openNextFile();
+
         if (!f) break;
         const char *filename = f.name();
         unsigned long length = f.size();
@@ -154,6 +162,10 @@ bool loadSample(const char* path)
         return false;
     }
     File f = SD.open(path);
+    if(!f){
+       Serial.println("Datei nicht gefunden ") ;
+       return false;
+    }
     const char *filename = f.name();
     unsigned long length = f.size();
     if (SerialFlash.create(filename, length)) {
@@ -172,7 +184,7 @@ bool loadSample(const char* path)
     }
     return false;
 }
-bool deleteSampleFromFlash(const char* path)
+bool deleteSampleFromFlash(const char* name)
 {
     if (!SD.begin(SDCARD_CS_PIN)) {
         Serial.println("Unable to access SPI Flash chip");
@@ -182,14 +194,14 @@ bool deleteSampleFromFlash(const char* path)
         Serial.println("Unable to access SPI Flash chip");
         return false;
     }
-    if(SerialFlash.remove(path))
+    if(SerialFlash.remove(name))
     {
-        Serial.println(path);
+        Serial.println(name);
         Serial.println(" is deleted");
         return true;
     }
     Serial.println("unable to delete ");
-    Serial.println(path);
+    Serial.println(name);
     return false;
 }
 bool deleteSamplePackFromFlash(const char* path)
@@ -275,11 +287,6 @@ SerialFlashFile triggerSample(const char* path)
         Serial.println("Couldnt open SerialFlash");
     }
     SerialFlashFile ff = SerialFlash.open(path);
-
-    while(1)
-    {
-        playFlashRaw1.play(path);
-    }
     return ff;
 
 }
