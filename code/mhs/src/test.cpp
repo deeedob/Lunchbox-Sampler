@@ -10,7 +10,8 @@
 #include <iostream>
 #include <fstream>
 
-using string = std::string ;
+
+using namespace std;
 
 #define SDCARD_CS_PIN   10
 #define SDCARD_MOSI_PIN 11
@@ -26,6 +27,8 @@ bool loadSample(const char*);
 bool deleteSampleFromFlash(const char*);
 bool deleteSamplePackFromFlash(const char* path);
 void deleteAllFilesOnFlash();
+void  readFileOnSD();
+void  writeFileOnSD();
 bool replaceSample(const char* oldPath, const char* newPath);
 SerialFlashFile triggerSample(const char* path);
 
@@ -39,32 +42,110 @@ void setup() {
 
     Serial.begin(9600);
     Serial.println("Starting Memory Class");
-    String *settings = new String[127];
-
-    Serial.println(searchFreeMidi());
-    settings[0] = "Sample01";
-    settings[1] = "Sample02";
-    Serial.println(searchFreeMidi());
-
+    settings = new String[127];
+    for(int i=0; i<127; i++)
+    {
+        settings[i]="not defined";
+    }
     //loadSamplePack("SamplePack01");
     //deleteSamplePackFromFlash("SamplePack01");
     //loadSample("SamplePack02/01.WAV");
-    //deleteSampleFromFlash("Rim.wav");
+    //deleteSampleFromFlash("01.WAV");
     //deleteAllFilesOnFlash();
     //triggerSample("01.WAV");
     //directoryListing();
+    //readFileOnSD();
+    //writeFileOnSD();
+    readFileOnSD();
+    for(int i=0; i<127; i++)
+    {
+        if(settings[i].equals("not defined"))
+        {
+            break;
+        }
+        Serial.println(settings[i]);
+    }
 }
 void loop() {
 
 }
+void readFileOnSD()
+{
+    if (!SD.begin(SDCARD_CS_PIN )) {
+        Serial.println("initialization failed!");
+        return;
+    }
+    File myFile;
+    myFile = SD.open("settings.txt", FILE_READ);
+    if(myFile) {
+        Serial.println("settings.txt");
+        while (myFile.available()) {
+            Serial.write(myFile.read());
+        }
+        // close the file:
+        myFile.close();
+    }
+    else {
+        // if the file didn't open, print an error:
+        Serial.println("error opening test.txt");
+    }
+}
+void writeFileOnSD()
+{
+    if (!SD.begin(SDCARD_CS_PIN )) {
+        Serial.println("initialization failed!");
+        return;
+    }
+    File myFile;
+    myFile = SD.open("settings.txt", FILE_WRITE);
+    if (myFile) {
+        myFile.seek(';');
+        for(int i=0; i<127; i++)
+        {
+            myFile.print(i);
+            myFile.print(",");
+            myFile.print(settings[i]);
+            myFile.println(";");
+        }
+        myFile.close();
+        Serial.println("done.");
+    }
+    else {
+        // if the file didn't open, print an error:
+        Serial.println("error opening test.txt");
+    }
+    /*if(myFile) {
+        unsigned long count = myFile.size();
+        while (count > 0) {
+            char buf1[128];
+            unsigned long n = count;
+            if (n > 128) n = 128;
+            myFile.read(buf1, n);
+            for(int i=0; i<n; i++)
+            {
+                if (buf1[i]==';')
+                {
+                    if(buf1[i-1]==',')
+                    {
+                        Serial.println(buf1[i-2]);
+                    }
+                }
+            }
+            count = count - n;
+        }
+    }
+    else {
+        // if the file didn't open, print an error:
+        Serial.println("error opening test.txt");
+    }*/
+
+}
 int searchFreeMidi(){
-    Serial.println(sizeof(settings));
-    /*for(int i=0;i<sizeof(settings);i++){
-        if (settings[i].equals("")){
-            Serial.println("gefunden!");
+    for(int i=0;i<127;i++){
+        if (settings[i].equals("not defined")){
             return i;
         }
-    }*/
+    }
     return 128;
 }
 void createArray(){
@@ -104,7 +185,6 @@ bool loadSamplePack(const char* path)
     }
     while (1) {
         File f = dir.openNextFile();
-
         if (!f) break;
         const char *filename = f.name();
         unsigned long length = f.size();
@@ -144,6 +224,9 @@ bool loadSamplePack(const char* path)
                 Serial.println(filename);
                 Serial.println(length);
             }
+            int i=searchFreeMidi();
+            settings[i]=f.name();
+            Serial.println(settings[i]);
             ff.close();
         }
         f.close();
@@ -180,6 +263,9 @@ bool loadSample(const char* path)
                 count = count + n;
             }
         }
+        int i=searchFreeMidi();
+        settings[i]=f.name();
+        Serial.println(settings[i]);
         return true;
     }
     return false;
