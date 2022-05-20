@@ -47,7 +47,7 @@ void setup() {
     {
         settings[i]="not defined";
     }
-    //loadSamplePack("SamplePack01");
+    loadSamplePack("SamplePack01");
     //deleteSamplePackFromFlash("SamplePack01");
     //loadSample("SamplePack02/01.WAV");
     //deleteSampleFromFlash("01.WAV");
@@ -56,7 +56,8 @@ void setup() {
     //directoryListing();
     //readFileOnSD();
     //writeFileOnSD();
-    readFileOnSD();
+    //readFileOnSD();
+
     for(int i=0; i<127; i++)
     {
         if(settings[i].equals("not defined"))
@@ -97,6 +98,7 @@ void writeFileOnSD()
         return;
     }
     File myFile;
+    SD.remove("settings.txt");
     myFile = SD.open("settings.txt", FILE_WRITE);
     if (myFile) {
         myFile.seek(';');
@@ -114,7 +116,23 @@ void writeFileOnSD()
         // if the file didn't open, print an error:
         Serial.println("error opening test.txt");
     }
-    /*if(myFile) {
+}
+int searchFreeMidi(){
+    for(int i=0;i<127;i++){
+        if (settings[i].equals("not defined")){
+            return i;
+        }
+    }
+    return 128;
+}
+void configSettings(){
+    if (!SD.begin(SDCARD_CS_PIN )) {
+        Serial.println("initialization failed!");
+        return;
+    }
+    File myFile;
+    myFile = SD.open("settings.txt", FILE_READ);
+    if(myFile) {
         unsigned long count = myFile.size();
         while (count > 0) {
             char buf1[128];
@@ -127,7 +145,7 @@ void writeFileOnSD()
                 {
                     if(buf1[i-1]==',')
                     {
-                        Serial.println(buf1[i-2]);
+
                     }
                 }
             }
@@ -137,18 +155,7 @@ void writeFileOnSD()
     else {
         // if the file didn't open, print an error:
         Serial.println("error opening test.txt");
-    }*/
-
-}
-int searchFreeMidi(){
-    for(int i=0;i<127;i++){
-        if (settings[i].equals("not defined")){
-            return i;
-        }
     }
-    return 128;
-}
-void createArray(){
 }
 void deleteAllFilesOnFlash()
 {
