@@ -1,7 +1,7 @@
 
 #pragma once
 
-class dig_interrupt
+class Interrupts
 {
 
 };
