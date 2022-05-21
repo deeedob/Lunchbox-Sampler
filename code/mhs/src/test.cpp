@@ -45,9 +45,10 @@ void setup() {
     settings = new String[127];
     for(int i=0; i<127; i++)
     {
+
         settings[i]="not defined";
     }
-    loadSamplePack("SamplePack01");
+    //loadSamplePack("SamplePack01");
     //deleteSamplePackFromFlash("SamplePack01");
     //loadSample("SamplePack02/01.WAV");
     //deleteSampleFromFlash("01.WAV");
@@ -57,15 +58,6 @@ void setup() {
     //readFileOnSD();
     //writeFileOnSD();
     //readFileOnSD();
-
-    for(int i=0; i<127; i++)
-    {
-        if(settings[i].equals("not defined"))
-        {
-            break;
-        }
-        Serial.println(settings[i]);
-    }
 }
 void loop() {
 
@@ -101,7 +93,6 @@ void writeFileOnSD()
     SD.remove("settings.txt");
     myFile = SD.open("settings.txt", FILE_WRITE);
     if (myFile) {
-        myFile.seek(';');
         for(int i=0; i<127; i++)
         {
             myFile.print(i);
@@ -133,23 +124,25 @@ void configSettings(){
     File myFile;
     myFile = SD.open("settings.txt", FILE_READ);
     if(myFile) {
-        unsigned long count = myFile.size();
-        while (count > 0) {
-            char buf1[128];
-            unsigned long n = count;
-            if (n > 128) n = 128;
-            myFile.read(buf1, n);
-            for(int i=0; i<n; i++)
-            {
-                if (buf1[i]==';')
-                {
-                    if(buf1[i-1]==',')
-                    {
-
-                    }
+        unsigned long count = 0;
+        while (count > myFile.size()) {
+            char buf1[myFile.size()];
+            myFile.read(buf1, 0);
+            while (count < myFile.size()) {
+                int i = 0;
+                String name;
+                String midiValue;
+                while (buf1[count + i] != ',') {
+                    midiValue += buf1[i + count];
+                    count++;
                 }
+                settings[midiValue.toInt()];
+                while (buf1[count + i] != ';') {
+                    name += buf1[i + count];
+                    count++;
+                }
+                count += i;
             }
-            count = count - n;
         }
     }
     else {
