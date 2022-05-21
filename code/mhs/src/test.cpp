@@ -31,7 +31,7 @@ void  readFileOnSD();
 void  writeFileOnSD();
 bool replaceSample(const char* oldPath, const char* newPath);
 SerialFlashFile triggerSample(const char* path);
-
+void configSettings();
 void directoryListing();
 bool compareFiles(File &file, SerialFlashFile &ffile);
 SerialFlashFile file;
@@ -42,12 +42,8 @@ void setup() {
 
     Serial.begin(9600);
     Serial.println("Starting Memory Class");
-    settings = new String[127];
-    for(int i=0; i<127; i++)
-    {
-
-        settings[i]="not defined";
-    }
+    settings = new String[128];
+    configSettings();
     //loadSamplePack("SamplePack01");
     //deleteSamplePackFromFlash("SamplePack01");
     //loadSample("SamplePack02/01.WAV");
@@ -55,9 +51,8 @@ void setup() {
     //deleteAllFilesOnFlash();
     //triggerSample("01.WAV");
     //directoryListing();
-    //readFileOnSD();
     //writeFileOnSD();
-    //readFileOnSD();
+    readFileOnSD();
 }
 void loop() {
 
@@ -98,10 +93,11 @@ void writeFileOnSD()
             myFile.print(i);
             myFile.print(",");
             myFile.print(settings[i]);
-            myFile.println(";");
+            myFile.print(";");
         }
         myFile.close();
         Serial.println("done.");
+        configSettings();
     }
     else {
         // if the file didn't open, print an error:
@@ -124,26 +120,29 @@ void configSettings(){
     File myFile;
     myFile = SD.open("settings.txt", FILE_READ);
     if(myFile) {
-        unsigned long count = 0;
-        while (count > myFile.size()) {
+         int count = 0;
             char buf1[myFile.size()];
-            myFile.read(buf1, 0);
-            while (count < myFile.size()) {
+            myFile.read(buf1, myFile.size());
+            while (1) {
                 int i = 0;
                 String name;
                 String midiValue;
-                while (buf1[count + i] != ',') {
-                    midiValue += buf1[i + count];
-                    count++;
-                }
-                settings[midiValue.toInt()];
-                while (buf1[count + i] != ';') {
-                    name += buf1[i + count];
-                    count++;
-                }
-                count += i;
+                    while (buf1[count + i] != ',') {
+                        midiValue.append(buf1[i + count]);
+                        i++;
+                    }
+                    i++;
+                    while (buf1[count + i] != ';') {
+                        name += buf1[i + count];
+                        i++;
+                    }
+                    i++;
+                    settings[midiValue.toInt()] = name;
+                    count += i;
+                    if(count==myFile.size())break;
             }
-        }
+            myFile.close();
+            return;
     }
     else {
         // if the file didn't open, print an error:
@@ -227,6 +226,7 @@ bool loadSamplePack(const char* path)
             int i=searchFreeMidi();
             settings[i]=f.name();
             Serial.println(settings[i]);
+            writeFileOnSD();
             ff.close();
         }
         f.close();
@@ -312,6 +312,13 @@ bool deleteSamplePackFromFlash(const char* path)
             {
                 Serial.println(filename);
                 Serial.println( "is deleted");
+                for(int i=0; i<128; i++)
+                {
+                    if(settings[i].equals(filename))
+                    {
+                        settings[i]="not defined";
+                    }
+                }
             }
             else
             {
@@ -324,6 +331,7 @@ bool deleteSamplePackFromFlash(const char* path)
             Serial.println(filename);
             Serial.println( " does not exist on Flash");
         }
+        configSettings();
         f.close();
     }
     return true;
