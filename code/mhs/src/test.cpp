@@ -27,12 +27,12 @@ bool loadSample(const char*);
 bool deleteSampleFromFlash(const char*);
 bool deleteSamplePackFromFlash(const char* path);
 void deleteAllFilesOnFlash();
-void  readFileOnSD();
-void  writeFileOnSD();
+void readSettingsTxt();
+void updateSettingsTxt();
 bool replaceSample(const char* oldPath, const char* newPath);
 SerialFlashFile triggerSample(const char* path);
 void configSettings();
-void directoryListing();
+void directoryListingFlash();
 bool compareFiles(File &file, SerialFlashFile &ffile);
 SerialFlashFile file;
 
@@ -42,22 +42,26 @@ void setup() {
 
     Serial.begin(9600);
     Serial.println("Starting Memory Class");
+
+    // Zuweisung Midi sind in der txt Datei "settings.txt" und im String [] "settings" gespeichert. Die Beiden tauschen sich untereinander aus.
+    // Settings zieht sich in der Setup Methode über configSettings() die Midi Zuweisungen aus der txt Datei, welche wiederum in der Laufzeit von settings aktualisiert wird über
+    // updateSettingsTxt(). Werden neue Samples/Samplepacks hinzugefuegt werden sie zunächst ins Array eingelesen und dann in der Textdatei aktualisiert.
+    // Gleiches gilt für das Löschen von Samples/SamplePacks. Über readSettingsTxt() kann der Inhalt der TextDatei gelesen werden.
+
     settings = new String[128];
     configSettings();
     //loadSamplePack("SamplePack01");
     //deleteSamplePackFromFlash("SamplePack01");
-    //loadSample("SamplePack02/01.WAV");
-    //deleteSampleFromFlash("01.WAV");
+    //loadSample("SamplePack01/Rim.wav");
+    //deleteSampleFromFlash("Rim.wav");
     //deleteAllFilesOnFlash();
-    //triggerSample("01.WAV");
-    //directoryListing();
-    //writeFileOnSD();
-    readFileOnSD();
+    directoryListingFlash();
+    readSettingsTxt();
 }
 void loop() {
 
 }
-void readFileOnSD()
+void readSettingsTxt()
 {
     if (!SD.begin(SDCARD_CS_PIN )) {
         Serial.println("initialization failed!");
@@ -78,7 +82,7 @@ void readFileOnSD()
         Serial.println("error opening test.txt");
     }
 }
-void writeFileOnSD()
+void updateSettingsTxt()
 {
     if (!SD.begin(SDCARD_CS_PIN )) {
         Serial.println("initialization failed!");
@@ -88,7 +92,7 @@ void writeFileOnSD()
     SD.remove("settings.txt");
     myFile = SD.open("settings.txt", FILE_WRITE);
     if (myFile) {
-        for(int i=0; i<127; i++)
+        for(int i=0; i<128; i++)
         {
             myFile.print(i);
             myFile.print(",");
@@ -105,7 +109,7 @@ void writeFileOnSD()
     }
 }
 int searchFreeMidi(){
-    for(int i=0;i<127;i++){
+    for(int i=0;i<128;i++){
         if (settings[i].equals("not defined")){
             return i;
         }
@@ -216,6 +220,9 @@ bool loadSamplePack(const char* path)
                     ff.write(buf, n);
                     count = count + n;
                 }
+                int i=searchFreeMidi();
+                settings[i]=f.name();
+                Serial.println(settings[i]);
             }
             else
             {
@@ -223,10 +230,7 @@ bool loadSamplePack(const char* path)
                 Serial.println(filename);
                 Serial.println(length);
             }
-            int i=searchFreeMidi();
-            settings[i]=f.name();
-            Serial.println(settings[i]);
-            writeFileOnSD();
+            updateSettingsTxt();
             ff.close();
         }
         f.close();
@@ -251,6 +255,21 @@ bool loadSample(const char* path)
     }
     const char *filename = f.name();
     unsigned long length = f.size();
+    if (SerialFlash.exists(filename)) {
+        Serial.println(F("already exists on the Flash chip"));
+        SerialFlashFile ff = SerialFlash.open(filename);
+        if (ff && ff.size() == f.size()) {
+            Serial.println(F("  size is the same, comparing data..."));
+            if (compareFiles(f, ff) == true) {
+                Serial.println(F("  files are identical :)"));
+                f.close();
+                ff.close();
+                return false;
+            }
+        }
+        // delete the copy on the Flash chip, if different
+        SerialFlash.remove(filename);
+    }
     if (SerialFlash.create(filename, length)) {
         SerialFlashFile ff = SerialFlash.open(filename);
         if (ff) {
@@ -262,10 +281,12 @@ bool loadSample(const char* path)
                 ff.write(buf, n);
                 count = count + n;
             }
+            int i=searchFreeMidi();
+            settings[i]=f.name();
+            Serial.println(settings[i]);
+            updateSettingsTxt();
         }
-        int i=searchFreeMidi();
-        settings[i]=f.name();
-        Serial.println(settings[i]);
+        ff.close();
         return true;
     }
     return false;
@@ -284,6 +305,15 @@ bool deleteSampleFromFlash(const char* name)
     {
         Serial.println(name);
         Serial.println(" is deleted");
+        for(int i=0; i<128; i++)
+        {
+            if(settings[i].equals(name))
+            {
+                settings[i]="not defined";
+                updateSettingsTxt();
+                break;
+            }
+        }
         return true;
     }
     Serial.println("unable to delete ");
@@ -317,6 +347,8 @@ bool deleteSamplePackFromFlash(const char* path)
                     if(settings[i].equals(filename))
                     {
                         settings[i]="not defined";
+                        updateSettingsTxt();
+                        break;
                     }
                 }
             }
@@ -331,7 +363,6 @@ bool deleteSamplePackFromFlash(const char* path)
             Serial.println(filename);
             Serial.println( " does not exist on Flash");
         }
-        configSettings();
         f.close();
     }
     return true;
@@ -341,7 +372,7 @@ bool replaceSample(const char* oldPath, const char* newPath)
 
     return true;
 }
-void directoryListing()
+void directoryListingFlash()
 {
     while (!Serial) ;
     delay(100);
