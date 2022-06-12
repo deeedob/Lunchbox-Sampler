@@ -14,6 +14,8 @@ Connect all the inputs , outputs and display as followed :
 | 2 | Dig 2  | Rotary, Out A  |
 | 3 | Dig 3  | Rotary, Out B  |
 | 4 | Dig 4  | Rotary, Switch  |
+| 5 | Dig 5  | Button, Return |
+| 22 | Dig 22 | Button, Play/Pause
 |   |   |   |
 | 16  | SCL1  | Display, I2C Clock  |
 | 17  | SDA1  | Display, I2C Data  |
