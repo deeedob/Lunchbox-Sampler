@@ -1,26 +1,22 @@
 #include "worker.hpp"
 
-template<class Func, class... Args>
-mhs::Worker<Func, Args...>::Worker() : done(false), dispatchQueue(50) {
+mhs::Worker::Worker() : done(false), dispatchQueue(50) {
     runnable = std::make_unique<std::thread>(&Runnable::runThread, this);
     runnable->detach();
 }
 
-template<class Func, class... Args>
-mhs::Worker<Func, Args...>::~Worker() {
+mhs::Worker::~Worker() {
     done = true;
     runnable->join();
 }
 
-template<class Func, class... Args>
-void mhs::Worker<Func, Args...>::send( const Func &f ) {
+void mhs::Worker::send( const std::function<void()> &f ) {
     dispatchQueue.put(f);
 }
 
-template<class Func, class... Args>
-void mhs::Worker<Func, Args...>::runTarget( void *arg ) {
+void mhs::Worker::runTarget( void *arg ) {
     while( !done ) {
-        Func f = dispatchQueue.take();
+        std::function<void()> f = dispatchQueue.take();
         f();
     }
 }

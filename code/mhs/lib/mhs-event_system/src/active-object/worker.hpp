@@ -4,28 +4,27 @@
 #include <TeensyThreads.h>
 #include "dispatch_queue.hpp"
 #include "runnable.hpp"
-
+#include "../scheduler.hpp"
 namespace mhs
 {
-    template<class Func, class ...Args>
     class Worker : public Runnable
     {
     public:
+
         Worker();
+        Worker( const Worker & ) = delete;
+        void operator=( Worker & ) = delete;
         ~Worker();
+
+        void send( const std::function<void()>& f );
 
     protected:
         void runTarget( void *arg ) override;
 
-    public:
-        Worker( const Worker & ) = delete;
-        void operator=( Worker & ) = delete;
-
-        void send( const Func& f );
-
     private:
+        friend class Scheduler;
         std::atomic<bool> done;
         std::unique_ptr<std::thread> runnable;
-        DispatchQueue<Func> dispatchQueue;
+        DispatchQueue<std::function<void()>> dispatchQueue;
     };
 }

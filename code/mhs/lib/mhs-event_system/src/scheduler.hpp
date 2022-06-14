@@ -16,7 +16,11 @@ namespace mhs
         void dispatch();
         void enqueue();
 
+    protected:
+        friend class EventSystem;
     private:
-        Worker<std::function<void>> m_activeObject;
+        Worker m_digitalListener;
+        Worker m_analogListener;
+        Worker m_audio;
     };
 }

@@ -5,11 +5,9 @@
 #include <TeensyThreads.h>
 #include <ui.hpp>
 #include <define_t40.hpp>
-#include "dispatch_queue.hpp"
 #include "scheduler.hpp"
-#include "worker.hpp"
 #include "interrupt_handler.hpp"
-#include "test.hpp"
+#include "TestModule.hpp"
 Bounce b(ROTARY_SW, 2);
 ADC adc;
 int pinAstateCurrent = LOW;
