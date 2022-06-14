@@ -5,8 +5,11 @@
 #include <TeensyThreads.h>
 #include <ui.hpp>
 #include <define_t40.hpp>
-#include <ChRt.h>
-
+#include "dispatch_queue.hpp"
+#include "scheduler.hpp"
+#include "worker.hpp"
+#include "interrupt_handler.hpp"
+#include "test.hpp"
 Bounce b(ROTARY_SW, 2);
 ADC adc;
 int pinAstateCurrent = LOW;
@@ -28,7 +31,6 @@ void setup() {
     pinMode(ROTARY_SW, INPUT_PULLUP);
     pinMode(ROTARY_A, INPUT_PULLUP);
     pinMode(ROTARY_B, INPUT_PULLUP);
-
     attachInterrupt(digitalPinToInterrupt(ROTARY_SW), []() {
         b.update();
         if(b.fallingEdge()) {
