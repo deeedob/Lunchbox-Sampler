@@ -2,43 +2,49 @@
 #include "abstract_interrupt.hpp"
 #include "event_sytem.hpp"
 #include <Arduino.h>
+#include <ADC.h>
 #include "../include/define_t40.hpp"
 
 namespace mhs
 {
     /* for now declared in global... TODO: can this be a member? regarding ISR */
-    int __pinAstateCurrent = LOW;
-    int __pinAstateLast = LOW;
+    std::atomic<int> _pinAstateCurrent(LOW);
+    std::atomic<int> _pinAstateLast(LOW);
+    std::atomic<std::array<u_int16_t, 4>> _pinAnalogOldPot();
     class InterruptHandler
     {
     public:
         /* All analog interrupts */
-        class AnalogInterrupts : AbstractInterrupt
+        class AnalogInterrupts
         {
         public:
-            explicit AnalogInterrupts(std::initializer_list<EventSystem::EventInfo> mapping );
-            ~AnalogInterrupts() override;
+            AnalogInterrupts();
+            ~AnalogInterrupts();
 
-            void enablePin( EventSystem::Events e ) override;
-            void disablePin( EventSystem::Events e ) override;
+            void enablePin( EventSystem::Events::ANALOG e, void (*function)(void), int mode = CHANGE );
+            void disablePin( EventSystem::Events::ANALOG e );
 
         private:
-            void setup_isr(EventSystem::Events::ANALOG event_anlg);
+            void setup_all_isr();
+            void readAllOldValues();
         };
 
         /* All digital interrupts of the system */
-        class DigitalInterrupts : AbstractInterrupt
+        class DigitalInterrupts
         {
         public:
-            DigitalInterrupts(std::initializer_list<EventSystem::EventInfo> mapping );
-            ~DigitalInterrupts() override;
-            void enablePin( EventSystem::Events e ) override;
-            void disablePin( EventSystem::Events e ) override;
+            DigitalInterrupts();
+            DigitalInterrupts(std::initializer_list<std::pair<EventSystem::Events::DIGITAL, u_int8_t>> list);
+            ~DigitalInterrupts();
+            void enablePin( EventSystem::Events::DIGITAL e, void (*function)(void), int mode = CHANGE);
+            void disablePin( EventSystem::Events::DIGITAL e );
         private:
-            void setup_isr( EventSystem::EventInfo event_dig);
+            static void setup_all_isr();
         };
 
     private:
-        static EventSystem m_eventSystem;
+        static EventSystem m_event_system;
+        static std::map<EventSystem::Events::DIGITAL, u_int8_t> m_dig_lookup;
+        static std::map<EventSystem::Events::ANALOG, u_int8_t> m_analog_lookup;
     };
 }

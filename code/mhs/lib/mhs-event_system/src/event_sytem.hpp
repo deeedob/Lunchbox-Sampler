@@ -12,45 +12,26 @@ namespace mhs
         class Events
         {
         public:
-            struct DIGITAL
+            enum class DIGITAL
             {
-                enum class ROTARY
-                {
-                    LEFT,
-                    RIGHT
-                };
-                enum class BUTTON
-                {
-                    ENTER,
-                    RETURN,
-                    TOGGLE
-                };
-
-                enum class MIDI
-                {
-                    SERIAL_,
-                    FSR,
-                    HOST
-                };
-
+                ROTARY_L,
+                ROTARY_R,
+                BTN_ENTER,
+                BTN_RETURN,
+                BTN_TOGGLE,
+                MIDI_IN,
             };
-            struct ANALOG
+            enum class ANALOG
             {
-                enum class POTI
-                {
-                    ONE,
-                    TWO,
-                    THREE,
-                    FOUR
-                };
+                POT0,
+                POT1,
+                POT2,
+                POT3,
 
-                enum class FSR
-                {
-                    ONE,
-                    TWO,
-                    THREE,
-                    FOUR
-                };
+                FSR0,
+                FSR1,
+                FSR2,
+                FSR3
             };
 
         };
@@ -70,12 +51,13 @@ namespace mhs
         void detach( u_int16_t p );
 
     protected:
-        void enqueueDigital( Events e);
-        void enqueueAnalog( Events e);
+        void enqueueDigital( Events::DIGITAL e);
+        void enqueueAnalog( Events::ANALOG e);
 
     private:
         friend class InterruptHandler;
         Scheduler scheduler;
-        std::map<EventInfo, std::function<void()>> eventTable;
+        std::map<Events::DIGITAL, std::function<void()>> m_digMapping;
+        std::map<Events::ANALOG, std::function<void()>> m_analogMapping;
     };
 }

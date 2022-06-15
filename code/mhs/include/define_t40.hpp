@@ -1,21 +1,27 @@
 #pragma once
 
-#define POT0 A0
-#define POT1 A1
-#define POT2 A12
-#define POT3 A10
+/* General Pins */
+#define _DISPLAY_CLK 16
+#define _DISPLAY_SDA 17
+#define _DISPLAY_RST 9
 
-#define DISPLAY_CLK 16
-#define DISPLAY_SDA 17
-#define DISPLAY_RST 9
+#define _SDCARD_CS_PIN   10
+#define _SDCARD_MOSI_PIN 11
+#define _SDCARD_SCK_PIN  13
 
-#define ROTARY_A 2
-#define ROTARY_B 3
-#define ROTARY_SW 4
 
-#define MIDI_IN 0
-#define MIDI_OUT 1
+/* Digital Pin */
+#define _ROTARY_A 2
+#define _ROTARY_B 3
+#define _BTN_ENTER 4
+#define _BTN_RETURN 5
+#define _BTN_TOGGLE 22
 
-#define SDCARD_CS_PIN   10
-#define SDCARD_MOSI_PIN 11
-#define SDCARD_SCK_PIN  13
+#define _MIDI_IN 0
+#define _MIDI_OUT 1
+
+/* Analog Pins */
+#define _POT0 A0
+#define _POT1 A1
+#define _POT2 A12
+#define _POT3 A10

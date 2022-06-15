@@ -1,6 +1,7 @@
 # help clion and clang a bit ...
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/mhs-ui)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/mhs-event-system)
 include_directories($CMAKE_CURRENT_SOURCE_DIR}/test/test-ui)
 
 
