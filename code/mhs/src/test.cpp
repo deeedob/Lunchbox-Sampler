@@ -2,8 +2,6 @@
 #include <SD.h>
 #include <SPI.h>
 #include <SerialFlash.h>
-#include <Bounce.h>
-#include <iostream>
 
 #include "MemGeneric.hpp"
 #include "MemSample.hpp"
@@ -30,7 +28,7 @@ void setup() {
     msamp->deleteSample("Rim.wav");
     mgen->purgeFlash();
     mgen->listFlash();
-    mgen->readSettings();
+    msamp->readSettings();
 }
 
 void loop() {

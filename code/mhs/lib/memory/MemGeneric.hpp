@@ -1,4 +1,6 @@
 #pragma once
+#ifndef MHS_MEMGENERIC_H
+#define MHS_MEMGENERIC_H
 
 #define SDCARD_CS_PIN   10
 #define SDCARD_MOSI_PIN 11
@@ -7,21 +9,18 @@
 
 class MemGeneric {
 
+public: static MemGeneric *getInstance();
+public: static MemGeneric *instance;
+
 public:
-    static MemGeneric *getInstance();
-    int searchFreeMidi();
     void listFlash();
     void purgeFlash();
     bool compare(File &file, SerialFlashFile &ffile);
 
-    void setSettingsFile(String *settings);
-    void readSettings();
-    void updateSettings();
-    void configSettings();
-
-private:
-    static MemGeneric *instance;
-    String *settings;
     MemGeneric();
+private:
+
 
 };
+
+#endif MHS_MEMGENERIC_H
