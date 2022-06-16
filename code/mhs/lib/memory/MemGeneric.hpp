@@ -10,16 +10,15 @@
 class MemGeneric {
 
 public: static MemGeneric *getInstance();
-public: static MemGeneric *instance;
 
 public:
     void listFlash();
     void purgeFlash();
     bool compare(File &file, SerialFlashFile &ffile);
 
-    MemGeneric();
-private:
 
+private:
+    explicit MemGeneric();
 
 };
 
