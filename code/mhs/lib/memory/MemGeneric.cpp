@@ -6,15 +6,35 @@
 
 #include "MemGeneric.hpp"
 
-MemGeneric *MemGeneric::instance;
 
 MemGeneric
 *MemGeneric::getInstance()
 {
-    if (!MemGeneric::instance)
-        MemGeneric::instance = new MemGeneric();
+    static MemGeneric *instance;
 
-    return MemGeneric::instance;
+
+
+
+
+
+
+    if (!instance)
+        instance = new MemGeneric();
+
+    return instance;
+}
+
+MemGeneric::MemGeneric()
+{
+
+    while(!Serial) {}
+    Serial.println(F("listFlash: All Files on SPI Flash chip:"));
+
+    /* Opening SerialPin? */
+    if (!SerialFlash.begin(FLASH_PIN)) {
+        Serial.println("Error initializing Flash chip");
+    }
+
 }
 
 void
@@ -22,15 +42,7 @@ MemGeneric::listFlash()
 {
     /* could cause infinity loop, reason ? */
     while (!Serial);
-    delay(100);
 
-    Serial.println(F("listFlash: All Files on SPI Flash chip:"));
-
-    /* Opening SerialPin? */
-    if (!SerialFlash.begin(FLASH_PIN)) {
-        Serial.println("listFlash: Flash Chip is empty!");
-        return;
-    }
 
     unsigned int count = 0;
 
@@ -93,9 +105,4 @@ MemGeneric::compare(File &file, SerialFlashFile &ffile) {
         count = count - n;
     }
     return true;  // all data identical
-}
-
-MemGeneric::MemGeneric()
-{
-
 }
