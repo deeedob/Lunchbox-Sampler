@@ -1,6 +1,6 @@
 #pragma once
 #include <window.hpp>
-#include <define_t40.hpp>
+#include "../include/define_t40.hpp"
 #include <map>
 
 class UI {
@@ -9,7 +9,7 @@ public:
     enum class Trigger { setLoad, setAudio, setManagesound, setRecord, setMainsettings };
 
     explicit UI(u_int8_t w = 128, u_int8_t h = 128, TwoWire *wire = &Wire1,
-       int8_t  display_rst = DISPLAY_RST, uint32_t preclk = 400000, uint32_t postclk = 100000 );
+       int8_t  display_rst = _DISPLAY_RST, uint32_t preclk = 400000, uint32_t postclk = 100000 );
 
     void start();
 

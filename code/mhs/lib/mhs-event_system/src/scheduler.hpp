@@ -1,7 +1,6 @@
 #pragma once
 #include "active-object/worker.hpp"
 #include <TeensyThreads.h>
-#include "event_sytem.hpp"
 
 namespace mhs
 {
@@ -16,9 +15,8 @@ namespace mhs
         void dispatch();
         void enqueue();
 
-    protected:
-        friend class EventSystem;
     private:
+        friend class EventSystem;
         Worker m_digitalListener;
         Worker m_analogListener;
         Worker m_audio;

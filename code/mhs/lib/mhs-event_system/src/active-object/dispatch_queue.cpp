@@ -2,8 +2,8 @@
 
 
 template<class Func, class... Args>
-void mhs::DispatchQueue<Func, Args...>::put( const Func &f ) {
-    std::lock_guard<std::mutex> guard(mtx);
+void mhs::DispatchQueue<Func, Args...>::put( const Func &f ) volatile {
+    std::lock_guard<volatile std::mutex> guard(mtx);
     queue.push(f);
 }
 

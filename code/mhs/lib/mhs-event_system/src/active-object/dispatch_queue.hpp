@@ -18,7 +18,7 @@ namespace mhs
     public:
         explicit DispatchQueue(u_int32_t _wait_us) : wait_us(_wait_us) { };
 
-        void put( const Func &f );
+        void put( const Func &f ) volatile;
         Func take();
 
         u_int32_t getWaitUs() const;

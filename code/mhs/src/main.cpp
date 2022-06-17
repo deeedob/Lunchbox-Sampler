@@ -1,14 +1,15 @@
-#include <define_t40.hpp>
 #include <ADC.h>
 #include <ADC_Module.h>
 #include <Bounce.h>
 #include <TeensyThreads.h>
 #include <ui.hpp>
-#include <define_t40.hpp>
 #include "scheduler.hpp"
 #include "interrupt_handler.hpp"
-#include "TestModule.hpp"
-Bounce b(ROTARY_SW, 2);
+#include "event_sytem.hpp"
+#include "interrupt_handler.hpp"
+
+
+Bounce b(_BTN_ENTER, 2);
 ADC adc;
 int pinAstateCurrent = LOW;
 int pinAStateLast = pinAstateCurrent;
@@ -26,14 +27,14 @@ void setup() {
     Serial.begin(9600);
     Serial.println("<<<<<<<<<<<<Begin program>>>>>>>>>>>>>>>");
     /* DIGITAL INTERRUPTS */
-    pinMode(ROTARY_SW, INPUT_PULLUP);
-    pinMode(ROTARY_A, INPUT_PULLUP);
-    pinMode(ROTARY_B, INPUT_PULLUP);
-    attachInterrupt(digitalPinToInterrupt(ROTARY_SW), []() {
+    pinMode(_BTN_ENTER, INPUT_PULLUP);
+    pinMode(_ROTARY_A, INPUT_PULLUP);
+    pinMode(_ROTARY_B, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(_BTN_ENTER), []() {
         b.update();
         if(b.fallingEdge()) {
             Serial.println("Interrup press");
-            Serial.println(adc.analogRead(POT0));
+            Serial.println(adc.analogRead(_POT0));
         }
 
         if(b.risingEdge()) {
@@ -42,10 +43,10 @@ void setup() {
         }
     }, CHANGE);
 
-    attachInterrupt(digitalPinToInterrupt(ROTARY_B), []() {
-        pinAstateCurrent = digitalRead(ROTARY_A);
+    attachInterrupt(digitalPinToInterrupt(_ROTARY_B), []() {
+        pinAstateCurrent = digitalRead(_ROTARY_A);
         if((pinAStateLast == LOW) && (pinAstateCurrent == HIGH)) {
-            if( digitalReadFast(ROTARY_B) == HIGH) {
+            if( digitalReadFast(_ROTARY_B) == HIGH) {
                 Serial.println("Left");
             } else {
                 Serial.println("Right");
@@ -75,22 +76,22 @@ void setup() {
     adc.adc1->analogReadContinuous();
     adc.adc0->analogReadContinuous();
     /* single */
-    adc.adc1->startSingleRead(POT0);
+    adc.adc1->startSingleRead(_POT0);
     old_positions[0] = adc.adc1->readSingle();
     Serial.print("POT 0 INIT VAL : ");
     Serial.println(old_positions[0]);
 
-    adc.adc1->startSingleRead(POT1);
+    adc.adc1->startSingleRead(_POT1);
     old_positions[1] = adc.adc1->readSingle();
     Serial.print("POT 1 INIT VAL : ");
     Serial.println(old_positions[1]);
 
-    adc.adc1->startSingleRead(POT2);
+    adc.adc1->startSingleRead(_POT2);
     old_positions[2] = adc.adc1->readSingle();
     Serial.print("POT 2 INIT VAL : ");
     Serial.println(old_positions[2]);
 
-    adc.adc0->startSingleRead(POT3);
+    adc.adc0->startSingleRead(_POT3);
     old_positions[3] = adc.adc0->readSingle();
     Serial.print("POT 3 INIT VAL : ");
     Serial.println(old_positions[3]);
@@ -100,14 +101,14 @@ void setup() {
 void loop() {
     Serial.println("POT0");
     adc.adc1->enableCompareRange( old_positions[0] - delta, old_positions[0] + delta , false, true);
-    adc.adc1->startContinuous(POT0);
+    adc.adc1->startContinuous(_POT0);
     delay(1000);
     adc.adc1->disableCompare();
     cnt++;
 
     Serial.println("POT1");
     adc.adc1->enableCompareRange( old_positions[1] - delta, old_positions[1] + delta , false, true);
-    adc.adc1->startContinuous(POT1);
+    adc.adc1->startContinuous(_POT1);
     delay(1000);
     adc.adc1->stopContinuous();
     adc.adc1->disableCompare();
@@ -115,7 +116,7 @@ void loop() {
 
     Serial.println("POT2");
     adc.adc1->enableCompareRange( old_positions[2] - delta, old_positions[2] + delta , false, true);
-    adc.adc1->startContinuous(POT2);
+    adc.adc1->startContinuous(_POT2);
     delay(1000);
     adc.adc1->stopContinuous();
     adc.adc1->disableCompare();
@@ -123,7 +124,7 @@ void loop() {
 
     Serial.println("POT3");
     adc.adc0->enableCompareRange( old_positions[3] - delta, old_positions[3] + delta , false, true);
-    adc.adc0->startContinuous(POT3);
+    adc.adc0->startContinuous(_POT3);
     delay(1000);
     adc.adc0->stopContinuous();
     adc.adc0->disableCompare();

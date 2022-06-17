@@ -2,7 +2,6 @@
 #include <map>
 #include <functional>
 #include <cstdio>
-#include "interrupt_handler.hpp"
 #include "scheduler.hpp"
 namespace mhs
 {
@@ -23,15 +22,15 @@ namespace mhs
             };
             enum class ANALOG
             {
-                POT0,
-                POT1,
-                POT2,
-                POT3,
+                POT0 = 0,
+                POT1 = 1,
+                POT2 = 2,
+                POT3 = 3,
 
-                FSR0,
-                FSR1,
-                FSR2,
-                FSR3
+                FSR0 = 0,
+                FSR1 = 1,
+                FSR2 = 2,
+                FSR3 = 3
             };
 
         };
@@ -42,6 +41,8 @@ namespace mhs
             Events event;
         };
 
+        EventSystem() = default;
+
         void attach( u_int16_t p, const Events &e, std::function<void()> f );
 
         void attach( EventInfo eventInfo, std::function<void()> f );
@@ -51,11 +52,11 @@ namespace mhs
         void detach( u_int16_t p );
 
     protected:
+        friend class InterruptHandler;
         void enqueueDigital( Events::DIGITAL e);
         void enqueueAnalog( Events::ANALOG e);
 
     private:
-        friend class InterruptHandler;
         Scheduler scheduler;
         std::map<Events::DIGITAL, std::function<void()>> m_digMapping;
         std::map<Events::ANALOG, std::function<void()>> m_analogMapping;

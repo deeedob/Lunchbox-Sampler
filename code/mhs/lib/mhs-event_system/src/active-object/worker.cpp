@@ -10,7 +10,7 @@ mhs::Worker::~Worker() {
     runnable->join();
 }
 
-void mhs::Worker::send( const std::function<void()> &f ) {
+void mhs::Worker::send( const std::function<void()> &f ){
     dispatchQueue.put(f);
 }
 

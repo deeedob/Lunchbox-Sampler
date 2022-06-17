@@ -23,5 +23,5 @@
 /* Analog Pins */
 #define _POT0 A0
 #define _POT1 A1
-#define _POT2 A12
-#define _POT3 A10
+#define _POT2 A10
+#define _POT3 A12
