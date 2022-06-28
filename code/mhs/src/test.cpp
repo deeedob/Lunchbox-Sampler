@@ -2,6 +2,7 @@
 #include <define_t40.hpp>
 #include <functional>
 #include <frozen/map.h>
+#include <Bounce2.h>
 
 /* Arduino ... why u do this shit?! */
 #undef main
@@ -37,6 +38,7 @@ public:
 private:
     std::function<void()> m_stateController;
     /* map of <mltpxAPin, <sig0, sig1, sig2>> -> A0 - A7 */
+    /* from the multiplexer docs */
     static constexpr frozen::map<u_int8_t , std::array<bool, 3>, 8> m_analog_lookup = {
             {0, {false, false, false}},
             {1, {false, false, true }},
@@ -55,10 +57,14 @@ int main() {
     Serial.println(":::Beginning Multiplexer Test:::");
     FSR testPad(4);
     testPad.setActive();
+    Bounce bounce(_BTN_TOGGLE, 20);
+
     while(true) {
-        Serial.print("PAD: ");
-        Serial.println(analogRead(_FSR_POLL));
-        delay(250);
+        bounce.update();
+        if(bounce.fell()) {
+            Serial.println("HI");
+        }
+        delay(300);
     }
 
     return 0;
