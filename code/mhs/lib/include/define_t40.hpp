@@ -25,3 +25,10 @@
 #define _POT1 A1
 #define _POT2 A10
 #define _POT3 A12
+
+/* FSR Pins */
+#define _FSR_POLL A11
+#define _FSR_SEL0 28
+#define _FSR_SEL1 30
+#define _FSR_SEL2 32
+
