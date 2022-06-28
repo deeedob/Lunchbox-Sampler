@@ -1,13 +1,13 @@
 #pragma once
-#ifndef MHS_MEMGENERIC_H
-#define MHS_MEMGENERIC_H
+#ifndef MHS_MEMSD_H
+#define MHS_MEMSD_H
 
 #define SDCARD_CS_PIN   10
 #define SDCARD_MOSI_PIN 11
 #define SDCARD_SCK_PIN  13
 #define FLASH_PIN 6
 
-class MemGeneric {
+class MemSD {
 
 public: static MemGeneric *getInstance();
 
@@ -22,4 +22,4 @@ private:
 
 };
 
-#endif MHS_MEMGENERIC_H
+#endif MHS_MEMSD_H

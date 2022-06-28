@@ -4,19 +4,13 @@
 #include <Bounce.h>
 #include <iostream>
 
-#include "MemGeneric.hpp"
+#include "MemSD.hpp"
 
 
 MemGeneric
 *MemGeneric::getInstance()
 {
     static MemGeneric *instance;
-
-
-
-
-
-
 
     if (!instance)
         instance = new MemGeneric();
