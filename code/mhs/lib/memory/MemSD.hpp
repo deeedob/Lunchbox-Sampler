@@ -9,17 +9,19 @@
 
 class MemSD {
 
-public: static MemGeneric *getInstance();
-
 public:
-    void listFlash();
+    MemSD *getInstance();
+    String listFlash();
     void purgeFlash();
     bool compare(File &file, SerialFlashFile &ffile);
-
+    void readSettings();
+    void updateSettings();
+    void configSettings();
+    int searchFreeMidi();
 
 private:
-    explicit MemGeneric();
+    explicit MemSD();
 
 };
 
-#endif MHS_MEMSD_H
+#endif

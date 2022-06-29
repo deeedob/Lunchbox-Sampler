@@ -2,56 +2,90 @@
 #include <SD.h>
 #include <SerialFlash.h>
 #include <iostream>
+#include "frozen/unordered_map.h"
 
-#include "MemGeneric.hpp"
-
+#include "MemSD.hpp"
 #include "MemSample.hpp"
 
-MemSample *MemSample::instance;
+constexpr frozen::unordered_map<String, uint8_t, 12> MemSample::MidiMapping::pitches =
 
-MemSample *MemSample::getInstance()
+MemSample
+*MemSample::getInstance()
 {
-    if (!MemSample::instance)
-        MemSample::instance = new MemSample();
+    static MemSample *instance;
 
-    return MemSample::instance;
+    if (!SerialFlash.begin(FLASH_PIN)) {
+#ifdef VERBOSE
+        Serial.println("loadSamplePack: Unable to access SPI Flash chip");
+#endif
+        //TODO: Error handling
+    }
+
+    if (!instance)
+        instance = new MemSample();
+
+    return instance;
 }
 
-MemSample::MemSample()
-{
-
-}
-
-String MemSample::getCurrentSamplePack()
+String
+MemSample::getCurrentSamplePack()
 {
     return this->currentSamplePack;
+}
+
+bool
+MemSample::testSize(const char* path)
+{
+    File dir = SD.open(path, FILE_READ);
+    uint64_t packsize = 0;
+
+    if(!dir)
+    {
+#ifdef VERBOSE
+        Serial.println("loadSamplePack: Directory nicht gefunden");
+#endif
+        //TODO: Error handling
+    }
+
+    File f = nullptr;
+
+    while ((f = dir.openNextFile())) {
+        packsize += f.size();
+    }
+
+    if (packsize > FLASHSIZE)
+        return false;
+
+    return true;
 }
 
 // load Sample Pack from SD to Flash
 bool
 MemSample::loadSamplePack(const char* path)
 {
-    if (!SD.begin(SDCARD_CS_PIN)) {
-        Serial.println("loadSamplePack: Unable to access SPI Flash chip");
+    //if samplepack same as loadedsamplepack -> abort
+    // Access to SD through MemSD
+    File dir = SD.open(path, FILE_READ);
+
+    //loadMapping
+    // TODO: loadMapping from filepath into Midimapping object
+
+    //TODO: adjustSize() (strips samplesizes down if size of sample pack too large
+
+    //test if success and size is ok and Mapping loaded
+    if (!dir || !this->currentMapping)
         return false;
-    }
-    if (!SerialFlash.begin(FLASH_PIN)) {
-        Serial.println("loadSamplePack: Unable to access SPI Flash chip");
-        return false;
-    }
-    File dir=SD.open(path, FILE_READ);
-    if(!dir)
-    {
-        Serial.println("loadSamplePack: Directory nicht gefunden");
-        return false;
-    }
-    while (1) {
-        File f = dir.openNextFile();
-        if (!f) break;
+
+    // Load every file to flash
+    File f = nullptr;
+    while ((f = dir.openNextFile())) {
+
         const char *filename = f.name();
         unsigned long length = f.size();
+#ifdef VERBOSE
         Serial.println("name: ");
         Serial.println(filename);
+#endif
         if (SerialFlash.exists(filename)) {
             Serial.println(F("loadSamplePack: already exists on the Flash chip"));
             SerialFlashFile ff = SerialFlash.open(filename);
@@ -67,6 +101,8 @@ MemSample::loadSamplePack(const char* path)
             // delete the copy on the Flash chip, if different
             SerialFlash.remove(filename);
         }
+
+
         // create the file on the Flash chip and copy data
         if (SerialFlash.create(filename, length)) {
             SerialFlashFile ff = SerialFlash.open(filename);
@@ -89,13 +125,16 @@ MemSample::loadSamplePack(const char* path)
                 Serial.println(filename);
                 Serial.println(length);
             }
-            updateSettings();
             ff.close();
         }
         f.close();
     }
     dir.close();
+
+    this->currentSamplePack = path;
+
     return true;
+
 }
 
 bool
@@ -355,7 +394,7 @@ MemSample::setSettingsFile(String *settings)
 
 int
 MemSample::searchFreeMidi(){
-    for(int i=0;i<128;i++){
+    for(int i=0; i < 128; i++){
         if (settings[i].equals("not defined")){
             return i;
         }
@@ -363,8 +402,31 @@ MemSample::searchFreeMidi(){
     return 128;
 }
 
-MemGeneric
-*MemSample::mgen()
+MemSample::MidiMapping
+*MemSample::MidiMapping::getInstance()
 {
-    return MemGeneric::getInstance();
+
+}
+
+uint8_t
+MemSample::getIntFromNote(String note)
+{
+    note = note.toLowerCase();
+    uint8_t octave = 5;
+    String pitchstr;
+    String octavestr;
+    uint8_t pitch = 0;
+
+    for (int i = 0; i < note.length(); i++) {
+       if ((note[i] >= 'a' && note[i] <= 'z')) {
+           pitchstr.append(note[i]);
+       } else {
+           octavestr.append(note[i]);
+       }
+    }
+
+    octave = octavestr.toInt();
+    pitch = MemSample::MidiMapping::pitches.find(pitchstr)->second;
+
+    return octave * 12 + pitch;
 }

@@ -6,97 +6,92 @@
 
 #include "MemSD.hpp"
 
-
-MemGeneric
-*MemGeneric::getInstance()
+MemSD
+*MemSD::getInstance()
 {
-    static MemGeneric *instance;
+    static MemSD *instance;
+
+    if (!SD.begin(SDCARD_CS_PIN)) {
+#ifdef VERBOSE
+        Serial.println("loadSamplePack: Unable to access SPI Flash chip");
+#endif
+        //TODO: Error handling
+    }
 
     if (!instance)
-        instance = new MemGeneric();
+        instance = new MemSD();
 
     return instance;
 }
 
-MemGeneric::MemGeneric()
+String
+MemSD::listFlash()
 {
-
-    while(!Serial) {}
-    Serial.println(F("listFlash: All Files on SPI Flash chip:"));
-
-    /* Opening SerialPin? */
-    if (!SerialFlash.begin(FLASH_PIN)) {
-        Serial.println("Error initializing Flash chip");
-    }
-
-}
-
-void
-MemGeneric::listFlash()
-{
-    /* could cause infinity loop, reason ? */
-    while (!Serial);
-
-
     unsigned int count = 0;
+    char filename[64];
+    uint32_t filesize;
+    String filelist;
 
     /* announce reading filelist (prob setting file iterator to 0) */
     SerialFlash.opendir();
 
-    while (1) {
-        char filename[64];
-        uint32_t filesize;
-
-        if (SerialFlash.readdir(filename, sizeof(filename), filesize)) {
-            Serial.print(F("  "));
+    while (SerialFlash.readdir(filename, sizeof(filename), filesize)) {
+            filelist.append("File " + count);
+            filelist.append(": ");
+            filelist.append(filename);
+            filelist.append("  ");
+            filelist.append(filesize);
+            filelist.append(" bytes\n");
+#ifdef VERBOSE
+            Serial.print("File ");
+            Serial.print(count);
+            Serial.print(F(": "));
             Serial.print(filename);
             Serial.print(F("  "));
             Serial.print(filesize);
             Serial.print(F(" bytes"));
             Serial.println();
+#endif
             count++;
-        }
-        else {
-            if(count == 0)
-            {
-                Serial.println("listFlash: SPI Flash chip is empty");
-            }
-            break;
-        }
     }
 
+    if (count == 0)
+        Serial.println("Flash is empty");
+
+    return filelist;
 }
 
 void
-MemGeneric::purgeFlash()
+MemSD::purgeFlash()
 {
-    if (!SerialFlash.begin(FLASH_PIN)) {
-        while (1) {
-            Serial.println(F("purgeFlash: Unable to access SPI Flash chip"));
-            return;
-        }
-    }
+#ifdef VERBOSE
     Serial.println("purgeFlash: deleting all Files. Please wait until 'ready' (ca.40s)");
+#endif
     SerialFlash.eraseAll();
-    while (SerialFlash.ready() == false);
+    while (!SerialFlash.ready());
+
+#ifdef VERBOSE
     Serial.println("ready");
+#endif
 }
 
-
-
 bool
-MemGeneric::compare(File &file, SerialFlashFile &ffile) {
+MemSD::compare(File &file, SerialFlashFile &ffile) {
     file.seek(0);
     ffile.seek(0);
+
     unsigned long count = file.size();
+
     while (count > 0) {
         char buf1[128], buf2[128];
         unsigned long n = count;
         if (n > 128) n = 128;
         file.read(buf1, n);
         ffile.read(buf2, n);
-        if (memcmp(buf1, buf2, n) != 0) return false; // differ
+        if (memcmp(buf1, buf2, n) != 0)
+            return false; // differ
         count = count - n;
     }
+
     return true;  // all data identical
 }
