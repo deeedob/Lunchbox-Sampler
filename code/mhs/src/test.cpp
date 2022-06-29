@@ -9,6 +9,7 @@
 using namespace std;
 
 void setup() {
+
     SPI.setSCK(SDCARD_SCK_PIN);
     SPI.setMOSI(SDCARD_MOSI_PIN);
 
