@@ -20,6 +20,7 @@ int main() {
     while(true) {
         if(MidiUSB.available()) {
             auto msg = MidiUSB.read();
+            /* TODO: some Serial ports must be empty for printing -- see @platformio.ini */
             Serial.print(msg.header);
             Serial.print(" ");
             Serial.print(msg.byte1);
