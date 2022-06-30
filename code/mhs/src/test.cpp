@@ -2,7 +2,8 @@
 #include <define_t40.hpp>
 #include <functional>
 #include <map>
-#include <MIDI.h>
+#include <MIDIcontroller.h>
+#include <MIDIUSB.h>
 
 /* Arduino ... why u do this shit?! */
 #undef assert
@@ -11,13 +12,24 @@
 void assert_3(const char *__file, int __lineno, const char *__sexp );
 #define assert( a ) if (!a) { assert_3(__FILE__, __LINE__,  #a); }
 
-MIDI_CREATE_DEFAULT_INSTANCE();
-
+/* https://github.com/joshnishikawa/MIDIcontroller/commit/f345d2e08b770a9e53a71319b5f620138afb1868
+ * some changes happened? what is going on
+ * */
 int main() {
-    MIDI.begin(MIDI_CHANNEL_OMNI);
+    Serial.begin(115200);
     while(true) {
-        MIDI.sendNoteOn(42, 127, 1);
-        MIDI.read();
+        if(MidiUSB.available()) {
+            auto msg = MidiUSB.read();
+            Serial.print(msg.header);
+            Serial.print(" ");
+            Serial.print(msg.byte1);
+            Serial.print(" ");
+            Serial.print(msg.byte2);
+            Serial.print(" ");
+            Serial.print(msg.byte3);
+            Serial.print(" ");
+        }
+        yield();
     }
 
     return 0;
