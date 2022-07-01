@@ -2,8 +2,8 @@
 #include <define_t40.hpp>
 #include <functional>
 #include <map>
-#include <MIDIcontroller.h>
 #include <MIDIUSB.h>
+#include <MIDIcontroller.h>
 
 /* Arduino ... why u do this shit?! */
 #undef assert
@@ -15,8 +15,12 @@ void assert_3(const char *__file, int __lineno, const char *__sexp );
 /* https://github.com/joshnishikawa/MIDIcontroller/commit/f345d2e08b770a9e53a71319b5f620138afb1868
  * some changes happened? what is going on
  * */
+
 int main() {
     Serial.begin(115200);
+    //Serial1.begin(2000000);
+    //while(!Serial && millis() < 3000 ){ }
+    Serial.println(":::Starting MIDI Test :::");
     while(true) {
         if(MidiUSB.available()) {
             auto msg = MidiUSB.read();
