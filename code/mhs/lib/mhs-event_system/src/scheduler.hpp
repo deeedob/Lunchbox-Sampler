@@ -2,7 +2,7 @@
 #include "active-object/worker.hpp"
 #include <TeensyThreads.h>
 
-namespace mhs
+namespace lbs
 {
     class Scheduler
     {

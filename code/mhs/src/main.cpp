@@ -4,10 +4,13 @@
 #include <TeensyThreads.h>
 #include <ui.hpp>
 #include "scheduler.hpp"
-#include "interrupt_handler.hpp"
+#include "interrupt_system/fsr.hpp"
+#include "interrupt_system/interrupt_handler.hpp"
 #include "event_sytem.hpp"
-#include "interrupt_handler.hpp"
-
+#include "interrupt_system/interrupt_handler.hpp"
+#include "interrupt_system/multiplex.hpp"
+#include "interrupt_system/analog_interrupts.hpp"
+#include <Audio.h>
 
 Bounce b(_BTN_ENTER, 2);
 ADC adc;
@@ -16,7 +19,6 @@ int pinAStateLast = pinAstateCurrent;
 
 FLASHMEM void flashfunc() {};
 DMAMEM void otherMem(){};
-
 
 u_int16_t delta = 20;
 u_int8_t cnt = 0;

@@ -5,7 +5,7 @@
 #include <atomic>
 #include <TeensyThreads.h>
 
-namespace mhs
+namespace lbs
 {
     /*!
      * @ingroup EventSystem

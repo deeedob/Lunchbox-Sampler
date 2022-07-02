@@ -2,13 +2,13 @@
 
 
 template<class Func, class... Args>
-void mhs::DispatchQueue<Func, Args...>::put( const Func &f ) volatile {
+void lbs::DispatchQueue<Func, Args...>::put( const Func &f ) volatile {
     std::lock_guard<volatile std::mutex> guard(mtx);
     queue.push(f);
 }
 
 template<class Func, class... Args>
-Func mhs::DispatchQueue<Func, Args...>::take() {
+Func lbs::DispatchQueue<Func, Args...>::take() {
     std::lock_guard<std::mutex> guard(mtx);
     while( !queue.empty() ) {
         threads.delay_us(wait_us);         // let the thread wait with yield() until the queue has content
@@ -19,11 +19,11 @@ Func mhs::DispatchQueue<Func, Args...>::take() {
 }
 
 template<class Func, class... Args>
-u_int32_t mhs::DispatchQueue<Func, Args...>::getWaitUs() const {
+u_int32_t lbs::DispatchQueue<Func, Args...>::getWaitUs() const {
     return wait_us;
 }
 
 template<class Func, class... Args>
-void mhs::DispatchQueue<Func, Args...>::setWaitUs( u_int32_t waitUs ) {
+void lbs::DispatchQueue<Func, Args...>::setWaitUs( u_int32_t waitUs ) {
     wait_us = waitUs;
 }

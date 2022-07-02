@@ -3,37 +3,11 @@
 #include <functional>
 #include <cstdio>
 #include "scheduler.hpp"
-namespace mhs
+namespace lbs
 {
     class EventSystem
     {
     public:
-        class Events
-        {
-        public:
-            enum class DIGITAL
-            {
-                ROTARY_L,
-                ROTARY_R,
-                BTN_ENTER,
-                BTN_RETURN,
-                BTN_TOGGLE,
-                MIDI_IN,
-            };
-            enum class ANALOG
-            {
-                POT0 = 0,
-                POT1 = 1,
-                POT2 = 2,
-                POT3 = 3,
-
-                FSR0 = 0,
-                FSR1 = 1,
-                FSR2 = 2,
-                FSR3 = 3
-            };
-
-        };
 
         struct EventInfo
         {
@@ -54,11 +28,11 @@ namespace mhs
     protected:
         friend class InterruptHandler;
         void enqueueDigital( Events::DIGITAL e);
-        void enqueueAnalog( Events::ANALOG e);
+        void enqueueAnalog( Events::POTS e);
 
     private:
         Scheduler scheduler;
         std::map<Events::DIGITAL, std::function<void()>> m_digMapping;
-        std::map<Events::ANALOG, std::function<void()>> m_analogMapping;
+        std::map<Events::POTS, std::function<void()>> m_analogMapping;
     };
 }

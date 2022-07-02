@@ -1,9 +1,8 @@
 #include "interrupt_handler.hpp"
-namespace mhs {
-
-/* _________________________ANALOG INTERRUPTS______________________ */
-/* ----------------------------------------------------------------- */
-/* _________________________________________________________________ */
+namespace lbs {
+    /* _________________________ANALOG INTERRUPTS______________________ */
+    /* ----------------------------------------------------------------- */
+    /* _________________________________________________________________ */
     InterruptHandler::AnalogInterrupts::AnalogInterrupts(u_int16_t _delta)
         : delta(_delta)
     {
@@ -16,13 +15,14 @@ namespace mhs {
         disableAll();
     }
 
-    /* Audio library uses ADC0 so try to use ADC1*/
+    /* Audio library uses ADC0 so try to use ADC1 */
     void InterruptHandler::AnalogInterrupts::readAllOldValues() {
         u_int8_t pos = 0;
         u_int8_t pin;
         ADC_STATE state;
 
-        for(const auto & it : m_analog_lookup) {
+
+        for(const auto & it : getAnalogLookup() ) {
             pos = static_cast<u_int8_t>(it.first);
             pin = it.second.first;
             state = it.second.second;
@@ -99,18 +99,20 @@ namespace mhs {
 
     }
 
+    const InterruptHandler::anlg_lookup& InterruptHandler::AnalogInterrupts::getAnalogLookup() {
+        static const auto* table = new anlg_lookup {
+
+        };
+        return *table;
+    }
+
 /* _________________________DIGITAL INTERRUPTS______________________ */
 /* ----------------------------------------------------------------- */
 /* _________________________________________________________________ */
 
     InterruptHandler::DigitalInterrupts::DigitalInterrupts() {
         m_dig_lookup = {
-                { EventSystem::Events::DIGITAL::ROTARY_L, _ROTARY_A },
-                { EventSystem::Events::DIGITAL::ROTARY_R, _ROTARY_B },
-                { EventSystem::Events::DIGITAL::BTN_ENTER, _BTN_ENTER },
-                { EventSystem::Events::DIGITAL::BTN_RETURN, _BTN_RETURN },
-                { EventSystem::Events::DIGITAL::BTN_TOGGLE, _BTN_TOGGLE },
-                { EventSystem::Events::DIGITAL::MIDI_IN, _MIDI_IN },
+
         };
     }
 
@@ -152,14 +154,31 @@ namespace mhs {
         }, CHANGE);
     }
 
-    void InterruptHandler::DigitalInterrupts::enablePin(mhs::EventSystem::Events::DIGITAL e, void (*function)(), int mode) {
+    void InterruptHandler::DigitalInterrupts::enablePin( lbs::EventSystem::Events::DIGITAL e, void (*function)(), int mode) {
         attachInterrupt(m_dig_lookup.find(e)->second, function, mode);
     }
 
-    void InterruptHandler::DigitalInterrupts::disablePin(mhs::EventSystem::Events::DIGITAL e) {
+    void InterruptHandler::DigitalInterrupts::disablePin( lbs::EventSystem::Events::DIGITAL e) {
         detachInterrupt(m_dig_lookup.find(e)->second);
     }
 
+    const InterruptHandler::dig_lookup&
+    InterruptHandler::DigitalInterrupts::getDigitalLookup() {
+        static const auto* table = new dig_lookup({
+          { EventSystem::Events::DIGITAL::ROTARY_L, _ROTARY_A },
+          { EventSystem::Events::DIGITAL::ROTARY_R, _ROTARY_B },
+          { EventSystem::Events::DIGITAL::BTN_ENTER, _BTN_ENTER },
+          { EventSystem::Events::DIGITAL::BTN_RETURN, _BTN_RETURN },
+          { EventSystem::Events::DIGITAL::BTN_TOGGLE, _BTN_TOGGLE },
+          { EventSystem::Events::DIGITAL::MIDI_IN, _MIDI_IN },
+        });
+        return *table;
+    }
+
+
+/* ________________________INTERRUPTS BASE__________________________ */
+/* ----------------------------------------------------------------- */
+/* _________________________________________________________________ */
     InterruptHandler::InterruptHandler()
     {
     }

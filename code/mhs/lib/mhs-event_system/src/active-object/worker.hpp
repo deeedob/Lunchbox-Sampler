@@ -6,7 +6,7 @@
 #include "dispatch_queue.hpp"
 #include "runnable.hpp"
 
-namespace mhs
+namespace lbs
 {
     class Worker : public Runnable
     {
