@@ -13,7 +13,6 @@ namespace lbs
     std::atomic<int> _pinAstateCurrent(LOW);
     std::atomic<int> _pinAstateLast(LOW);
 
-
     class InterruptHandler
     {
     public:

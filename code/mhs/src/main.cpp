@@ -10,6 +10,7 @@
 #include "interrupt_system/interrupt_handler.hpp"
 #include "interrupt_system/multiplex.hpp"
 #include "interrupt_system/analog_interrupts.hpp"
+#include "interrupt_system/pots.hpp"
 #include <Audio.h>
 
 Bounce b(_BTN_ENTER, 2);

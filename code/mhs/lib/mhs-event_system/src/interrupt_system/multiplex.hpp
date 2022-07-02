@@ -16,16 +16,17 @@ namespace lbs {
         explicit Multiplex(u_int8_t mpxPin);
         Multiplex() = default;
 
+        /*! activate the analog pin on the multiplexer for polling!
+         * */
+        void setActive();
+
         /*! using the construct on first use idiom.
          *  @return the static lookup table of the multiplexer pins
          * */
         static const mpx_lookup& getTable();
 
-        u_int16_t read();
     private:
-        /*! activate the analog pin on the multiplexer for polling!
-         * */
-        void setActive();
+
         std::function<void()> fn_pinSelect;
     };
 }

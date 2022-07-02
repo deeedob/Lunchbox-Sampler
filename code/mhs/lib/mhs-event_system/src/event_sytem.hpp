@@ -33,6 +33,6 @@ namespace lbs
     private:
         Scheduler scheduler;
         std::map<Events::DIGITAL, std::function<void()>> m_digMapping;
-        std::map<Events::POTS, std::function<void()>> m_analogMapping;
+        std::map<Events::POTS, std::function<void(u_int16_t)>> m_analogMapping;
     };
 }

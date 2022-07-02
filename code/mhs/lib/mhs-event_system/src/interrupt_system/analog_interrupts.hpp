@@ -1,42 +1,29 @@
 #pragma once
 #include "events.hpp"
 #include "define_t40.hpp"
-#include <map>
-#include <atomic>
 #include <ADC.h>
+#include <memory>
+#include "pots.hpp"
+#include "fsr.hpp"
+
+/* we have big jitter problems when using adc1 with usb
+ * https://forum.pjrc.com/threads/45206-Pedvide-s-ADC-library-multiple-channel-simultaneous-amp-continuous-acquisition
+ * https://forum.pjrc.com/threads/25532-ADC-library-update-now-with-support-for-Teensy-3-1?p=45376&viewfull=1#post45376
+ * */
+//NVIC_SET_PRIORITY(IRQ_USBOTG, 200);
 
 namespace lbs {
-    /* globals to access the adc values
-     * We are mapping 8 analog values to 2 adc's
-     * Do not use this directly!!!
-     * */
-    volatile std::atomic<std::array<u_int16_t, 8>> _analogOldValue;
-    volatile std::atomic<u_int8_t> _analogReadPosition;
+    volatile ADC _glob_adc;
     class AnalogInterrupts
     {
     public:
-        /* every pin has at least one of these properties
-         * thanks @https://github.com/KurtE/TeensyDocuments/blob/master/Teensy4%20MicroMod%20Pins.pdf
-         * Note that the AudioInputAnalog class uses adc0!
-         */
-        enum class ADC_STATE {
-            ADC0 = 0,
-            ADC1 = 1,
-            BOTH = 2,
-        };
-        using anlg_lookup = std::map<Events::Analog::POTS, std::pair<u_int8_t, ADC_STATE>>;
+        AnalogInterrupts();
 
-        void enableAllIsr();
-        void enableADC0Isr();
-        void enableADC1Isr();
-
-        void disableAllIsr();
-        void disableADC0Isr();
-        void disableADC1Isr();
-
-        static const anlg_lookup& getLookup();
+        const std::unique_ptr<Pots>& getPots() const;
+        const std::unique_ptr<FSR>& getFSR() const;
 
     private:
-        ADC adc;
+        std::unique_ptr<Pots> pots;
+        std::unique_ptr<FSR> fsr;
     };
 }
