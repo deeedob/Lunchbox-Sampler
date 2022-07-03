@@ -1,4 +1,5 @@
 #include "fsr.hpp"
+#include "analog_interrupts.hpp"
 
 using namespace lbs;
 
@@ -49,4 +50,14 @@ u_int16_t FSR::getDelta() const {
 
 void FSR::setDelta( u_int16_t mDelta ) {
     m_delta = mDelta;
+}
+
+void FSR::rescanAll() {
+    for(int i = 0; i < 4; i++) {
+        m_pads[i].setActive();
+        _glob_FSRValues[i] = _glob_adc.adc1->analogRead(_FSR_POLL);
+#ifdef VERBOSE
+        Serial.print("FSR: "); Serial.print(i); Serial.print(" VAL: "); Serial.println(_glob_FSRValues[i]);
+#endif
+    }
 }

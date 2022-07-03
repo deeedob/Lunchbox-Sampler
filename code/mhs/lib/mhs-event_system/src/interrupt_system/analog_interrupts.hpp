@@ -1,8 +1,9 @@
 #pragma once
-#include "events.hpp"
-#include "define_t40.hpp"
 #include <ADC.h>
 #include <memory>
+#include "events.hpp"
+#include "event_sytem.hpp"
+#include "define_t40.hpp"
 #include "pots.hpp"
 #include "fsr.hpp"
 
@@ -17,13 +18,16 @@ namespace lbs {
     class AnalogInterrupts
     {
     public:
-        AnalogInterrupts();
+        AnalogInterrupts(const std::shared_ptr<EventSystem>& eventSystem);
 
         const std::unique_ptr<Pots>& getPots() const;
         const std::unique_ptr<FSR>& getFSR() const;
+        void enableAll();
+        void disableAll();
 
     private:
-        std::unique_ptr<Pots> pots;
-        std::unique_ptr<FSR> fsr;
+        std::shared_ptr<EventSystem> m_eventSystem;
+        std::unique_ptr<Pots> m_pots;
+        std::unique_ptr<FSR> m_fsr;
     };
 }

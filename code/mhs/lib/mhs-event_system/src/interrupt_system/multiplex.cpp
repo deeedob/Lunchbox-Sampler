@@ -1,8 +1,7 @@
 #include "multiplex.hpp"
 
 using namespace lbs;
-/* ____________________________ MULTIPLEX __________________________ */
-/* _________________________________________________________________ */
+
 Multiplex::Multiplex( u_int8_t mpxPin ) {
     assert(("pin out of range", (mpxPin <= 7)));
     std::array<bool, 3> tmp = getTable().find(mpxPin)->second;

@@ -4,6 +4,7 @@
 #include <functional>
 #include <atomic>
 #include <TeensyThreads.h>
+#include <cstdio>
 
 namespace lbs
 {

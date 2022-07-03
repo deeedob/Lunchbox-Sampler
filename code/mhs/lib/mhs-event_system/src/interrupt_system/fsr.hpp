@@ -1,6 +1,5 @@
 #pragma once
 #include "multiplex.hpp"
-#include "analog_interrupts.hpp"
 
 namespace lbs {
     /* globals to access the adc values. Do not use this directly!!! */
@@ -19,7 +18,7 @@ namespace lbs {
         /*! enables the interrupt for the multiplexer poll out.
          *  ADC1 is used exclusively for this conversion.
          */
-        void enableISR(u_int8_t prio);
+        void enableISR(u_int8_t prio = 255);
         void disableISR();
         void startScan();
         void stopScan();
@@ -28,6 +27,8 @@ namespace lbs {
         u_int16_t getDelta() const;
         void setDelta( u_int16_t mDelta );
     private:
+        void rescanAll();
+
         u_int16_t m_delta;
         std::array<Multiplex, 4> m_pads;
     };

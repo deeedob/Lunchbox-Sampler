@@ -3,11 +3,14 @@
 #include <functional>
 #include <cstdio>
 #include "scheduler.hpp"
+#include "events.hpp"
 namespace lbs
 {
     class EventSystem
     {
     public:
+
+        EventSystem(EventSystem &system );
 
         struct EventInfo
         {
@@ -26,13 +29,13 @@ namespace lbs
         void detach( u_int16_t p );
 
     protected:
-        friend class InterruptHandler;
+        friend class DigitalInterrupts;
         void enqueueDigital( Events::DIGITAL e);
-        void enqueueAnalog( Events::POTS e);
+        void enqueueAnalog( Events::Analog::POTS e);
 
     private:
         Scheduler scheduler;
         std::map<Events::DIGITAL, std::function<void()>> m_digMapping;
-        std::map<Events::POTS, std::function<void(u_int16_t)>> m_analogMapping;
+        std::map<Events::Analog::POTS, std::function<void()>> m_analogMapping;
     };
 }

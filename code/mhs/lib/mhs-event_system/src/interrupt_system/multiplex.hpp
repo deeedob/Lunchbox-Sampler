@@ -5,7 +5,7 @@
 
 namespace lbs {
     /*!
-   * @class Multiplex is a implementation for the CD74HC4051EE4 analog multiplexer!
+   * @class Multiplex is a
    * */
     class Multiplex {
     public:
@@ -20,7 +20,8 @@ namespace lbs {
          * */
         void setActive();
 
-        /*! using the construct on first use idiom.
+        /*! Using the: Construct on first use idiom.
+         *  implementation for the CD74HC4051EE4 analog multiplexer!
          *  @return the static lookup table of the multiplexer pins
          * */
         static const mpx_lookup& getTable();

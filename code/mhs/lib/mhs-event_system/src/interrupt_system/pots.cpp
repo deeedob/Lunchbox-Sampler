@@ -1,10 +1,12 @@
 #include "pots.hpp"
+#include "analog_interrupts.hpp"
 
 using namespace lbs;
 
-Pots::Pots( u_int8_t potPin0, u_int8_t potPin1, u_int8_t potPin2, u_int8_t potPin3, u_int16_t delta )
-    : m_pots({potPin0, potPin1, potPin2, potPin3}), m_delta(delta)
+Pots::Pots( u_int8_t pot0, u_int8_t pot1, u_int8_t pot2, u_int8_t pot3, u_int16_t delta )
+    : m_pots({pot0, pot1, pot2, pot3}), m_delta(delta)
 {
+    rescanAll();
 }
 
 void Pots::isr() {
@@ -45,4 +47,13 @@ u_int16_t Pots::getDelta() const {
 
 void Pots::setDelta( u_int16_t mDelta ) {
     m_delta = mDelta;
+}
+
+void Pots::rescanAll() {
+    for(int i = 0; i < 4; i++) {
+        _glob_PotValues[i] = _glob_adc.adc0->analogRead(m_pots[i]);
+#ifdef VERBOSE
+        Serial.print("POT: "); Serial.print(i); Serial.print(" VAL: "); Serial.println(_glob_PotValues[i]);
+#endif
+    }
 }
