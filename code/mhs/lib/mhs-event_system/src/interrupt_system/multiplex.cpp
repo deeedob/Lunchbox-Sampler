@@ -3,21 +3,20 @@
 using namespace lbs;
 
 Multiplex::Multiplex( u_int8_t mpxPin ) {
-    assert(("pin out of range", (mpxPin <= 7)));
     std::array<bool, 3> tmp = getTable().find(mpxPin)->second;
     fn_pinSelect = [pos = tmp]() {
         if(pos[0])
-            digitalWriteFast(_FSR_SEL2, HIGH);
+            digitalWriteFast(FSR_SEL2_, HIGH);
         else
-            digitalWriteFast(_FSR_SEL2, LOW);
+            digitalWriteFast(FSR_SEL2_, LOW);
         if(pos[1])
-            digitalWriteFast(_FSR_SEL1, HIGH);
+            digitalWriteFast(FSR_SEL1_, HIGH);
         else
-            digitalWriteFast(_FSR_SEL1, LOW);
+            digitalWriteFast(FSR_SEL1_, LOW);
         if(pos[2])
-            digitalWriteFast(_FSR_SEL0, HIGH);
+            digitalWriteFast(FSR_SEL0_, HIGH);
         else
-            Serial.println("2 0");
+            digitalWriteFast(FSR_SEL0_, LOW);
     };
 }
 

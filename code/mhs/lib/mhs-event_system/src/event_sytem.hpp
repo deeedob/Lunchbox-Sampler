@@ -2,7 +2,7 @@
 #include <map>
 #include <functional>
 #include <cstdio>
-#include "scheduler.hpp"
+//#include "scheduler.hpp"
 #include "events.hpp"
 namespace lbs
 {
@@ -10,15 +10,13 @@ namespace lbs
     {
     public:
 
-        EventSystem(EventSystem &system );
+        EventSystem() = default;
 
         struct EventInfo
         {
             u_int16_t pin;
             Events event;
         };
-
-        EventSystem() = default;
 
         void attach( u_int16_t p, const Events &e, std::function<void()> f );
 
@@ -34,7 +32,7 @@ namespace lbs
         void enqueueAnalog( Events::Analog::POTS e);
 
     private:
-        Scheduler scheduler;
+//        Scheduler scheduler;
         std::map<Events::DIGITAL, std::function<void()>> m_digMapping;
         std::map<Events::Analog::POTS, std::function<void()>> m_analogMapping;
     };

@@ -8,8 +8,8 @@ public:
     enum class State { LOAD, AUDIO, MANAGESOUND, RECORD, MAINSETTINGS };
     enum class Trigger { setLoad, setAudio, setManagesound, setRecord, setMainsettings };
 
-    explicit UI(u_int8_t w = 128, u_int8_t h = 128, TwoWire *wire = &Wire1,
-       int8_t  display_rst = _DISPLAY_RST, uint32_t preclk = 400000, uint32_t postclk = 100000 );
+    explicit UI( u_int8_t w = 128, u_int8_t h = 128, TwoWire *wire = &Wire1,
+                 int8_t  display_rst = DISPLAY_RST_, uint32_t preclk = 400000, uint32_t postclk = 100000 );
 
     void start();
 

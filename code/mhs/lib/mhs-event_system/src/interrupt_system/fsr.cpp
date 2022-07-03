@@ -30,7 +30,7 @@ void FSR::startScan() {
     m_pads[_glob_FSRPosition].setActive();      // select different mpx out
     int oldVal = _glob_FSRValues[_glob_FSRPosition];
     _glob_adc.adc1->enableCompareRange(static_cast<int16_t>(oldVal - m_delta), static_cast<int16_t>(oldVal + m_delta), false, true);
-    _glob_adc.adc1->startContinuous(_FSR_POLL);
+    _glob_adc.adc1->startContinuous(FSR_POLL_);
 }
 
 void FSR::stopScan() {
@@ -55,7 +55,7 @@ void FSR::setDelta( u_int16_t mDelta ) {
 void FSR::rescanAll() {
     for(int i = 0; i < 4; i++) {
         m_pads[i].setActive();
-        _glob_FSRValues[i] = _glob_adc.adc1->analogRead(_FSR_POLL);
+        _glob_FSRValues[i] = _glob_adc.adc1->analogRead(FSR_POLL_);
 #ifdef VERBOSE
         Serial.print("FSR: "); Serial.print(i); Serial.print(" VAL: "); Serial.println(_glob_FSRValues[i]);
 #endif

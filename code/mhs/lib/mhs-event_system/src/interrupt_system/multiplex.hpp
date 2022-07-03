@@ -1,7 +1,9 @@
 #pragma once
-#include "../include/define_t40.hpp"
 #include <functional>
 #include <map>
+#include <cstdio>
+#include <Arduino.h>
+#include <define_t40.hpp>
 
 namespace lbs {
     /*!
