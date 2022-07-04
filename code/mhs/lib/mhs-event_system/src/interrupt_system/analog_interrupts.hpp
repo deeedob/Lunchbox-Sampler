@@ -14,7 +14,6 @@
 //NVIC_SET_PRIORITY(IRQ_USBOTG, 200);
 
 namespace lbs {
-    volatile ADC _glob_adc;
     class AnalogInterrupts
     {
     public:
@@ -26,6 +25,7 @@ namespace lbs {
         void disableAll();
 
     private:
+        std::shared_ptr<ADC> m_adc;
         std::shared_ptr<EventSystem> m_eventSystem;
         std::unique_ptr<Pots> m_pots;
         std::unique_ptr<FSR> m_fsr;

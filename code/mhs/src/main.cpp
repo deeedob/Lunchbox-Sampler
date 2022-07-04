@@ -42,11 +42,14 @@ int main() {
 
     auto eventSystem = std::make_shared<EventSystem>();
     DigitalInterrupts dig_int(eventSystem);
-    //AnalogInterrupts an_int(eventSystem);
+    AnalogInterrupts an_int(eventSystem);
     dig_int.enableAll();
+    an_int.enableAll();
 
     while( true ) {
-        yield();
+        an_int.getPots()->startScan();
+        delay(1000);
+        an_int.getPots()->next();
     }
 
 }

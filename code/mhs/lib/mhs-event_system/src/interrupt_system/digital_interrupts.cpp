@@ -1,17 +1,16 @@
 #include "digital_interrupts.hpp"
 
 using namespace lbs;
-/* todo make singleton?*/
 DigitalInterrupts * DigitalInterrupts::instance = nullptr;
 
 DigitalInterrupts::DigitalInterrupts(const std::shared_ptr<EventSystem>& eventSystem, u_int8_t bounceTime)
     : m_btnEnter(BTN_ENTER_, bounceTime), m_btnReturn(BTN_RETURN_, bounceTime),
-      m_btnToggle(BTN_TOGGLE_, bounceTime)
+      m_btnToggle(BTN_TOGGLE_, bounceTime), m_encoder(ROTARY_A_, ROTARY_B_)
 {
     m_eventSystem = eventSystem;
+    m_rotaryCurrent = LOW;
+    m_rotaryLast = LOW;
     instance = this;
-    glob_rotaryCurrent = LOW;
-    glob_rotaryLast = LOW;
 };
 
 /* Disable all pins if class gets out of scope */
@@ -55,8 +54,8 @@ void DigitalInterrupts::disableAll() {
 }
 
 void DigitalInterrupts::isr_rotary() {
-    DigitalInterrupts::instance->glob_rotaryCurrent = digitalReadFast(ROTARY_A_);
-    if((DigitalInterrupts::instance->glob_rotaryLast == LOW ) && (DigitalInterrupts::instance->glob_rotaryCurrent == HIGH )) {
+    DigitalInterrupts::instance->m_rotaryCurrent = digitalReadFast(ROTARY_A_);
+    if((DigitalInterrupts::instance->m_rotaryLast == LOW ) && (DigitalInterrupts::instance->m_rotaryCurrent == HIGH )) {
         if( digitalReadFast(ROTARY_B_) == HIGH ) {
 #ifdef VERBOSE
     Serial.print("ISR::ROTARY:: "); Serial.print(ROTARY_B_); Serial.println(" LEFT");
@@ -90,12 +89,9 @@ void DigitalInterrupts::isr_btn_return() {
     /* on button enter */
     if(DigitalInterrupts::instance->m_btnReturn.fallingEdge()) {
 #ifdef VERBOSE
-        Serial.print("ISR::BTN:: ");
-        Serial.print(BTN_RETURN_);
-        Serial.println(" RETURN");
+        Serial.print("ISR::BTN:: "); Serial.print(BTN_RETURN_); Serial.println(" RETURN");
 #endif
-        DigitalInterrupts::instance->m_eventSystem->enqueueDigital(
-                Events::DIGITAL::BTN_RETURN);
+        DigitalInterrupts::instance->m_eventSystem->enqueueDigital(Events::DIGITAL::BTN_RETURN);
     }
 }
 

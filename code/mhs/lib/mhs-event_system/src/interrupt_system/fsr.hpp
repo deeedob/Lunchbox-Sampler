@@ -1,10 +1,10 @@
 #pragma once
 #include "multiplex.hpp"
+#include <memory>
+#include <ADC.h>
 
 namespace lbs {
-    /* globals to access the adc values. Do not use this directly!!! */
-    std::array<int , 4> _glob_FSRValues = {};
-    volatile u_int8_t _glob_FSRPosition = 0;
+
 
     /*! @class Manages the interrupts for the FSR Pads.
      *  ADC1 is used exclusively to make things simpler.
@@ -12,7 +12,7 @@ namespace lbs {
     class FSR
     {
     public:
-        explicit FSR(u_int8_t mpxPin0, u_int8_t mpxPin1, u_int8_t mpxPin2, u_int8_t mpxPin3, u_int16_t delta );
+        explicit FSR(const std::shared_ptr<ADC>& adc, u_int8_t mpxPin0, u_int8_t mpxPin1, u_int8_t mpxPin2, u_int8_t mpxPin3, u_int16_t delta );
 
         static void isr();
         /*! enables the interrupt for the multiplexer poll out.
@@ -28,8 +28,12 @@ namespace lbs {
         void setDelta( u_int16_t mDelta );
     private:
         void rescanAll();
-
-        u_int16_t m_delta;
+    private:
+        std::shared_ptr<ADC> m_adc;
+        std::array<int , 4> m_values;
+        volatile u_int8_t m_position;
         std::array<Multiplex, 4> m_pads;
+        u_int16_t m_delta;
+        static FSR* isr_instance;
     };
 }

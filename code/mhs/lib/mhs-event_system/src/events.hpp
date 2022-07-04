@@ -11,7 +11,6 @@ namespace lbs {
             BTN_ENTER,
             BTN_RETURN,
             BTN_TOGGLE,
-            MIDI_IN, // maybe not?
         };
         class Analog {
         public:

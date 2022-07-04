@@ -1,44 +1,52 @@
 #include "pots.hpp"
-#include "analog_interrupts.hpp"
 
 using namespace lbs;
+Pots* Pots::isr_instance = nullptr;
 
-Pots::Pots( u_int8_t pot0, u_int8_t pot1, u_int8_t pot2, u_int8_t pot3, u_int16_t delta )
-    : m_pots({pot0, pot1, pot2, pot3}), m_delta(delta)
+Pots::Pots( const std::shared_ptr<ADC>& adc, u_int8_t pot0, u_int8_t pot1, u_int8_t pot2, u_int8_t pot3, u_int16_t delta)
+    : m_values({}), m_pots({pot0, pot1, pot2, pot3}), m_delta(delta)
 {
+    m_adc = adc;
+    m_position = 0;
     rescanAll();
+    isr_instance = this;
 }
 
 void Pots::isr() {
-    int val = _glob_adc.adc1->analogReadContinuous();
-    _glob_PotValues[_glob_PotPosition] = val;
+    auto i = Pots::isr_instance;
+    int val = i->m_adc->adc0->analogReadContinuous();
+    i->m_values[i->m_position] = val;
+#ifdef VERBOSE
+    Serial.print("IRS::POT: "); Serial.print(i->m_position); Serial.print(" VAL: "); Serial.println(val);
+#endif
     /* TODO: enqueue */
 }
 
 void Pots::enableISR( u_int8_t prio ) {
-    _glob_adc.adc0->enableInterrupts(isr, prio);
+    m_adc->adc0->enableInterrupts(isr, prio);
 }
 
 void Pots::disableISR() {
-    _glob_adc.adc0->disableInterrupts();
+    m_adc->adc0->disableInterrupts();
 }
 
 void Pots::startScan() {
     stopScan();
-    int oldVal = _glob_PotValues[_glob_PotPosition];
-    _glob_adc.adc0->enableCompareRange(static_cast<int16_t>(oldVal - m_delta), static_cast<int16_t>(oldVal + m_delta), false, true);
-    _glob_adc.adc0->startContinuous(m_pots[_glob_PotPosition]);
+    int oldVal = m_values[m_position];
+    m_adc->adc0->enableCompareRange(static_cast<int16_t>(oldVal - m_delta), static_cast<int16_t>(oldVal + m_delta), false, true);
+    m_adc->adc0->startContinuous(m_pots[m_position]);
 }
 
 void Pots::stopScan() {
-    _glob_adc.adc0->stopContinuous();
-    _glob_adc.adc0->disableCompare();
+    m_adc->adc0->stopContinuous();
+    m_adc->adc0->disableCompare();
 }
 
 u_int8_t Pots::next() {
-    if( _glob_PotPosition >= 4 )
-        _glob_PotPosition = 0;
-    return _glob_PotPosition++;
+    /* todo access without instance? */
+    if( m_position >= 4 )
+        m_position = 0;
+    return m_position++;
 }
 
 u_int16_t Pots::getDelta() const {
@@ -50,10 +58,11 @@ void Pots::setDelta( u_int16_t mDelta ) {
 }
 
 void Pots::rescanAll() {
+    /* todo does it work to change the "normal value" in static contect */
     for(int i = 0; i < 4; i++) {
-        _glob_PotValues[i] = _glob_adc.adc0->analogRead(m_pots[i]);
+        m_values[i] = m_adc->analogRead(m_pots[i]);
 #ifdef VERBOSE
-        Serial.print("POT: "); Serial.print(i); Serial.print(" VAL: "); Serial.println(_glob_PotValues[i]);
+        Serial.print("POT: "); Serial.print(i); Serial.print(" VAL: "); Serial.println(m_values[i]);
 #endif
     }
 }
