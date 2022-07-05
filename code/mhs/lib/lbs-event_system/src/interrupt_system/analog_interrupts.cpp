@@ -14,7 +14,7 @@ AnalogInterrupts::AnalogInterrupts(const std::shared_ptr<EventSystem>& eventSyst
     m_adc->adc0->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED);
     m_adc->adc1->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED);
 
-    m_pots = std::make_unique<Pots>(m_adc, POT0_, POT1_, POT2_, POT3_, 110);
+    m_pots = std::make_unique<Pots>(m_adc, POT0_, POT1_, POT2_, POT3_, 30);
     m_fsr = std::make_unique<FSR>(m_adc, FSR_MPX0_, FSR_MPX1_, FSR_MPX2_, FSR_MPX3_, 20);
 
 }

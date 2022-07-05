@@ -13,7 +13,7 @@ namespace lbs {
 
     class DigitalInterrupts
     {
-        using dig_lookup = std::map<Events::DIGITAL, std::pair<u_int8_t, void (*)()>>;
+        using dig_lookup = std::map<Events::DIGITAL, std::tuple<u_int8_t, void (*)(), u_int8_t>>;
     public:
         explicit DigitalInterrupts(const std::shared_ptr<EventSystem>& eventSystem, u_int8_t bounceTime = 20);
         ~DigitalInterrupts();
@@ -26,14 +26,13 @@ namespace lbs {
         static const dig_lookup& getTable();
 
         /* isr functions */
-        static void isr_rotary();
+        static void isr_rotaryA();
+        static void isr_rotaryB();
         static void isr_btn_enter();
         static void isr_btn_return();
         static void isr_btn_toggle();
     private:
         std::shared_ptr<EventSystem> m_eventSystem;
-        volatile int m_rotaryCurrent;
-        volatile int m_rotaryLast;
         Bounce m_btnEnter;
         Bounce m_btnReturn;
         Bounce m_btnToggle;

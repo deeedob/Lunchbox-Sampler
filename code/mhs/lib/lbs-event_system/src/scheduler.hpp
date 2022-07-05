@@ -1,5 +1,5 @@
 #pragma once
-#include "active-object/worker.hpp"
+#include "active_object/worker.hpp"
 #include <TeensyThreads.h>
 
 namespace lbs

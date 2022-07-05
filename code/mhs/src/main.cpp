@@ -5,6 +5,7 @@
 #include <Bounce.h>
 #include <SD.h>
 #include <Audio.h>
+#include <TeensyThreads.h>
 
 using namespace lbs;
 
@@ -23,6 +24,10 @@ int main() {
     pinMode(ROTARY_A_, INPUT_PULLUP);
     pinMode(ROTARY_B_, INPUT_PULLUP);
     pinMode(LED_BUILTIN, INPUT);
+    pinMode(FSR_SEL0_, OUTPUT);
+    pinMode(FSR_SEL1_, OUTPUT);
+    pinMode(FSR_SEL2_, OUTPUT);
+    pinMode(FSR_POLL_, INPUT);
     SPI.setSCK(SDCARD_SCK_PIN_);
     SPI.setMOSI(SDCARD_MOSI_PIN_);
     Serial.begin(9600);
@@ -40,17 +45,27 @@ int main() {
     delay(10);
 
 
-
     auto eventSystem = std::make_shared<EventSystem>();
     DigitalInterrupts dig_int(eventSystem);
-    AnalogInterrupts an_int(eventSystem);
     dig_int.enableAll();
+
+    AnalogInterrupts an_int(eventSystem);
+    auto& pots = an_int.getPots();
+    auto& fsr = an_int.getFSR();
     //an_int.getPots()->enableISR();
     //an_int.getPots()->setDelta(40);
-    //an_int.getPots()->startScan();
+    //an_int.getPots()->update();
+    fsr->enableISR();
+    fsr->setDelta(18);
+    fsr->update();
+    //pots->recalibrateDelta(15, 500);
+
 
     while( true ) {
-        yield();
+        //pots->update();
+        fsr->update();
+        delay(200);
+        //pots->next();
+        fsr->next();
     }
-
 }

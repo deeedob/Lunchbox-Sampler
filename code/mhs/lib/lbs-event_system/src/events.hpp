@@ -8,6 +8,7 @@ namespace lbs {
         {
             ROTARY_L,
             ROTARY_R,
+            ROTARY,
             BTN_ENTER,
             BTN_RETURN,
             BTN_TOGGLE,
