@@ -1,6 +1,4 @@
 #pragma once
-#ifndef MHS_MEMSAMPLE_H
-#define MHS_MEMSAMPLE_H
 
 #include "frozen/string.h"
 
@@ -47,5 +45,3 @@ private:
     bool testSize(const char* path);
 
 };
-
-#endif

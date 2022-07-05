@@ -9,10 +9,10 @@
 
 constexpr frozen::unordered_map<String, uint8_t, 12> MemSample::MidiMapping::pitches =
 
-MemSample
-*MemSample::getInstance()
+MemSample&
+MemSample::getInstance()
 {
-    static MemSample *instance;
+    static const MemSample& instance = new MemSample();
 
     if (!SerialFlash.begin(FLASH_PIN)) {
 #ifdef VERBOSE
@@ -20,9 +20,6 @@ MemSample
 #endif
         //TODO: Error handling
     }
-
-    if (!instance)
-        instance = new MemSample();
 
     return instance;
 }
