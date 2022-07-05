@@ -9,15 +9,19 @@ Pots::Pots( const std::shared_ptr<ADC>& adc, u_int8_t pot0, u_int8_t pot1, u_int
     m_adc = adc;
     m_position = 0;
     rescanAll();
+    for(auto i : m_pots) {
+        pinMode(i, INPUT);
+    }
     isr_instance = this;
 }
 
 void Pots::isr() {
-    auto i = Pots::isr_instance;
+    auto& i = Pots::isr_instance;
     int val = i->m_adc->adc0->analogReadContinuous();
     i->m_values[i->m_position] = val;
+    i->startScan();
 #ifdef VERBOSE
-    Serial.print("IRS::POT: "); Serial.print(i->m_position); Serial.print(" VAL: "); Serial.println(val);
+    Serial.print("IRS::POT:: "); Serial.print(i->m_position); Serial.print(" VAL: "); Serial.println(i->m_values[i->m_position]);
 #endif
     /* TODO: enqueue */
 }
@@ -32,8 +36,8 @@ void Pots::disableISR() {
 
 void Pots::startScan() {
     stopScan();
-    int oldVal = m_values[m_position];
-    m_adc->adc0->enableCompareRange(static_cast<int16_t>(oldVal - m_delta), static_cast<int16_t>(oldVal + m_delta), false, true);
+    u_int16_t oldVal = m_values[m_position];
+    m_adc->adc0->enableCompareRange(oldVal - m_delta, oldVal + m_delta, false, true);
     m_adc->adc0->startContinuous(m_pots[m_position]);
 }
 
@@ -43,9 +47,8 @@ void Pots::stopScan() {
 }
 
 u_int8_t Pots::next() {
-    /* todo access without instance? */
-    if( m_position >= 4 )
-        m_position = 0;
+    if( m_position >= 3 )
+        return m_position = 0;
     return m_position++;
 }
 

@@ -14,6 +14,7 @@ AudioControlSGTL5000 audioShield;
 
 AudioConnection          patchCord1(playSdWav, 0, audioOutput, 0);
 AudioConnection          patchCord2(playSdWav, 1, audioOutput, 1);
+
 #undef main
 int main() {
     pinMode(BTN_ENTER_, INPUT_PULLUP);
@@ -44,24 +45,12 @@ int main() {
     DigitalInterrupts dig_int(eventSystem);
     AnalogInterrupts an_int(eventSystem);
     dig_int.enableAll();
-    an_int.enableAll();
+    //an_int.getPots()->enableISR();
+    //an_int.getPots()->setDelta(40);
+    //an_int.getPots()->startScan();
 
     while( true ) {
-        an_int.getPots()->startScan();
-        delay(1000);
-        an_int.getPots()->next();
+        yield();
     }
 
-}
-
-void todo() {
-
-    attachInterrupt(digitalPinToInterrupt(BTN_RETURN_), []() {
-        Bounce b(BTN_RETURN_, 25);
-        b.update();
-
-        if(b.fallingEdge()) {
-            Serial.println("Interrup press");
-        }
-    }, CHANGE);
 }

@@ -22,11 +22,12 @@ namespace lbs {
 
         u_int16_t getDelta() const;
         void setDelta( u_int16_t mDelta );
+
     private:
         void rescanAll();
     private:
         std::shared_ptr<ADC> m_adc;
-        std::array<int, 4> m_values;
+        std::array<u_int16_t , 4> m_values;
         volatile u_int8_t m_position;
         std::array<u_int8_t, 4> m_pots;
         u_int16_t m_delta;

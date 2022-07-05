@@ -10,6 +10,7 @@
 
 
 namespace lbs {
+
     class DigitalInterrupts
     {
         using dig_lookup = std::map<Events::DIGITAL, std::pair<u_int8_t, void (*)()>>;
@@ -36,7 +37,6 @@ namespace lbs {
         Bounce m_btnEnter;
         Bounce m_btnReturn;
         Bounce m_btnToggle;
-        Encoder m_encoder;
         /* glue routine to have a class like feeling in isr */
         static DigitalInterrupts* instance;
     };

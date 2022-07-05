@@ -5,17 +5,26 @@ DigitalInterrupts * DigitalInterrupts::instance = nullptr;
 
 DigitalInterrupts::DigitalInterrupts(const std::shared_ptr<EventSystem>& eventSystem, u_int8_t bounceTime)
     : m_btnEnter(BTN_ENTER_, bounceTime), m_btnReturn(BTN_RETURN_, bounceTime),
-      m_btnToggle(BTN_TOGGLE_, bounceTime), m_encoder(ROTARY_A_, ROTARY_B_)
+      m_btnToggle(BTN_TOGGLE_, bounceTime)
 {
     m_eventSystem = eventSystem;
+    delayMicroseconds(2000);
+
     m_rotaryCurrent = LOW;
     m_rotaryLast = LOW;
+
     instance = this;
 };
 
 /* Disable all pins if class gets out of scope */
 DigitalInterrupts::~DigitalInterrupts() {
     disableAll();
+}
+
+void DigitalInterrupts::enableAll() {
+    for(auto& i : getTable()) {
+        enablePin(i.first);
+    }
 }
 
 void DigitalInterrupts::enablePin( Events::DIGITAL e ) {
@@ -27,18 +36,13 @@ void DigitalInterrupts::enableCustomizedPin( Events::DIGITAL e, void (*function)
     attachInterrupt(getTable().find(e)->second.first, function, mode);
 }
 
-void DigitalInterrupts::enableAll() {
-    for(auto& i : getTable()) {
-        enablePin(i.first);
-    }
-}
-
 void DigitalInterrupts::disablePin( Events::DIGITAL e ) {
     detachInterrupt(getTable().find(e)->second.first);
 }
 
 const DigitalInterrupts::dig_lookup &DigitalInterrupts::getTable() {
     static const auto* table = new dig_lookup({
+        //{ Events::DIGITAL::ROTARY_R,    { ROTARY_A_,    isr_rotary } },
         { Events::DIGITAL::ROTARY_R,    { ROTARY_B_,    isr_rotary } },
         { Events::DIGITAL::BTN_ENTER,   { BTN_ENTER_,   isr_btn_enter } },
         { Events::DIGITAL::BTN_RETURN,  { BTN_RETURN_,  isr_btn_return } },
@@ -54,21 +58,30 @@ void DigitalInterrupts::disableAll() {
 }
 
 void DigitalInterrupts::isr_rotary() {
-    DigitalInterrupts::instance->m_rotaryCurrent = digitalReadFast(ROTARY_A_);
-    if((DigitalInterrupts::instance->m_rotaryLast == LOW ) && (DigitalInterrupts::instance->m_rotaryCurrent == HIGH )) {
-        if( digitalReadFast(ROTARY_B_) == HIGH ) {
+    static unsigned long lastInterruptTime = 0;
+    unsigned long interruptTime = millis();
+    /* if the interrupt comes faster then 5ms assume it's a bounce */
+    if ( interruptTime - lastInterruptTime > 1) {
+        auto& i = DigitalInterrupts::instance;
+
+        i->m_rotaryCurrent = digitalRead(ROTARY_A_);
+        if((i->m_rotaryLast == LOW) && (i->m_rotaryCurrent == HIGH)) {
+            if( digitalReadFast(ROTARY_B_) == HIGH) {
 #ifdef VERBOSE
-    Serial.print("ISR::ROTARY:: "); Serial.print(ROTARY_B_); Serial.println(" LEFT");
+                Serial.print("ISR::ROTARY:: "); Serial.print(ROTARY_B_); Serial.println(" LEFT");
 #endif
-            DigitalInterrupts::instance->m_eventSystem->enqueueDigital(Events::DIGITAL::ROTARY_L);
-        } else {
+            } else {
 #ifdef VERBOSE
-            Serial.print("ISR::ROTARY:: "); Serial.print(ROTARY_B_); Serial.println(" RIGHT");
+                Serial.print("ISR::ROTARY:: "); Serial.print(ROTARY_B_); Serial.println(" RIGHT");
 #endif
-            DigitalInterrupts::instance->m_eventSystem->enqueueDigital(Events::DIGITAL::ROTARY_R);
+            }
         }
+        i->m_rotaryLast = i->m_rotaryCurrent;
+        lastInterruptTime = interruptTime;
     }
+
 }
+
 
 void DigitalInterrupts::isr_btn_enter() {
     DigitalInterrupts::instance->m_btnEnter.update();

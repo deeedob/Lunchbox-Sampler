@@ -26,6 +26,7 @@ namespace lbs {
 
         u_int16_t getDelta() const;
         void setDelta( u_int16_t mDelta );
+
     private:
         void rescanAll();
     private:

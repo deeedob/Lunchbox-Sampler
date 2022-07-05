@@ -35,7 +35,7 @@ void FSR::startScan() {
     stopScan();
     m_pads[m_position].setActive();      // select different mpx out
     int oldVal = m_values[m_position];
-    m_adc->adc1->enableCompareRange(static_cast<int16_t>(oldVal - m_delta), static_cast<int16_t>(oldVal + m_delta), false, true);
+    m_adc->adc1->enableCompareRange(oldVal - m_delta, oldVal + m_delta, false, true);
     m_adc->adc1->startContinuous(FSR_POLL_);
 }
 
