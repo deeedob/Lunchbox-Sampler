@@ -8,7 +8,7 @@ class Runnable {
 protected:
     virtual void runTarget(void* arg) = 0;
 public:
-    virtual ~Runnable(){}
+    virtual ~Runnable() = default;
     static void runThread(void* arg) {
         auto* runnable = static_cast<Runnable*>(arg);
         runnable->runTarget(arg);

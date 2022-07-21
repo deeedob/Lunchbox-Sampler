@@ -20,6 +20,7 @@ void Pots::isr() {
     int val = i->m_adc->adc0->analogReadContinuous();
     i->update();
     i->m_values[i->m_position] = val;
+
 #ifdef VERBOSE
     Serial.print("IRS::POT:: "); Serial.print(i->m_position); Serial.print(" VAL: "); Serial.println(i->m_values[i->m_position]);
 #endif

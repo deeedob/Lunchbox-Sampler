@@ -29,7 +29,6 @@ namespace lbs {
         static const mpx_lookup& getTable();
 
     private:
-
         std::function<void()> fn_pinSelect;
     };
 }

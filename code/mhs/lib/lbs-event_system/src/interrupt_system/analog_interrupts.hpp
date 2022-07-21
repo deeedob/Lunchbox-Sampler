@@ -17,7 +17,7 @@ namespace lbs {
     class AnalogInterrupts
     {
     public:
-        AnalogInterrupts(const std::shared_ptr<EventSystem>& eventSystem);
+        explicit AnalogInterrupts(const std::shared_ptr<EventSystem>& eventSystem);
 
         const std::unique_ptr<Pots>& getPots() const;
         const std::unique_ptr<FSR>& getFSR() const;

@@ -15,7 +15,7 @@ namespace lbs {
     {
         using dig_lookup = std::map<Events::DIGITAL, std::tuple<u_int8_t, void (*)(), u_int8_t>>;
     public:
-        explicit DigitalInterrupts(const std::shared_ptr<EventSystem>& eventSystem, u_int8_t bounceTime = 20);
+        explicit DigitalInterrupts(const std::shared_ptr<EventSystem>& eventSystem, u_int8_t bounceTime = 5);
         ~DigitalInterrupts();
         void enablePin(Events::DIGITAL e);
         void enableCustomizedPin( Events::DIGITAL e, void (*function)(), int mode = CHANGE );

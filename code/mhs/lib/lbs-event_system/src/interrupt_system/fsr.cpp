@@ -77,7 +77,7 @@ u_int16_t FSR::recalibrateDelta( u_int16_t padding, u_int16_t samples ) {
         }
         deltas[i] = highest - lowest;
     }
-    /* find the highest delta value*/
+    /* find the highest delta value */
     u_int16_t highestDelta = 0;
     for(int i = 0; i < 4 ; i++) {
         if( deltas[i] > highestDelta)

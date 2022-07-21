@@ -11,6 +11,10 @@ namespace lbs {
      *  */
     class Pots
     {
+        struct PotData {
+            u_int8_t pot;
+            u_int16_t value;
+        };
     public:
         explicit Pots( const std::shared_ptr<ADC>& adc,  u_int8_t pot0, u_int8_t pot1, u_int8_t pot2, u_int8_t pot3, u_int16_t delta);
 
