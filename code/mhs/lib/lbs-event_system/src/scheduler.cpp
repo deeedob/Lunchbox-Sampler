@@ -1,7 +1,7 @@
 #include "scheduler.hpp"
 
 lbs::Scheduler::Scheduler()
-    : m_digitalListener(5000), m_analogListener(5000), m_midiListener(5000)
+    : m_digitalListener(5000), m_midiListener(5000)
 {
     /* todo: how to handle ui and audio? */
     //threads.setSliceMicros(10); // set global slicing

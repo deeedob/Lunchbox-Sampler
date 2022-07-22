@@ -8,17 +8,19 @@
 
 namespace lbs
 {
-    template<class Func, class Arg = void>
+    template<class Func, class Args = void*>
     class Worker : public Runnable
     {
+
         static_assert(
                 (std::is_base_of<std::function<void()>, Func>::value) ||
                 (std::is_base_of<std::function<void(u_int16_t)>, Func>::value),
                 "Func must be a function");
+
     public:
         Worker(int wait_time = 50) : done(false), dispatchQueue(wait_time) {
             runnable = std::make_unique<std::thread>(&Runnable::runThread, this);
-            runnable->detach();
+            //runnable->detach();
         }
         ~Worker() override {
             done = true;
@@ -29,12 +31,12 @@ namespace lbs
 
         void runTarget( void *arg ) override {
             while( !done ) {
-                auto f = dispatchQueue.take();
-                f((int)arg);
+                auto element = dispatchQueue.take();
+                element.f(arg);
             }
         };
-        void send( const Func& f ) {
-            dispatchQueue.put(f);
+        void send( const Func& f, const Args& args) {
+            dispatchQueue.put({ f, args });
         };
         int getThreadId() {
             return runnable->get_id();
@@ -43,6 +45,6 @@ namespace lbs
     private:
         std::atomic<bool> done;
         std::unique_ptr<std::thread> runnable;
-        DispatchQueue<Func> dispatchQueue;
+        DispatchQueue<Func, Args> dispatchQueue;
     };
 }

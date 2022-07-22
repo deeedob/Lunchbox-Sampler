@@ -11,13 +11,13 @@ lbs::EventSystem::EventSystem() {
 }
 
 void lbs::EventSystem::enqueueDigital( Events::DIGITAL e ) {
-    scheduler.m_digitalListener.send(m_digMapping.find(e)->second);
+    scheduler.m_digitalListener.send(m_digMapping.find(e)->second, nullptr);
 }
 
 void lbs::EventSystem::enqueueAnalog( Events::Analog::POTS e, u_int16_t value ) {
     //scheduler.m_analogListener.send(m_analogMapping.find(e)->second);
     auto f = m_analogMapping.find(e)->second;
-    scheduler.m_analogListener.send(f);
+    //scheduler.m_analogListener.send(f, value);
 }
 
 void lbs::EventSystem::attachDigital( lbs::Events::DIGITAL e, std::function<void()> f ) {

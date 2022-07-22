@@ -18,7 +18,7 @@ namespace lbs
     private:
         friend class EventSystem;
         Worker<std::function<void()>> m_digitalListener;
-        Worker<std::function<void(u_int16_t value)>> m_analogListener;
+        //Worker<std::function<void(u_int16_t value)>, u_int16_t> m_analogListener;
         Worker<std::function<void()>> m_midiListener;
     };
 }

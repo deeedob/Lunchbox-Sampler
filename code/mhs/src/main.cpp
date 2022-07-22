@@ -73,17 +73,13 @@ int main() {
     });
 
     //eventSystem->detachDigital(Events::DIGITAL::ROTARY_L);
-    std::queue<std::function<void(u_int16_t)>> q;
-    q.push([](u_int16_t v){
-        Serial.println("Rotary Left");
-    });
-
-    auto f = q.front();
-    f(100);
 
     AnalogInterrupts analogInterrupts(eventSystem);
     auto& pots = analogInterrupts.getPots();
     pots->enableISR();
+
+    Worker<std::function<void(u_int16_t)>, u_int16_t> f;
+
 
     while(true) {
         pots->update();
