@@ -6,30 +6,24 @@
 
 #include <MemFlash.hpp>
 #include <MemSD.hpp>
-#include "MemSample.hpp"
 
 using namespace lbs;
 
 void setup()
 {
 
-    SPI.setSCK(C_SDCARD_SCK_PIN);
-    SPI.setMOSI(C_SDCARD_MOSI_PIN);
+    SPI.setSCK(SDCARD_SCK_PIN);
+    SPI.setMOSI(SDCARD_MOSI_PIN);
 
     Serial.begin(9600);
     Serial.println("Starting Memory Class");
-    Serial.println("Test TEST HALLOOOOOOO");
 
-    //MemFlash& ms = MemFlash::getInstance();
+    MemFlash &ms = MemFlash::getInstance();
+
 
     Serial.println("");
     Serial.println("Printing");
-
-    MemSample &msamp = MemSample::getInstance();
-    msamp.loadSamplePack("SamplePack01");
-    std::string filelist = MemFlash::getInstance().listFlash();
-    Serial.println(filelist.c_str());
-    msamp.playSample(60);
+    ms.loadSamplePack("SamplePack02");
 
     //MemFlash *msamp = MemFlash::getInstance();
 
