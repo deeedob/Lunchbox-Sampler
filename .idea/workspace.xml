@@ -3,24 +3,32 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+      <config projectName="Lunchbox-Sampler" targetName="BUILD_ALL" />
+      <config projectName="Lunchbox-Sampler" targetName="Debug" />
+      <config projectName="Lunchbox-Sampler" targetName="ERASE_ALL" />
+      <config projectName="Lunchbox-Sampler" targetName="CLEAN_ALL" />
+      <config projectName="Lunchbox-Sampler" targetName="Production" />
+      <config projectName="Lunchbox-Sampler" targetName="LIBS_UPDATE" />
+      <config projectName="Lunchbox-Sampler" targetName="Z_DUMMY_TARGET" />
+      <config projectName="Lunchbox-Sampler" targetName="UPLOAD_ALL" />
+    </generated>
+  </component>
   <component name="CMakeSettings">
     <configurations>
-      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+      <configuration PROFILE_NAME="teensy40" ENABLED="true" CONFIG_NAME="teensy40" />
     </configurations>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45122af1-22ff-4d95-a07b-a5105d8a2925" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.clang-format" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lunchbox_sampler.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lunchbox_sampler.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/event-system/test_event_system.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/MHS.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/img/Flowchart.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/general/LunchboxSampler_Flowchart.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/img/UML Conventions.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/docs/general/UML Conventions.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/img/UML Conventions2.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/general/UML Conventions2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/img/dependencyGraph.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/docs/general/dependencyGraph_events_system.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/img/interrupts_modes.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/general/interrupts_modes.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/img/multiplexer_modes.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/parts/multiplexer_modes.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/img/multiplexer_pins.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/parts/multiplexer_pins.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/img/multiplexer_sig.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/parts/multiplexer_sig.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/platformio.ini" beforeDir="false" afterPath="$PROJECT_DIR$/platformio.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,16 +38,32 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/lunchbox_sampler.hpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/lunchbox_sampler.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/CMakeListsUser.txt" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/CMakeLists.txt" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/platformio.ini" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/test/event-system/test_event_system.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/lib/lbs-event_system/src/scheduler.hpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/lib/lbs-event_system/src/events.hpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/.gitignore" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/lib/lbs-event_system/src/event_sytem.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/test/test_MemSD.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CMakeLists.txt" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/lib/lbs-event_system/src/interrupt_system/fsr.cpp" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectApplicationVersion">
+    <option name="ide" value="CLion" />
+    <option name="majorVersion" value="2021" />
+    <option name="minorVersion" value="3.4" />
   </component>
   <component name="ProjectId" id="28eoiNtTNbEyWt8kfREmGYjn1Ya" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -55,6 +79,7 @@
     <property name="cf.advertisement.text.has.clang-format" value="true" />
     <property name="cf.first.check.clang-format" value="false" />
     <property name="cidr.known.project.marker" value="true" />
+    <property name="cmake.loaded.for.project" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -62,6 +87,7 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="CMakeSettings" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -69,6 +95,69 @@
       <recent name="$PROJECT_DIR$/docs/teensy40" />
       <recent name="$PROJECT_DIR$/test" />
     </key>
+  </component>
+  <component name="RunManager" selected="PlatformIO.PlatformIO Upload">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BUILD_ALL" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Lunchbox-Sampler" TARGET_NAME="BUILD_ALL" CONFIG_NAME="teensy40">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CLEAN_ALL" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Lunchbox-Sampler" TARGET_NAME="CLEAN_ALL" CONFIG_NAME="teensy40">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Debug" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Lunchbox-Sampler" TARGET_NAME="Debug" CONFIG_NAME="teensy40">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ERASE_ALL" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Lunchbox-Sampler" TARGET_NAME="ERASE_ALL" CONFIG_NAME="teensy40">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LIBS_UPDATE" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Lunchbox-Sampler" TARGET_NAME="LIBS_UPDATE" CONFIG_NAME="teensy40">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Production" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Lunchbox-Sampler" TARGET_NAME="Production" CONFIG_NAME="teensy40">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UPLOAD_ALL" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Lunchbox-Sampler" TARGET_NAME="UPLOAD_ALL" CONFIG_NAME="teensy40">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Z_DUMMY_TARGET" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Lunchbox-Sampler" TARGET_NAME="Z_DUMMY_TARGET" CONFIG_NAME="teensy40" RUN_TARGET_PROJECT_NAME="Lunchbox-Sampler" RUN_TARGET_NAME="Z_DUMMY_TARGET">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PlatformIO Upload" type="platformio" factoryName="PlatformIO Upload" nameIsGenerated="true" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Lunchbox-Sampler" TARGET_NAME="Production" CONFIG_NAME="teensy40">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.BUILD_ALL" />
+      <item itemvalue="CMake Application.CLEAN_ALL" />
+      <item itemvalue="CMake Application.Debug" />
+      <item itemvalue="CMake Application.ERASE_ALL" />
+      <item itemvalue="CMake Application.LIBS_UPDATE" />
+      <item itemvalue="CMake Application.Production" />
+      <item itemvalue="CMake Application.UPLOAD_ALL" />
+      <item itemvalue="CMake Application.Z_DUMMY_TARGET" />
+      <item itemvalue="PlatformIO.PlatformIO Upload" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -81,7 +170,7 @@
       <workItem from="1651586541167" duration="774000" />
       <workItem from="1651588923698" duration="22000" />
       <workItem from="1658494769937" duration="5191000" />
-      <workItem from="1658501612585" duration="1371000" />
+      <workItem from="1658501612585" duration="2656000" />
     </task>
     <servers />
   </component>
