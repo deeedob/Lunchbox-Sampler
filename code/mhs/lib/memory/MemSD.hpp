@@ -1,27 +1,29 @@
 #pragma once
-#ifndef MHS_MEMSD_H
-#define MHS_MEMSD_H
+#include <SD.h>
+#include <SerialFlash.h>
+#include <Bounce.h>
+#include <iostream>
+#include <memory>
+#include <vector>
+#include <tuple>
+#include <CSV_Parser.h>
 
-#define SDCARD_CS_PIN   10
-#define SDCARD_MOSI_PIN 11
-#define SDCARD_SCK_PIN  13
-#define FLASH_PIN 6
 
-class MemSD {
+namespace lbs {
+    static const std::string settingsfile = "/mapping.csv";
+    static const std::string packdir = "/packs/";
 
-public:
-    MemSD *getInstance();
-    String listFlash();
-    void purgeFlash();
-    bool compare(File &file, SerialFlashFile &ffile);
-    void readSettings();
-    void updateSettings();
-    void configSettings();
-    int searchFreeMidi();
+    class MemSD {
+    public:
+        static MemSD &getInstance();
 
-private:
-    explicit MemSD();
+    public:
+        bool exists(std::string file);
+        File *getSample(std::string sampleName);
+        std::vector<std::tuple<std::string, int8_t, std::string, std::string>> *readSettings(std::string path);
 
-};
-
-#endif
+    private:
+        static inline String finishCSVLine(String line);
+        MemSD();
+    };
+}
