@@ -1,0 +1,5 @@
+cmake-build-teensy40
+docs/html
+CMakeListsPrivate.txt
+CMakeLists.txt
+.pio

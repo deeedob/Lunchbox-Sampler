@@ -1,0 +1,37 @@
+# help clion and clang a bit ...
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/lbs-ui)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib/lbs-event-system)
+include_directories($CMAKE_CURRENT_SOURCE_DIR}/test/event-system)
+
+
+add_custom_target(
+    LIBS_UPDATE
+    COMMAND platformio lib update
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+
+add_custom_target(
+    CLEAN_ALL
+    COMMAND platformio run --target clean
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+add_custom_target(
+    BUILD_ALL
+    COMMAND platformio run
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+add_custom_target(
+    UPLOAD_ALL
+    COMMAND platformio run --target upload
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+add_custom_target(
+    ERASE_ALL
+    COMMAND platformio run --target erase
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)

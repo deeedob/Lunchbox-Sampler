@@ -39,4 +39,5 @@ and have the [audio files](https://github.com/MobileHS/MHS/tree/hw-test/code/mhs
 | 24  | A10  | Poti 2  |
 | 26  | A12  | Poti 3  |
 
+
 If you need help wiring the Rotary please refer to [this](https://github.com/MobileHS/MHS/blob/main/docs/parts/rotary%20wiring.png). The Rotary button is in **PULLUP** mode.
