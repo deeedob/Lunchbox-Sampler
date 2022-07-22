@@ -109,7 +109,7 @@ When a feature is finished - merge it back into development.
 ```
 
 ## Coding Standard
-- Work in **Modules** in the lib folder
+- Work with **Modules** inside the lib folder
   - every module sits in namespace **lbs**
 - **main** is the active branch! Don't touch it and use **development** instead!
 - Don't get lost in your feature branch! Commit regularly into development if working.
