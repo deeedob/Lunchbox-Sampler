@@ -1,43 +1,107 @@
-# MHS Hardware Test
+# Lunchbox Sampler
+This device plays back audio files, records them, loads samples packs, and visualizes everything on a screen while trying to be **blazingly fast**.
+We tried to incorporate as many features as we could from classic samplers like the MPC, Korg Volca, and many more.
+The Lunchbox Sampler lives up to its name and puts an emphasis on ***mobility*** and ***extensibility***. 
+There's everything you need to rebuild this device yourself - and maybe even extend it. *Give it a shot!*
 
-Please test the hardware setup if it's working.
+Overview :
+1. [Pin Layout](#pin-layout)
+2. [Building](#building)
+3. [Contribution Policy](#contribution-policy)
 
-## How To
-- Clone this repo or switch to hw-test branch :
+## Pin Layout
+The following pins are used :
 
+| **Teensy Pins** |    **Mode**     | **descriptions**         | 
+|:---------------:|:---------------:|--------------------------|
+|        0        |       RX1       | Midi IN,  Serial         |
+|        1        |       TX1       | Midi OUT, Serial         |
+|        2        |      Dig 2      | Rotary A                 |
+|        3        |      Dig 3      | Rotary B                 | 
+|        4        |      Dig 4      | Button Enter             |
+|        5        |      Dig 5      | Button Return            |
+|       *6*       |   *RESERVED*    | *Audio-Shield, MEMCS*    |
+|       *7*       |   *RESERVED*    | *Audio-Shield, DIN*      |
+|       *8*       |   *RESERVED*    | *Audio-Shield, DOUT*     |
+|        9        |      Dig 9      | Display Reset            |
+|      *10*       |   *RESERVED*    | *Audio-Shield, SD::CS*   |
+|      *11*       |   *RESERVED*    | *Audio-Shield, SD::MOSI* |
+|      *12*       |   *RESERVED*    | *Audio-Shield, MISO*     |
+|      *13*       |   *RESERVED*    | *Audio-Shield, SD::SCK*  |
+|       14        |       A0        | POT0, ADC0               |
+|       15        |       A1        | POT1, ADC0               |
+|       16        |      SCL1       | Display, I2C Clock       |
+|       17        |      SDA1       | Display, I2C Data        |
+|      *18*       |   *RESERVED*    | *Audio-Shield, SDA*      |
+|      *19*       |   *RESERVED*    | *Audio-Shield, SCL*      |
+|      *20*       |   *RESERVED*    | *Audio-Shield, LRCLK*    |
+|      *21*       |   *RESERVED*    | *Audio-Shield, BCLK*     |
+|       22        |       A8        | FSR Poll, ADC1           |
+|      *23*       |   *RESERVED*    | *Audio-Shield, MCLK*     |
+|                 | **Bottom Pins** |                          |
+|       24        |       A10       | POT2, ADC0               |
+|       25        |       A11       | POT3, ADC0               |
+|       26        |    **FREE**     |                          |
+|       27        |       A8        |                          |
+|       28        |     Dig 28      | FSR Select 0             |
+|       29        |    **FREE**     |                          |
+|       30        |     Dig 30      | FSR Select 1             |
+|       31        |    **FREE**     |                          |
+|       32        |     Dig 32      | FSR Select 2             |
+|       33        |    **FREE**     |                          |
+
+## Building
+The following describes the build process for the [Teensy Platform](https://www.pjrc.com/) using platformio.
+Please install this program and the teensy-loader on your system and add them to your System Paths variable.
+
+Clone this repo :
 ```bash
-    git clone https://github.com/MobileHS/MHS.git 
-# or
-    git checkout hw-test
+    $ git clone https://github.com/MobileHS/Lunchbox-Sampler.git
+    # or via ssh
+    $ git clone git@github.com:MobileHS/Lunchbox-Sampler.git 
+    # cd into the repo
+    $ cd Lunchbox-Sampler
 ```
 
-- then re-init platformio and make sure the [Adafruit SSD1327](https://github.com/adafruit/Adafruit_SSD1327) lib is 
-linking and building correctly!
+Run platformio :
+```bash
+    # pio run
+```
+This will generate a hidden folder called **.pio**. In this directory, all the compiled libraries and sources are linked and the final hex file is produced.
 
-- make sure you have a working microSD Card formatted as fat32
-and have the [audio files](https://github.com/MobileHS/MHS/tree/hw-test/code/mhs/res) loaded!
+Then simply upload it to the teensy board :
+```bash
+    # pio run --target upload
+```
 
-- connect all the inputs , outputs and display as followed :
+## Contribution Policy
+Please follow this commandments :
 
-| **Teensy Pins**  | **Mode**  | **description**  |
-|---|---|---|
-| 0  | RX1  | Midi IN, serial  |
-| 1 | TX1  | Midi OUT, serial  |
-|   |   |   |
-| 2 | Dig 2  | Rotary, Out A  |
-| 3 | Dig 3  | Rotary, Out B  |
-| 4 | Dig 4  | Rotary, Switch  |
-| 5 | Dig 5  | Button, Return |
-| 22 | Dig 22 | Button, Play/Pause
-|   |   |   |
-| 16  | SCL1  | Display, I2C Clock  |
-| 17  | SDA1  | Display, I2C Data  |
-| 9  | Dig 9  | Display, Reset  |
-|   |   |   |
-| 14  | A0  | Poti 0  |
-| 15  | A1  | Poti 1  |
-| 24  | A10  | Poti 2  |
-| 26  | A12  | Poti 3  |
+1. Make **small commits**.
+2. Explain the why, not the what, in your commit message
+3. Create a **new branch** for every task / small feature / bug fix
+4. Do not commit or push directly to the master branch
+5. Do not commit commented-out code
 
+When working on features, it is necessary to work in a subbranch, e.g. :
 
-If you need help wiring the Rotary please refer to [this](https://github.com/MobileHS/MHS/blob/main/docs/parts/rotary%20wiring.png). The Rotary button is in **PULLUP** mode.
+```bash
+    git checkout -b feature-xyz development #create a new feature branch from development
+```
+
+The master branch gets merged regularly from the development branch! To update your feature branch when working on bigger features use a **rebase technique** to do so!
+
+```bash
+    git checkout development
+    git pull
+    git checkout feature-xyz
+    git rebase development   # merge conflicts may happen. Better do this step in an IDE!
+```
+
+When a feature is finished - merge it back into development.
+
+```bash
+    git checkout development
+    git pull
+    git merge feature-xyz   # merge conflicts may happen. Better do this step in an IDE!
+```

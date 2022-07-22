@@ -10,276 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45122af1-22ff-4d95-a07b-a5105d8a2925" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/MHS.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MHS.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scratchpad_23_03_22.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/.idea/code.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/.idea/serialmonitor_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/.idea/serialmonitor_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/CMakeLists.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/CMakeListsUser.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/abstract__windowState_8hpp_source.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/annotated.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/bc_s.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/bdwn.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/classAbstractWindowState-members.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/classAbstractWindowState.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/classAbstractWindowState.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/classUI-members.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/classUI.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/classWindow-members.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/classWindow.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/classWindow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/classWindowConfigs-members.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/classWindowConfigs.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/classWindowFullscreen-members.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/classWindowFullscreen.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/classWindowFullscreen.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/classWindowHorizSplit-members.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/classWindowHorizSplit.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/classWindowHorizSplit.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/classWindowVertSplit-members.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/classWindowVertSplit.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/classWindowVertSplit.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/classes.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/closed.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/concrete__windowStates_8hpp_source.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/dir_56b70c50642370c786fddc7fa1b64a17.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/dir_97aefd0d527b934f1d99a682da8fe6a9.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/doc.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/doxygen.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/doxygen.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/dynsections.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/files.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/folderclosed.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/folderopen.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/functions.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/functions_func.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/hierarchy.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/jquery.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/menu.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/menudata.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/nav_f.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/nav_g.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/nav_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/open.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/all_0.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/all_0.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/all_1.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/all_1.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/all_2.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/all_2.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/all_3.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/all_3.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/all_4.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/all_4.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/all_5.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/all_5.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/all_6.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/all_6.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/classes_0.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/classes_0.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/classes_1.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/classes_1.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/classes_2.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/classes_2.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/close.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/functions_0.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/functions_0.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/functions_1.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/functions_1.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/functions_2.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/functions_2.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/functions_3.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/functions_3.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/mag_sel.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/nomatches.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/search.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/search.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/search_l.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/search_m.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/search_r.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/search/searchdata.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/splitbar.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/sync_off.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/sync_on.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/tab_a.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/tab_b.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/tab_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/tab_s.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/tabs.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/ui_8hpp_source.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/window_8hpp_source.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/html/window__config_8hpp_source.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/img/Flowchart.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/img/Teensy4_AnalogCard.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/img/UML Conventions.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/img/UML Conventions2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/img/dependencyGraph.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/img/interrupts_modes.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/img/multiplexer_modes.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/img/multiplexer_pins.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/img/multiplexer_sig.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/docs/research/interrupts.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/doxygen.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/include/define_t40.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-event_system/library.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-event_system/src/active_object/dispatch_queue.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-event_system/src/active_object/runnable.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-event_system/src/active_object/worker.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-event_system/src/event_sytem.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-event_system/src/event_sytem.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-event_system/src/events.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-event_system/src/interrupt_system/analog_interrupts.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-event_system/src/interrupt_system/analog_interrupts.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-event_system/src/interrupt_system/digital_interrupts.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-event_system/src/interrupt_system/digital_interrupts.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-event_system/src/interrupt_system/fsr.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-event_system/src/interrupt_system/fsr.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-event_system/src/interrupt_system/multiplex.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-event_system/src/interrupt_system/multiplex.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-event_system/src/interrupt_system/pots.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-event_system/src/interrupt_system/pots.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-event_system/src/scheduler.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-event_system/src/scheduler.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-ui/abstract_module.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-ui/abstract_windowState.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-ui/concrete_windowStates.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-ui/concrete_windowStates.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-ui/ui.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-ui/window.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-ui/window.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-ui/window_config.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/lbs-ui/window_config.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/memory/MemFlash.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/memory/MemFlash.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/memory/MemSD.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/memory/MemSD.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/memory/MemSample.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/memory/MemSample.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/memory/MidiMapping.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/memory/MidiMapping.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/memory/memory.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/lib/memory/memory.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/platformio.ini" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/res/01.WAV" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/res/02.WAV" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/res/03.WAV" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/res/04.WAV" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/res/05.WAV" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/res/06.WAV" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/src/HWTestBranch.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/src/MIDI_branch.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/src/feature-fsr-pads.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/src/feature-host-midi/Notes.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/src/feature-host-midi/name.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/src/feature-host-midi/test.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/src/main.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/src/memoryClassBranch.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/test/event-system/test_active_object.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/test/event-system/test_interrupts_and_audio.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/mhs/test/test_MemSD.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/research/AkaiMPD_20.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/research/audio_pins_t41.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/research/flash_storage.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/research/uebersicht_memory_class.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/.gitkeep" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/Introduction.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/PCB_and_Case_Design/LBS View side.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/PCB_and_Case_Design/LBS View top.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/PCB_and_Case_Design/LBS view buttom.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/PCB_and_Case_Design/MHS_Mobile_Hardware_Sampler_3D.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/PCB_and_Case_Design/MHS_Mobile_Hardware_Sampler_SCHEMATIC.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/PCB_and_Case_Design/MHS_Mobile_Hardware_Sampler_V3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/PCB_and_Case_Design/PCB Test draft.PNG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/PCB_and_Case_Design/Projektdurchfuehrung.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/Teleworking_Template_Slides.pptx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/img/Projekt_Komplex.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/img/Projekt_Simple.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/img/th_koeln_transparent.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/meeting_records/Wochenberichte/KW12 -- 25.03.2022.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/meeting_records/Wochenberichte/KW12 -- 25.03.2022.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/meeting_records/Wochenberichte/KW16.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/meeting_records/Wochenberichte/KW16.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/meeting_records/Wochenberichte/KW17 -- 28.04.2022.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/meeting_records/Wochenberichte/KW17 -- 28.04.2022.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/meeting_records/Wochenberichte/KW18 -- 03.05.2022.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/meeting_records/Wochenberichte/KW18 -- 10.05.2022.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/meeting_records/Wochenberichte/~$12 -- 25.03.2022.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/meeting_records/Wochenberichte/~$18 -- 10.05.2022.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/meeting_records/img/Projekt_Komplex.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/meeting_records/img/Projekt_Simple.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/meeting_records/img/th_koeln_transparent.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/meeting_records/protokoll 11.5.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/meeting_records/record_03_05.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/meeting_records/record_10_05.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/meeting_records/record_25_03.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/meeting_records/record_28_04.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/meeting_records/record_inputHandler_07_05.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/.gitkeep" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/Breadboard.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/Code_WindowHandler.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/Doxygen_Code.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/Gantt_Chart_PAM3_detailed.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/Gantt_chart_PAM3_detailed.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/Github_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/Github_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/Github_3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/Soldering.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/Space_Hardware.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/Space_Software.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/Space_Uni.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/Work_packages_Arbeitspakete.odt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/Work_packages_Arbeitspakete.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/doxygen_website_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/doxygen_website_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/gantt_PAM3.drawio" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/gantt_PAM3.drawio.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/gantt_PAM3.drawio.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektdurchfuehrung/gantt_PAM3.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektidee/MHS_Product Requirements Document.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektidee/MHS_Product Requirements Document.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektidee/MHS_Project Assignment Form.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektidee/MHS_Project Assignment Form.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektidee/PP KW 12 (1).pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektidee/Projektdefinition.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektidee/project_organisation/configplaindocEN.texconf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektidee/project_organisation/draft01.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektidee/project_organisation/draft02.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektidee/project_organisation/project_organisation.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektidee/project_organisation/project_organisation.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektplanung/Capacity Plan.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektplanung/Cost Plan.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektplanung/MHS project structure plan.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektplanung/PPT wednesday.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektplanung/PPT wednesday.pptx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektplanung/PPT_wednesday.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektplanung/PPT_wednesday.pptx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektplanung/Quality Plan.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektplanung/project_schedule/gant_chart01.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektplanung/project_schedule/gant_chart02.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektplanung/project_schedule/gant_chart03.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektplanung/project_schedule/prec_chart01.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektplanung/project_schedule/prec_chart02.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektplanung/project_schedule/prec_chart03.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektplanung/project_schedule/project_schedule.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektplanung/project_schedule/project_schedule.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektplanung/project_schedule/task_list.ods" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/projektplanung/project_schedule/task_list.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/university/wednesday_09_05/~$rk_packages_Arbeitspakete.odt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/img/Teensy4_AnalogCard.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/teensy40/Teensy4_AnalogCard.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -318,9 +51,12 @@
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/docs/teensy40" />
       <recent name="$PROJECT_DIR$/test" />
     </key>
   </component>
@@ -334,7 +70,7 @@
       <updated>1651586538523</updated>
       <workItem from="1651586541167" duration="774000" />
       <workItem from="1651588923698" duration="22000" />
-      <workItem from="1658494769937" duration="355000" />
+      <workItem from="1658494769937" duration="4874000" />
     </task>
     <servers />
   </component>
