@@ -2,4 +2,4 @@
 CMakeListsPrivate.txt
 CMakeLists.txt
 cmake-build-*/
-CMakeLists.txt
+.idea

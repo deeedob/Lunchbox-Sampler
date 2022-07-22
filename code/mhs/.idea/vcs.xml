@@ -2,7 +2,6 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$/../.." vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/lib/Zilch" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/lib/frozen" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/lib/mhs-TeensyThreads" vcs="Git" />
   </component>
