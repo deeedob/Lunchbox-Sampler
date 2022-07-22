@@ -1,6 +1,3 @@
 [submodule "code/mhs/lib/TeensyThreads"]
 	path = code/mhs/lib/TeensyThreads
 	url = https://github.com/ftrias/TeensyThreads
-[submodule "code/mhs/lib/frozen"]
-	path = code/mhs/lib/frozen
-	url = https://github.com/serge-sans-paille/frozen
