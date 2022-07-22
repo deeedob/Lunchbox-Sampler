@@ -10,9 +10,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45122af1-22ff-4d95-a07b-a5105d8a2925" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.clang-format" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/img/Teensy4_AnalogCard.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/teensy40/Teensy4_AnalogCard.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/img/Flowchart.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/general/LunchboxSampler_Flowchart.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/img/UML Conventions.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/docs/general/UML Conventions.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/img/UML Conventions2.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/general/UML Conventions2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/img/dependencyGraph.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/docs/general/dependencyGraph_events_system.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/img/interrupts_modes.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/general/interrupts_modes.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/img/multiplexer_modes.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/parts/multiplexer_modes.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/img/multiplexer_pins.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/parts/multiplexer_pins.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/img/multiplexer_sig.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/parts/multiplexer_sig.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,6 +52,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="cf.advertisement.text.has.clang-format" value="true" />
     <property name="cf.first.check.clang-format" value="false" />
     <property name="cidr.known.project.marker" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -56,6 +65,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/docs/parts" />
       <recent name="$PROJECT_DIR$/docs/teensy40" />
       <recent name="$PROJECT_DIR$/test" />
     </key>
@@ -70,7 +80,8 @@
       <updated>1651586538523</updated>
       <workItem from="1651586541167" duration="774000" />
       <workItem from="1651588923698" duration="22000" />
-      <workItem from="1658494769937" duration="4874000" />
+      <workItem from="1658494769937" duration="5191000" />
+      <workItem from="1658501612585" duration="1371000" />
     </task>
     <servers />
   </component>
