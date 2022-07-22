@@ -22,8 +22,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45122af1-22ff-4d95-a07b-a5105d8a2925" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/HWTestBranch.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/feature-fsr-pads.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MIDI_branch.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/feature-host-midi/Notes.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/feature-host-midi/name.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/feature-host-midi/test.cpp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/memoryClassBranch.cpp" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -36,11 +39,6 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:teensy40" />
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="main" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
@@ -49,11 +47,11 @@
     <setting file="file://$PROJECT_DIR$/CMakeListsUser.txt" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/platformio.ini" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/test/event-system/test_event_system.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/main.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/lbs-event_system/src/scheduler.hpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/lbs-event_system/src/events.hpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/.gitignore" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/lbs-event_system/src/event_sytem.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/test/test_MemSD.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/CMakeLists.txt" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/lib/lbs-event_system/src/interrupt_system/fsr.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -92,6 +90,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/docs/parts" />
       <recent name="$PROJECT_DIR$/docs/teensy40" />
       <recent name="$PROJECT_DIR$/test" />

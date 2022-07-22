@@ -8,6 +8,7 @@ Overview :
 1. [Pin Layout](#pin-layout)
 2. [Building](#building)
 3. [Contribution Policy](#contribution-policy)
+4. [Coding Standard](#coding-standard)
 
 ## Pin Layout
 The following pins are used :
@@ -75,7 +76,7 @@ Then simply upload it to the teensy board :
 ```
 
 ## Contribution Policy
-Please follow this commandments :
+Please follow these commandments :
 
 1. Make **small commits**.
 2. Explain the why, not the what, in your commit message
@@ -106,3 +107,9 @@ When a feature is finished - merge it back into development.
     git pull
     git merge feature-xyz   # merge conflicts may happen. Better do this step in an IDE!
 ```
+
+## Coding Standard
+- Work in **Modules** in the lib folder
+  - every module sits in namespace **lbs**
+- **main** is the active branch! Don't touch it and use **development** instead!
+- Don't get lost in your feature branch! Commit regularly into development if working.
