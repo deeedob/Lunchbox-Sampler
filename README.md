@@ -24,6 +24,7 @@ Overview :
 2. [Building](#building)
 3. [Contribution Policy](#contribution-policy)
 4. [Coding Standard](#coding-standard)
+5. [Clion Setup Guide](#clion-setup-guide)
 
 ## Pin Layout
 The following pins are used :
@@ -124,7 +125,21 @@ When a feature is finished - merge it back into development.
 ```
 
 ## Coding Standard
+
 - Work with **Modules** inside the lib folder
   - every module sits in namespace **lbs**
 - **main** is the active branch! Don't touch it and use **development** instead!
 - Don't get lost in your feature branch! Commit regularly into development if working.
+
+## Clion Setup Guide
+
+We currently use [platformio](https://docs.platformio.org) as a build system. We may switch to a pure CMake based system in the future though.
+In order to work with embedded projects following requirement have to be met :
+
+- install `PlatformIO for CLion` plugin 
+- install `Serial Port Monitor` plugin
+
+1. Then you have to `Re-Init` the platformio.ini file in order to generate the **CMakeLists.txt** file. 
+You may have to `Reload CMake Project` to let CLion properly detect the project!
+2. To build custom targets for platformio you have to set the proper `Build type` in `File > Settings > Build, Execution, Deployment > CMake`.
+This has to match the [platformio.ini](platformio.ini) environments that you declare.
