@@ -80,7 +80,7 @@ Please follow these commandments :
 
 1. Make **small commits**.
 2. Explain the why, not the what, in your commit message
-3. Create a **new branch** with the following pattern : feature-<name>
+3. Create a **new branch** with the following pattern : feature-\<name\>
 4. Do not commit or push directly to the master branch
 
 When working on features, it is necessary to work in a subbranch, e.g. :
