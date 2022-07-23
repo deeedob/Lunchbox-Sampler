@@ -7,7 +7,7 @@ extensibility***. There's everything you need to rebuild this device yourself - 
 Features :
 1. Midi USB Host
 2. Midi Jack IN & OUT
-3. Midi with 4 custom build Force Sensors ((FSR))[https://en.wikipedia.org/wiki/Force-sensing_resistor]
+3. Midi with 4 custom build Force Sensors ([FSR](https://en.wikipedia.org/wiki/Force-sensing_resistor))
 4. 128x128 Display
     - Horizontal, Vertical, Fullscreen
 5. Condenser Microphone
