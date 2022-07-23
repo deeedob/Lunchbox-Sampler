@@ -71,7 +71,7 @@ Clone this repo :
 Run platformio :
 
 ```bash
-    # pio run
+    $ pio run
 ```
 
 This will generate a hidden folder called **.pio**. In this directory, all the compiled libraries and sources are linked and the final hex file is produced.
@@ -79,7 +79,7 @@ This will generate a hidden folder called **.pio**. In this directory, all the c
 Then simply upload it to the teensy board :
 
 ```bash
-    # pio run --target upload
+    $ pio run --target upload
 ```
 
 ## Contribution Policy
@@ -95,7 +95,7 @@ Please follow this commandments :
 When working on features, it is necessary to work in a subbranch, e.g. :
 
 ```bash
-    git checkout -b feature-xyz development #create a new feature branch from development
+    git checkout -b feature-xyz main #create a new feature branch from main
 ```
 
 The master branch gets merged regularly from the development branch! To update your feature branch 
