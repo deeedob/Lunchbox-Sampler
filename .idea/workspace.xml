@@ -22,6 +22,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45122af1-22ff-4d95-a07b-a5105d8a2925" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/Lunchbox-Sampler.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -166,7 +169,7 @@
       <workItem from="1651588923698" duration="22000" />
       <workItem from="1658494769937" duration="5191000" />
       <workItem from="1658501612585" duration="2656000" />
-      <workItem from="1658573086592" duration="3000" />
+      <workItem from="1658573086592" duration="305000" />
     </task>
     <servers />
   </component>
