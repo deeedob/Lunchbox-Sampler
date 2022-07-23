@@ -1,5 +1,4 @@
-cmake-build-teensy40
-cmake-build-debug
+cmake-build*
 .idea/misc.xml
 docs/html
 CMakeListsPrivate.txt
