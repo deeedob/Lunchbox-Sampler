@@ -4,6 +4,21 @@ This device plays back audio files, records them, loads samples packs, and visua
 name and puts an emphasis on ***mobility*** and ***
 extensibility***. There's everything you need to rebuild this device yourself - and maybe even extend it. *Give it a shot!*
 
+Features :
+1. Midi USB Host
+2. Midi Jack IN & OUT
+3. Midi with 4 custom build Force Sensors ((FSR))[https://en.wikipedia.org/wiki/Force-sensing_resistor]
+4. 128x128 Display
+    - Horizontal, Vertical, Fullscreen
+5. Condenser Microphone
+6. Stereo TS 6.35mm IN & OUT
+7. Stereo TRS 3.5mm OUT
+8. SD Card for loading Settings & Soundpacks
+9. Interrupt driven Event System
+    - Multithreaded
+    - Digital Interrupts
+    - Analog Interrupts on change
+
 Overview :
 
 1. [Pin Layout](#pin-layout)
