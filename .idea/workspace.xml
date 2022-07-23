@@ -22,12 +22,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45122af1-22ff-4d95-a07b-a5105d8a2925" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MIDI_branch.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/feature-host-midi/Notes.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/feature-host-midi/name.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/feature-host-midi/test.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/memoryClassBranch.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,11 +92,6 @@
     </key>
   </component>
   <component name="RunManager" selected="PlatformIO.PlatformIO Upload">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="BUILD_ALL" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Lunchbox-Sampler" TARGET_NAME="BUILD_ALL" CONFIG_NAME="teensy40">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -142,6 +132,11 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="PlatformIO Upload" type="platformio" factoryName="PlatformIO Upload" nameIsGenerated="true" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Lunchbox-Sampler" TARGET_NAME="Production" CONFIG_NAME="teensy40">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -171,6 +166,7 @@
       <workItem from="1651588923698" duration="22000" />
       <workItem from="1658494769937" duration="5191000" />
       <workItem from="1658501612585" duration="2656000" />
+      <workItem from="1658573086592" duration="3000" />
     </task>
     <servers />
   </component>
