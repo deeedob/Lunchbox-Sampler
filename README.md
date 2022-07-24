@@ -4,21 +4,6 @@ We tried to incorporate as many features as we could from classic samplers like 
 The Lunchbox Sampler lives up to its name and puts an emphasis on ***mobility*** and ***extensibility***. 
 There's everything you need to rebuild this device yourself - and maybe even extend it. *Give it a shot!*
 
-Features :
-1. Midi USB Host
-2. Midi Jack IN & OUT
-3. Midi with 4 custom build Force Sensors ([FSR](https://en.wikipedia.org/wiki/Force-sensing_resistor))
-4. 128x128 Display
-    - Horizontal, Vertical, Fullscreen
-5. Condenser Microphone
-6. Stereo TS 6.35mm IN & OUT
-7. Stereo TRS 3.5mm OUT
-8. SD Card for loading Settings & Soundpacks
-9. Interrupt driven Event System
-    - Multithreaded
-    - Digital Interrupts
-    - Analog Interrupts on change
-
 Overview :
 1. [Pin Layout](#pin-layout)
 2. [Building](#building)
@@ -82,32 +67,32 @@ Clone this repo :
 
 Run platformio :
 ```bash
-    $ pio run
+    # pio run
 ```
 This will generate a hidden folder called **.pio**. In this directory, all the compiled libraries and sources are linked and the final hex file is produced.
 
 Then simply upload it to the teensy board :
 ```bash
-    $ pio run --target upload
+    # pio run --target upload
 ```
 
 ## Contribution Policy
-Please follow these commandments :
+Please follow this commandments :
 
 1. Make **small commits**.
 2. Explain the why, not the what, in your commit message
-3. Create a **new branch** with the following pattern : feature-\<name\>
+3. Create a **new branch** for every task / small feature / bug fix
 4. Do not commit or push directly to the master branch
+5. Do not commit commented-out code
 
 When working on features, it is necessary to work in a subbranch, e.g. :
 
 ```bash
-    git checkout -b feature-xyz main #create a new feature branch from main
+    git checkout -b feature-xyz development #create a new feature branch from development
 ```
 
-The master branch gets merged regularly from the development branch! **To update** your feature branch 
-when working on bigger features use a **rebase technique**.
-> use this step on a **regular** basis
+The master branch gets merged regularly from the development branch! To update your feature branch 
+when working on bigger features use a **rebase technique** to do so!
 
 ```bash
     git checkout development
