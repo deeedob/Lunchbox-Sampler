@@ -1,6 +1,6 @@
 cmake-build*
-.pio
 .idea
+.pio
 docs/html
 CMakeListsPrivate.txt
 CMakeLists.txt
