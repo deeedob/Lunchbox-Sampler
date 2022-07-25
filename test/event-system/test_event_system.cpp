@@ -16,18 +16,18 @@ AudioConnection          patchCord1(playSdWav, 0, audioOutput, 0);
 AudioConnection          patchCord2(playSdWav, 1, audioOutput, 1);
 
 void setupPins() {
-    pinMode(BTN_ENTER_, INPUT_PULLUP);
-    pinMode(BTN_RETURN_, INPUT_PULLUP);
-    pinMode(BTN_TOGGLE_, INPUT_PULLUP);
-    pinMode(ROTARY_A_, INPUT_PULLUP);
-    pinMode(ROTARY_B_, INPUT_PULLUP);
+    pinMode( C_BTN_ENTER, INPUT_PULLUP );
+    pinMode( C_BTN_RETURN, INPUT_PULLUP );
+    pinMode( C_BTN_TOGGLE, INPUT_PULLUP );
+    pinMode( C_ROTARY_A, INPUT_PULLUP );
+    pinMode( C_ROTARY_B, INPUT_PULLUP );
     pinMode(LED_BUILTIN, INPUT);
-    pinMode(FSR_SEL0_, OUTPUT);
-    pinMode(FSR_SEL1_, OUTPUT);
-    pinMode(FSR_SEL2_, OUTPUT);
-    pinMode(FSR_POLL_, INPUT);
-    SPI.setSCK(SDCARD_SCK_PIN_);
-    SPI.setMOSI(SDCARD_MOSI_PIN_);
+    pinMode( C_FSR_SEL_0, OUTPUT );
+    pinMode( C_FSR_SEL_1, OUTPUT );
+    pinMode( C_FSR_SEL_2, OUTPUT );
+    pinMode( C_FSR_POLL, INPUT );
+    SPI.setSCK( C_SDCARD_SCK_PIN );
+    SPI.setMOSI( C_SDCARD_MOSI_PIN );
 }
 
 void t(std::function<void(u_int16_t)> f) {
@@ -40,7 +40,7 @@ int main() {
 
     Serial.println(":::Begin Event System Test:::");
     setupPins();
-    if (!(SD.begin(SDCARD_CS_PIN_))) {
+    if (!(SD.begin( C_SDCARD_CS_PIN ))) {
         // stop here, but print a message
         Serial.println("Unable to access the SD card.  Program halted.");
         delay(500);
@@ -56,19 +56,19 @@ int main() {
     DigitalInterrupts digitalInterrupts(eventSystem);
     digitalInterrupts.enableAll();
 
-    eventSystem->attachDigital(Events::DIGITAL::ROTARY_L, [](){
+    eventSystem->attachDigital( Events::DIGITAL::ROTARY_L, [](){
         Serial.println("Rotary Left");
     });
-    eventSystem->attachDigital(Events::DIGITAL::ROTARY_R, [](){
+    eventSystem->attachDigital( Events::DIGITAL::ROTARY_R, [](){
         Serial.println("Rotary Right");
     });
-    eventSystem->attachDigital(Events::DIGITAL::BTN_RETURN, [](){
+    eventSystem->attachDigital(Events::DIGITAL::C_BTN_RETURN, [](){
         Serial.println("Button Return");
     });
-    eventSystem->attachDigital(Events::DIGITAL::BTN_ENTER, [](){
+    eventSystem->attachDigital(Events::DIGITAL::C_BTN_ENTER, [](){
         Serial.println("Button Enter");
     });
-    eventSystem->attachDigital(Events::DIGITAL::BTN_TOGGLE, [](){
+    eventSystem->attachDigital(Events::DIGITAL::C_BTN_TOGGLE, [](){
         Serial.println("Button Toggle");
     });
 

@@ -3,8 +3,6 @@
 #undef main
 
 int main() {
-    LunchboxSampler& sampler = LunchboxSampler::getInstance();
-    sampler.run();
-
-    return EXIT_SUCCESS;
+	LunchboxSampler& sampler = LunchboxSampler::getInstance();
+	sampler.run();
 }

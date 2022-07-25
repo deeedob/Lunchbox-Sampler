@@ -4,23 +4,23 @@
 #undef main
 
 /* General Pins */
-#define DISPLAY_CLK_ 16
-#define DISPLAY_SDA_ 17
-#define DISPLAY_RST_ 9
+#define C_DISPLAY_CLK 16
+#define C_DISPLAY_SDA 17
+#define C_DISPLAY_RST 9
 
-#define SDCARD_CS_PIN_   10
-#define SDCARD_MOSI_PIN_ 11
-#define SDCARD_SCK_PIN_  13
+#define C_SDCARD_CS_PIN   10
+#define C_SDCARD_MOSI_PIN 11
+#define C_SDCARD_SCK_PIN  13
 
 /* Digital Pin */
-#define ROTARY_A_ 2
-#define ROTARY_B_ 3
-#define BTN_ENTER_ 4
-#define BTN_RETURN_ 5
-#define BTN_TOGGLE_ 26
+#define C_ROTARY_A 2
+#define C_ROTARY_B 3
+#define C_BTN_ENTER 4
+#define C_BTN_RETURN 5
+#define C_BTN_TOGGLE 26
 
-#define MIDI_IN_ 0
-#define MIDI_OUT_ 1
+#define C_MIDI_IN 0
+#define C_MIDI_OUT 1
 
 
 /* every pin has at least one of these properties
@@ -29,20 +29,19 @@
  */
 
 /* Analog Pins */
-#define POT0_ A0        //both
-#define POT1_ A1        //both
-#define POT2_ A10       //adc0
-#define POT3_ A11       //adc0
+#define C_POT_0 A0        //both
+#define C_POT_1 A1        //both
+#define C_POT_2 A10       //adc0
+#define C_POT_3 A11       //adc0
 
 /* FSR Pins */
-#define FSR_POLL_ A8    //both
-#define FSR_SEL0_ 28
-#define FSR_SEL1_ 30
-#define FSR_SEL2_ 32
+#define C_FSR_POLL A8    //both
+#define C_FSR_SEL_0 28
+#define C_FSR_SEL_1 30
+#define C_FSR_SEL_2 32
 
 /* MPX Positions */
-#define FSR_MPX0_ 0
-#define FSR_MPX1_ 1
-#define FSR_MPX2_ 2
-#define FSR_MPX3_ 3
-
+#define C_FSR_MPX_0 0
+#define C_FSR_MPX_1 1
+#define C_FSR_MPX_2 2
+#define C_FSR_MPX_3 3

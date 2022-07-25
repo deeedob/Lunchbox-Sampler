@@ -153,7 +153,7 @@ INLINE_INHERITED_MEMB  = NO
 FULL_PATH_NAMES        = YES
 
 # The STRIP_FROM_PATH tag can be used to strip a user-defined part of the path.
-# Stripping is only done if one of the specified strings matches the left-hand
+# Stripping is only m_done if one of the specified strings matches the left-hand
 # part of the path. The tag can be used to show relative paths in the file list.
 # If left blank the directory from which doxygen is run is used as the path to
 # strip.
@@ -265,7 +265,7 @@ ALIASES                =
 
 # Set the OPTIMIZE_OUTPUT_FOR_C tag to YES if your project consists of C sources
 # only. Doxygen will then generate output that is more tailored for C. For
-# instance, some of the names that are used will be different. The list of all
+# m_instance, some of the names that are used will be different. The list of all
 # members will be omitted, etc.
 # The default value is: NO.
 
@@ -273,7 +273,7 @@ OPTIMIZE_OUTPUT_FOR_C  = NO
 
 # Set the OPTIMIZE_OUTPUT_JAVA tag to YES if your project consists of Java or
 # Python sources only. Doxygen will then generate output that is more tailored
-# for that language. For instance, namespaces will be presented as packages,
+# for that language. For m_instance, namespaces will be presented as packages,
 # qualified scopes will look different, etc.
 # The default value is: NO.
 
@@ -293,7 +293,7 @@ OPTIMIZE_OUTPUT_VHDL   = NO
 
 # Set the OPTIMIZE_OUTPUT_SLICE tag to YES if your project consists of Slice
 # sources only. Doxygen will then generate output that is more tailored for that
-# language. For instance, namespaces will be presented as modules, types will be
+# language. For m_instance, namespaces will be presented as modules, types will be
 # separated into more groups, etc.
 # The default value is: NO.
 
@@ -308,9 +308,9 @@ OPTIMIZE_OUTPUT_SLICE  = NO
 # VHDL, Fortran (fixed format Fortran: FortranFixed, free formatted Fortran:
 # FortranFree, unknown formatted Fortran: Fortran. In the later case the parser
 # tries to guess whether the code is fixed or free formatted code, this is the
-# default for Fortran type files). For instance to make doxygen treat .inc files
-# as Fortran files (default is PHP), and .f files as C (default is Fortran),
-# use: inc=Fortran f=C.
+# default for Fortran type files). For m_instance to make doxygen treat .inc files
+# as Fortran files (default is PHP), and .m_f files as C (default is Fortran),
+# use: inc=Fortran m_f=C.
 #
 # Note: For files without extension you can use no_extension as a placeholder.
 #
@@ -399,9 +399,9 @@ DISTRIBUTE_GROUP_DOC   = NO
 GROUP_NESTED_COMPOUNDS = NO
 
 # Set the SUBGROUPING tag to YES to allow class member groups of the same type
-# (for instance a group of public functions) to be put as a subgroup of that
+# (for m_instance a group of public functions) to be put as a subgroup of that
 # type (e.g. under the Public Functions section). Set it to NO to prevent
-# subgrouping. Alternatively, this can be done per class using the
+# subgrouping. Alternatively, this can be m_done per class using the
 # \nosubgrouping command.
 # The default value is: YES.
 
@@ -456,7 +456,7 @@ LOOKUP_CACHE_SIZE      = 0
 # during processing. When set to 0 doxygen will based this on the number of
 # cores available in the system. You can set it explicitly to a value larger
 # than 0 to get more control over the balance between CPU load and processing
-# speed. At this moment only the input processing can be done using multiple
+# speed. At this moment only the input processing can be m_done using multiple
 # threads. Since this is still an experimental feature the default is set to 1,
 # which effectively disables parallel processing. Please report any issues you
 # encounter. Generating dot graphs in parallel is controlled by the
@@ -900,7 +900,7 @@ INPUT_ENCODING         = UTF-8
 # *.c++, *.java, *.ii, *.ixx, *.ipp, *.i++, *.inl, *.idl, *.ddl, *.odl, *.h,
 # *.hh, *.hxx, *.hpp, *.h++, *.l, *.cs, *.d, *.php, *.php4, *.php5, *.phtml,
 # *.inc, *.m, *.markdown, *.md, *.mm, *.dox (to be provided as doxygen C
-# comment), *.py, *.pyw, *.f90, *.f95, *.f03, *.f08, *.f18, *.f, *.for, *.vhd,
+# comment), *.py, *.pyw, *.f90, *.f95, *.f03, *.f08, *.f18, *.m_f, *.for, *.vhd,
 # *.vhdl, *.ucf, *.qsf and *.ice.
 
 FILE_PATTERNS          = *.c \
@@ -942,7 +942,7 @@ FILE_PATTERNS          = *.c \
                          *.f03 \
                          *.f08 \
                          *.f18 \
-                         *.f \
+                         *.m_f \
                          *.for \
                          *.vhd \
                          *.vhdl \
@@ -1069,7 +1069,7 @@ FILTER_SOURCE_PATTERNS =
 
 # If the USE_MDFILE_AS_MAINPAGE tag refers to the name of a markdown file that
 # is part of the input, its contents will be placed on the main page
-# (index.html). This can be useful if you have a project on for instance GitHub
+# (index.html). This can be useful if you have a project on for m_instance GitHub
 # and want to reuse the introduction page also for the doxygen output.
 
 USE_MDFILE_AS_MAINPAGE =
@@ -1271,7 +1271,7 @@ HTML_EXTRA_FILES       =
 # The HTML_COLORSTYLE_HUE tag controls the color of the HTML output. Doxygen
 # will adjust the colors in the style sheet and background images according to
 # this color. Hue is specified as an angle on a color-wheel, see
-# https://en.wikipedia.org/wiki/Hue for more information. For instance the value
+# https://en.wikipedia.org/wiki/Hue for more information. For m_instance the value
 # 0 represents red, 60 is yellow, 120 is green, 180 is cyan, 240 is blue, 300
 # purple, and 360 is red again.
 # Minimum value: 0, maximum value: 359, default value: 220.
@@ -1689,7 +1689,7 @@ MATHJAX_FORMAT         = HTML-CSS
 
 # When MathJax is enabled you need to specify the location relative to the HTML
 # output directory using the MATHJAX_RELPATH option. The destination directory
-# should contain the MathJax.js script. For instance, if the mathjax directory
+# should contain the MathJax.js script. For m_instance, if the mathjax directory
 # is located at the same level as the HTML output directory, then
 # MATHJAX_RELPATH should be ../mathjax. The default value points to the MathJax
 # Content Delivery Network so you can quickly see the result without installing
@@ -1879,7 +1879,7 @@ PAPER_TYPE             = a4
 # The EXTRA_PACKAGES tag can be used to specify one or more LaTeX package names
 # that should be included in the LaTeX output. The package can be specified just
 # by its name or with the correct syntax as to be used with the LaTeX
-# \usepackage command. To get the times font for instance you can specify :
+# \usepackage command. To get the times font for m_instance you can specify :
 # EXTRA_PACKAGES=times or EXTRA_PACKAGES={times}
 # To use the option intlimits with the amsmath package you can specify:
 # EXTRA_PACKAGES=[intlimits]{amsmath}
@@ -2208,7 +2208,7 @@ ENABLE_PREPROCESSING   = YES
 
 # If the MACRO_EXPANSION tag is set to YES, doxygen will expand all macro names
 # in the source code. If set to NO, only conditional compilation will be
-# performed. Macro expansion can be done in a controlled way by setting
+# performed. Macro expansion can be m_done in a controlled way by setting
 # EXPAND_ONLY_PREDEF to YES.
 # The default value is: NO.
 # This tag requires that the tag ENABLE_PREPROCESSING is set to YES.
@@ -2282,7 +2282,7 @@ SKIP_FUNCTION_MACROS   = YES
 # file the location of the external documentation should be added. The format of
 # a tag file without this location is as follows:
 # TAGFILES = file1 file2 ...
-# Adding location for the tag files is done as follows:
+# Adding location for the tag files is m_done as follows:
 # TAGFILES = file1=loc1 "file2 = loc2" ...
 # where loc1 and loc2 can be relative or absolute paths or URLs. See the
 # section "Linking to external documentation" for more information about the use
@@ -2358,7 +2358,7 @@ DOT_NUM_THREADS        = 0
 
 # When you want a differently looking font in the dot files that doxygen
 # generates you can specify the font name using DOT_FONTNAME. You need to make
-# sure dot is able to find the font, which can be done by putting it in a
+# sure dot is able to find the font, which can be m_done by putting it in a
 # standard location or by setting the DOTFONTPATH environment variable or by
 # setting DOT_FONTPATH to the directory containing the font.
 # The default value is: Helvetica.

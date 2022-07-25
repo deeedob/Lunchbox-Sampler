@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="dennis_oberst" pattern="file[Lunchbox-Sampler]:lib/lbs-event_system/*||file[Lunchbox-Sampler]:lib/lbs-ui/*||file[Lunchbox-Sampler]:lib/include/*||file[Lunchbox-Sampler]:lib/lbs-event_system//*||file[Lunchbox-Sampler]:lib/lbs-ui//*||file[Lunchbox-Sampler]:lib/include//*||file[Lunchbox-Sampler]:lib//*" />
+</component>

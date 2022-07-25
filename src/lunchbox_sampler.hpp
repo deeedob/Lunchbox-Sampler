@@ -2,18 +2,22 @@
 #include <Arduino.h>
 #include <SPI.h>
 #include <define_t40.hpp>
+#include <event_sytem.hpp>
+
+using namespace lbs;
 
 class LunchboxSampler
 {
 public:
-    LunchboxSampler(const LunchboxSampler&) = delete;
-    LunchboxSampler& operator=(const LunchboxSampler& other) = delete;
-
-    static LunchboxSampler& getInstance();
-    void run();
+	LunchboxSampler( const LunchboxSampler& ) = delete;
+	LunchboxSampler& operator=( const LunchboxSampler& other ) = delete;
+	static LunchboxSampler& getInstance();
+	[[noreturn]] void run();
 private:
-    LunchboxSampler();
-    ~LunchboxSampler();
-
-    void setup();
+	LunchboxSampler();
+	~LunchboxSampler();
+	void setup();
+	void setupEventSystem();
+private:
+	EventSystem m_system;
 };
