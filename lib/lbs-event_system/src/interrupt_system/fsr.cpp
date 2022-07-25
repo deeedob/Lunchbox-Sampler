@@ -1,5 +1,4 @@
 #include "fsr.hpp"
-#include "analog_interrupts.hpp"
 #include "event_sytem.hpp" // todo: remove dis
 
 using namespace lbs;
@@ -24,7 +23,6 @@ void FSR::isr()
 	int val = i->m_parent.get()->getAdc()->analogReadContinuous();
 	i->updateRange();
 	i->m_values[ i->m_position ] = val;
-
 #ifdef VERBOSE
 	Serial.print( "IRS::FSR:: " );
 	Serial.print( i->m_position );

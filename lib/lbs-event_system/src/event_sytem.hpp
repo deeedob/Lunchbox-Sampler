@@ -31,11 +31,7 @@ namespace lbs
 	
 	protected:
 		friend class DigitalInterrupts;
-		
-		friend class AnalogInterrupts;
-		
 		friend class FSR;
-		
 		friend class Pots;
 		
 		void enqueueDigital( Events::DIGITAL e );

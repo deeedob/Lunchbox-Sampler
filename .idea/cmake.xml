@@ -3,6 +3,7 @@
   <component name="CMakeSharedSettings">
     <configurations>
       <configuration PROFILE_NAME="Release" ENABLED="true" CONFIG_NAME="release" />
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="debug" />
     </configurations>
   </component>
 </project>
