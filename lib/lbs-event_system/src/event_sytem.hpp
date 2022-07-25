@@ -1,11 +1,11 @@
 #pragma once
-#include <map>
-#include <functional>
-#include <cstdio>
-#include "scheduler.hpp"
 #include "events.hpp"
 #include "interrupt_system/analog_interrupts.hpp"
 #include "interrupt_system/digital_interrupts.hpp"
+#include "scheduler.hpp"
+#include <cstdio>
+#include <functional>
+#include <map>
 
 namespace lbs
 {
@@ -19,15 +19,15 @@ namespace lbs
 	class EventSystem
 	{
 		
-		using AnalogMapping = std::map< Events::Analog::POTS, std::function< void( AnalogData )>>;
-		using DigitalMapping = std::map< Events::DIGITAL, std::function< void()>>;
+		using AnalogMapping = std::map< Events::Analog::POTS, std::function< void( AnalogData ) > >;
+		using DigitalMapping = std::map< Events::DIGITAL, std::function< void() > >;
+	
 	public:
-		
 		EventSystem();
 		void attachDigital( Events::DIGITAL e, std::function< void() > f );
 		void detachDigital( Events::DIGITAL e );
 		void attachAnalog( Events::Analog::POTS e, std::function< void( AnalogData ) > f );
-		AnalogMapping& getAnalogMapping();
+		void detachAnalog( Events::Analog::POTS e );
 	
 	protected:
 		friend class DigitalInterrupts;

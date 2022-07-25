@@ -8,41 +8,38 @@ using namespace lbs;
 
 const std::unordered_map<std::string, uint8_t> MemFlash::MidiMapping::pitches = {{"c", 0}, {"csh", 1}, {"d", 2}, {"dsh", 3}, {"e", 4}, {"f", 5}, {"fsh", 6}, {"g", 7}, {"gsh", 8}, {"a", 9}, {"ash", 10}, {"b", 11}};
 
-std::string
-&toLower(std::string &str)
+std::string& toLower( std::string& str )
 {
-    std::transform(str.begin(), str.end(), str.begin(), ::tolower);
-    return str;
+	std::transform( str.begin(), str.end(), str.begin(), ::tolower );
+	return str;
 }
 
-MemFlash
-&MemFlash::getInstance()
+MemFlash& MemFlash::getInstance()
 {
-    static MemFlash *instance = new MemFlash();
-
-    if (!SerialFlash.begin(FLASH_PIN)) {
+	static MemFlash* instance = new MemFlash();
+	
+	if( !SerialFlash.begin( FLASH_PIN )) {
 #ifdef VERBOSE
-        Serial.println("loadSamplePack: Unable to access SPI Flash chip");
+		Serial.println( "loadSamplePack: Unable to access SPI Flash chip" );
 #endif
-        //TODO: Error handling
-    }
+		//TODO: Error handling
+	}
 
     return *instance;
 }
 
 // load Sample Pack from SD to Flash
-bool
-MemFlash::loadSamplePack(const std::string packName)
+bool MemFlash::loadSamplePack( const std::string packName )
 {
-    MemSD &sd = MemSD::getInstance();
-
-    auto settings = sd.readSettings(lbs::packdir + packName + lbs::settingsfile);
-
-    int count = 0;
-    for (auto i = settings->begin(); i < settings->end(); i++) {
-        std::string &pitch = std::get<0>(*i);
-        int8_t &oct = std::get<1>(*i);
-        std::string &sample = std::get<2>(*i);
+	MemSD& sd = MemSD::getInstance();
+	
+	auto settings = sd.readSettings( lbs::packdir + packName + lbs::settingsfile );
+	
+	int count = 0;
+	for( auto i = settings->begin(); i < settings->end(); i++ ) {
+		std::string& pitch = std::get< 0 >( *i );
+		int8_t& oct = std::get< 1 >( *i );
+		std::string& sample = std::get< 2 >( *i );
         std::string &mode = std::get<3>(*i);
         this->mapping.add(pitch, oct, sample, mode);
     }

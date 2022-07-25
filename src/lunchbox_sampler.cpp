@@ -3,6 +3,7 @@
 LunchboxSampler::LunchboxSampler()
 	: m_system { }
 {
+	m_system = std::make_shared< EventSystem >();
 	setup();
 	setupEventSystem();
 }
@@ -45,52 +46,49 @@ void LunchboxSampler::setup()
 
 void LunchboxSampler::setupEventSystem()
 {
-	auto system = std::make_shared< EventSystem >();
-	DigitalInterrupts digitalInterrupts( system );
+	setupDigitalEvents();
+}
+
+void LunchboxSampler::setupDigitalEvents()
+{
+	DigitalInterrupts digitalInterrupts( m_system );
 	digitalInterrupts.enableAll();
 	
-	system->attachDigital( Events::DIGITAL::ROTARY_L, []() {
-		Serial.println( "Rotary Left" );
-	} );
-	system->attachDigital( Events::DIGITAL::ROTARY_R, []() {
-		Serial.println( "Rotary Right" );
-	} );
-	system->attachDigital( Events::DIGITAL::BTN_RETURN, []() {
-		Serial.println( "Button Return" );
-	} );
-	system->attachDigital( Events::DIGITAL::BTN_ENTER, []() {
-		Serial.println( "Button Enter" );
-	} );
-	system->attachDigital( Events::DIGITAL::BTN_TOGGLE, []() {
-		Serial.println( "Button Toggle" );
-	} );
+	m_system->attachDigital( Events::DIGITAL::ROTARY_L, []() { Serial.println( "Rotary Left" ); } );
+	m_system->attachDigital( Events::DIGITAL::ROTARY_R, []() { Serial.println( "Rotary Right" ); } );
+	m_system->attachDigital( Events::DIGITAL::BTN_RETURN, []() { Serial.println( "Button Return" ); } );
+	m_system->attachDigital( Events::DIGITAL::BTN_ENTER, []() { Serial.println( "Button Enter" ); } );
+	m_system->attachDigital( Events::DIGITAL::BTN_TOGGLE, []() { Serial.println( "Button Toggle" ); } );
+}
+
+void LunchboxSampler::setupAnalogEvents()
+{
 	
-	AnalogInterrupts analogInterrupts( system );
+	AnalogInterrupts analogInterrupts( m_system );
 	analogInterrupts.enableAll();
 	
-	system->attachAnalog( Events::Analog::POTS::POT_0, []( AnalogData d ) {
+	m_system->attachAnalog( Events::Analog::POTS::POT_0, []( AnalogData d ) {
 		Serial.print( "Analog Pos: " );
 		Serial.print( d.m_pos );
 		Serial.println( " , Data: " );
 		Serial.println( d.m_data );
 	} );
-	system->attachAnalog( Events::Analog::POTS::POT_1, []( AnalogData d ) {
+	m_system->attachAnalog( Events::Analog::POTS::POT_1, []( AnalogData d ) {
 		Serial.print( "Analog Pos: " );
 		Serial.print( d.m_pos );
 		Serial.println( " , Data: " );
 		Serial.println( d.m_data );
 	} );
-	system->attachAnalog( Events::Analog::POTS::POT_2, []( AnalogData d ) {
+	m_system->attachAnalog( Events::Analog::POTS::POT_2, []( AnalogData d ) {
 		Serial.print( "Analog Pos: " );
 		Serial.print( d.m_pos );
 		Serial.println( " , Data: " );
 		Serial.println( d.m_data );
 	} );
-	system->attachAnalog( Events::Analog::POTS::POT_3, []( AnalogData d ) {
+	m_system->attachAnalog( Events::Analog::POTS::POT_3, []( AnalogData d ) {
 		Serial.print( "Analog Pos: " );
 		Serial.print( d.m_pos );
 		Serial.println( " , Data: " );
 		Serial.println( d.m_data );
 	} );
-	
 }

@@ -1,5 +1,4 @@
 #include "digital_interrupts.hpp"
-#include "event_sytem.hpp"
 
 using namespace lbs;
 DigitalInterrupts* DigitalInterrupts::m_instance = nullptr;
@@ -70,14 +69,16 @@ void DigitalInterrupts::isrRotaryA()
 	/* if the interrupt comes faster then 5ms assume it's a bounce */
 	if( interruptTime - lastInterruptTime > 5 ) {
 		if( digitalRead( C_ROTARY_B ) == HIGH ) {
-			DigitalInterrupts::m_instance->m_eventSystem->enqueueDigital( Events::DIGITAL::ROTARY_L );
+			DigitalInterrupts::m_instance->m_eventSystem
+			                             ->enqueueDigital( Events::DIGITAL::ROTARY_L );
 #ifdef VERBOSE
 			Serial.print( "ISR::ROTARY:: " );
 			Serial.print( C_ROTARY_B );
 			Serial.println( " LEFT" );
 #endif
 		} else {
-			DigitalInterrupts::m_instance->m_eventSystem->enqueueDigital( Events::DIGITAL::ROTARY_R );
+			DigitalInterrupts::m_instance->m_eventSystem
+			                             ->enqueueDigital( Events::DIGITAL::ROTARY_R );
 #ifdef VERBOSE
 			Serial.print( "ISR::ROTARY:: " );
 			Serial.print( C_ROTARY_B );
@@ -103,7 +104,8 @@ void DigitalInterrupts::isrBtnEnter()
 	DigitalInterrupts::m_instance->m_btnEnter.update();
 	/* on button enter */
 	if( DigitalInterrupts::m_instance->m_btnEnter.fallingEdge()) {
-		DigitalInterrupts::m_instance->m_eventSystem->enqueueDigital( Events::DIGITAL::BTN_ENTER );
+		DigitalInterrupts::m_instance->m_eventSystem
+		                             ->enqueueDigital( Events::DIGITAL::BTN_ENTER );
 #ifdef VERBOSE
 		Serial.print( "ISR::BTN:: " );
 		Serial.print( C_BTN_ENTER );
@@ -117,7 +119,8 @@ void DigitalInterrupts::isrBtnReturn()
 	DigitalInterrupts::m_instance->m_btnReturn.update();
 	/* on button enter */
 	if( DigitalInterrupts::m_instance->m_btnReturn.fallingEdge()) {
-		DigitalInterrupts::m_instance->m_eventSystem->enqueueDigital( Events::DIGITAL::BTN_RETURN );
+		DigitalInterrupts::m_instance->m_eventSystem
+		                             ->enqueueDigital( Events::DIGITAL::BTN_RETURN );
 #ifdef VERBOSE
 		Serial.print( "ISR::BTN:: " );
 		Serial.print( C_BTN_RETURN );
@@ -131,7 +134,8 @@ void DigitalInterrupts::isrBtnToggle()
 	DigitalInterrupts::m_instance->m_btnToggle.update();
 	/* on button enter */
 	if( DigitalInterrupts::m_instance->m_btnToggle.fallingEdge()) {
-		DigitalInterrupts::m_instance->m_eventSystem->enqueueDigital( Events::DIGITAL::BTN_TOGGLE );
+		DigitalInterrupts::m_instance->m_eventSystem
+		                             ->enqueueDigital( Events::DIGITAL::BTN_TOGGLE );
 #ifdef VERBOSE
 		Serial.print( "ISR::BTN:: " );
 		Serial.print( C_BTN_TOGGLE );

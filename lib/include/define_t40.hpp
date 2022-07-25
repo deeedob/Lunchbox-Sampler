@@ -22,7 +22,6 @@
 #define C_MIDI_IN 0
 #define C_MIDI_OUT 1
 
-
 /* every pin has at least one of these properties
  * thanks @https://github.com/KurtE/TeensyDocuments/blob/master/Teensy4%20MicroMod%20Pins.pdf
  * Note that the AudioInputAnalog class uses adc0!

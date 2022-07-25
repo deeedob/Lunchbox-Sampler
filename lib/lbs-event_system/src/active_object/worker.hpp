@@ -12,7 +12,7 @@ namespace lbs
 	class Worker : public Runnable
 	{
 		
-		//static_assert(( std::is_base_of< std::function< void() >, Func >::value ) || ( std::is_base_of< std::function< void( u_int16_t ) >, Func >::value ), "Func must be of type std::function" );
+		//static_assert(( std::is_base_of< std::function< void() >, Func >::value ), "Func must be of type std::function" );
 	
 	public:
 		explicit Worker( int waitTime = 50 )

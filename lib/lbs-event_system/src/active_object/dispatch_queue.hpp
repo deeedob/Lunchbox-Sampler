@@ -22,12 +22,6 @@ namespace lbs
 		//static_assert(( std::is_base_of< std::function< void() >, Func >::value ) || ( std::is_base_of< std::function< void( u_int16_t ) >, Func >::value ), "Func must be a function" );
 	
 	public:
-		struct Pack
-		{
-			Func m_f;
-			Args m_args;
-		};
-		
 		explicit DispatchQueue( u_int32_t waitUs )
 			: m_waitUs( waitUs ) { };
 		

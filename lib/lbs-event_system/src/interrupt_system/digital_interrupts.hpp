@@ -5,12 +5,11 @@
 #include <Encoder.h>
 #include <memory>
 #include "events.hpp"
+#include "event_sytem.hpp"
 #include "define_t40.hpp"
 
 namespace lbs
 {
-	class EventSystem;
-	
 	class DigitalInterrupts
 	{
 		using DigLookup = std::map< Events::DIGITAL, std::tuple< u_int8_t, void ( * )(), u_int8_t>>;

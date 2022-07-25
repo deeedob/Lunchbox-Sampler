@@ -13,11 +13,15 @@ public:
 	LunchboxSampler& operator=( const LunchboxSampler& other ) = delete;
 	static LunchboxSampler& getInstance();
 	[[noreturn]] void run();
+
 private:
 	LunchboxSampler();
 	~LunchboxSampler();
 	void setup();
 	void setupEventSystem();
+	void setupDigitalEvents();
+	void setupAnalogEvents();
+
 private:
-	EventSystem m_system;
+	std::shared_ptr< EventSystem > m_system;
 };

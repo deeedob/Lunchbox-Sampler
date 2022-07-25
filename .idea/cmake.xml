@@ -2,6 +2,7 @@
 <project version="4">
   <component name="CMakeSharedSettings">
     <configurations>
+      <configuration PROFILE_NAME="Test_Events" ENABLED="true" CONFIG_NAME="test_events" />
       <configuration PROFILE_NAME="Release" ENABLED="true" CONFIG_NAME="release" />
       <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="debug" />
     </configurations>

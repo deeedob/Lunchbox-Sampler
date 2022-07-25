@@ -187,7 +187,7 @@
       </indentOptions>
     </codeStyleSettings>
     <codeStyleSettings language="ObjectiveC">
-      <option name="RIGHT_MARGIN" value="120" />
+      <option name="RIGHT_MARGIN" value="80" />
       <option name="KEEP_LINE_BREAKS" value="false" />
       <option name="KEEP_BLANK_LINES_IN_DECLARATIONS" value="1" />
       <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
@@ -217,7 +217,6 @@
       <option name="BINARY_OPERATION_WRAP" value="0" />
       <option name="TERNARY_OPERATION_WRAP" value="0" />
       <option name="TERNARY_OPERATION_SIGNS_ON_NEXT_LINE" value="false" />
-      <option name="ARRAY_INITIALIZER_WRAP" value="0" />
       <option name="ARRAY_INITIALIZER_RBRACE_ON_NEXT_LINE" value="true" />
       <option name="DOWHILE_BRACE_FORCE" value="3" />
       <option name="WHILE_BRACE_FORCE" value="3" />
