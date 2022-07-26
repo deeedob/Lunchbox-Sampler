@@ -1,9 +1,7 @@
 #include "notes.hpp"
 Notes::Notes( int bpm, int bpb, int bars )
-	: m_bpm(bpm), m_bars(bars), m_bpb(bpb)
-{
+	: m_bpm(bpm), m_bars(bars), m_bpb(bpb){}
 
-}
 void Notes::setBPM(int bpm) { m_bpm = bpm; }
 void Notes::setBars(int bars) { m_bars = bars; }
 void Notes::setBPB(int bpb) { m_bpb = bpb; }
@@ -28,31 +26,19 @@ void Notes::recordIntern(uint32_t startTime, boolean isMetronom) {
 		}
 		if (digitalRead( m_buttonPin1 ) == HIGH && !isNote1) {
 			isNote1 = true;
-			//saveNote({41, 70, midi::NoteOn, 1, clock});
-			Serial.println("Note On");
-			Serial.println(41);
-			Serial.println(clock);
+			saveNote({41, 70, midi::NoteOn, 1, clock}, false);
 		}
 		if (digitalRead( m_buttonPin1 ) == LOW && isNote1) {
 			isNote1 = false;
-			//saveNote({41, 70, midi::NoteOff, 1, clock});
-			Serial.println("Note Off");
-			Serial.println(41);
-			Serial.println(clock);
+			saveNote({41, 70, midi::NoteOff, 1, clock},false);
 		}
 		if (digitalRead( m_buttonPin2 ) == HIGH && !isNote2) {
 			isNote2 = true;
-			//saveNote({36, 70, midi::NoteOn, 1, clock});
-			Serial.println("Note On");
-			Serial.println(36);
-			Serial.println(clock);
+			saveNote({36, 70, midi::NoteOn, 1, clock}, false);
 		}
 		if (digitalRead( m_buttonPin2 ) == LOW && isNote2) {
 			isNote2 = false;
-			//saveNote({36, 70, midi::NoteOff, 1, clock});
-			Serial.println("Note Off");
-			Serial.println(36);
-			Serial.println(clock);
+			saveNote({36, 70, midi::NoteOff, 1, clock}, false);
 		}
 	}
 }
@@ -101,7 +87,7 @@ void Notes::RecordFromDaw() {
 				if (type == midi::NoteOn && clock >= ( m_bars * m_bpb * 24)) {
 					break;
 				}
-				saveNote({usbMIDI.getData1(), usbMIDI.getData2(), type, usbMIDI.getChannel(), clock});
+				saveNote({usbMIDI.getData1(), usbMIDI.getData2(), type, usbMIDI.getChannel(), clock}, false);
 				break;
 			}
 			if (type == midi::Clock) {
@@ -111,11 +97,70 @@ void Notes::RecordFromDaw() {
 		}
 	}
 }
-void Notes::saveNote(Note data) {
-	Serial.println("saved");
-	m_notes.push_back(data);
+void Notes::Overdub(uint32_t startTime){
+	Serial.println("Overdub");
+	boolean isNote1 = false;
+	boolean isNote2 = false;
+	int b=0;
+	int clock;
+	for(int i=0; i<1; i++) {
+		Serial.println("loop");
+		clock=0;
+		while( clock <= ( m_bars * m_bpb * 24 ) ) {
+			if (b == 24*4) {
+				Serial.println("takt");
+				b = 0;
+			}
+			if( micros() - startTime >= ( 60000000 / ( m_bpm * 24 ) ) ) {
+				clock++;
+				b++;
+				startTime = micros();
+			}
+			if( digitalRead( m_buttonPin1 ) == HIGH && !isNote1 ) {
+				isNote1 = true;
+				Serial.println("41");
+				saveNote( { 41, 70, midi::NoteOn, 1, clock }, true );
+			}
+			if( digitalRead( m_buttonPin1 ) == LOW && isNote1 ) {
+				isNote1 = false;
+				saveNote( { 41, 70, midi::NoteOff, 1, clock }, true );
+			}
+			if( digitalRead( m_buttonPin2 ) == HIGH && !isNote2 ) {
+				isNote2 = true;
+				saveNote( { 36, 70, midi::NoteOn, 1, clock }, true );
+			}
+			if( digitalRead( m_buttonPin2 ) == LOW && isNote2 ) {
+				isNote2 = false;
+				saveNote( { 36, 70, midi::NoteOff, 1, clock }, true );
+			}
+		}
+	}
+}
+void Notes::saveNote(Note data, boolean isOverdub) {
+	if(isOverdub) {
+		Serial.println("hi");
+		for( Note n : m_notes ) {
+			int pos;
+			if( n.m_timing < data.m_timing ) {
+				pos++;
+				continue;
+			}
+			if( n.m_timing >= data.m_timing ) { m_notes.insert( m_notes.begin() + pos, data );
+				Serial.println(data.m_timing);
+				    return;
+			}
+		}
+	}
+	else
+	{
+		m_notes.push_back(data);
+	}
 }
 void Notes::readRecord() {
+	if(m_notes.empty())
+	{
+		Serial.println("Notes empty");
+	}
 	for (Note n : m_notes) {
 		Serial.print("Type: ");
 		Serial.println(n.m_midiData.type);
