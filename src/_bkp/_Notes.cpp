@@ -144,7 +144,7 @@ void _Notes::loopMidi(int count) {
   }
 }
 void _Notes::readRecord() {
-  for (Note n : notes) {
+  for (Note n : m_notes) {
     Serial.print("Type: ");
     Serial.println(n.midiData.type);
     Serial.print("timing: ");
@@ -156,5 +156,5 @@ void _Notes::readRecord() {
 
 void _Notes::setNotes( const std::vector< Note >& notes ) { m_notes = notes; }
 std::vector< _Notes::Note> getNotes() {
-  return notes;
+  return m_notes;
 }

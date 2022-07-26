@@ -2,6 +2,7 @@
 Notes::Notes( int bpm, int bpb, int bars )
 	: m_bpm(bpm), m_bars(bars), m_bpb(bpb)
 {
+
 }
 void Notes::setBPM(int bpm) { m_bpm = bpm; }
 void Notes::setBars(int bars) { m_bars = bars; }
@@ -111,5 +112,37 @@ void Notes::RecordFromDaw() {
 	}
 }
 void Notes::saveNote(Note data) {
-	m_notes.push_back(data); 
+	Serial.println("saved");
+	m_notes.push_back(data);
+}
+void Notes::readRecord() {
+	for (Note n : m_notes) {
+		Serial.print("Type: ");
+		Serial.println(n.m_midiData.type);
+		Serial.print("timing: ");
+		Serial.println(n.m_timing);
+		Serial.print("note: ");
+		Serial.println(n.m_midiData.data1);
+	}
+}
+void Notes::sendMidiToDaw() {
+	long prevTiming = 0;
+	for (Note note : m_notes) {
+		int timing = note.m_timing;
+		delayMicroseconds(((60000000 / (24 * m_bpm )) * (timing - prevTiming)));
+		byte type = note.m_midiData.type;
+		switch (type) {
+			case midi::NoteOn:
+				if (note.m_midiData.data2 > 0) {
+					usbMIDI.sendNoteOn(note.m_midiData.data1, note.m_midiData.data2, note.m_midiData.channel);
+				} else {
+					usbMIDI.sendNoteOff(note.m_midiData.data1, note.m_midiData.data2, note.m_midiData.channel);
+				}
+				break;
+			case midi::NoteOff:
+				usbMIDI.sendNoteOff(note.m_midiData.data1, note.m_midiData.data2, note.m_midiData.channel);
+				break;
+		}
+		prevTiming = note.m_timing;
+	}
 }

@@ -18,7 +18,9 @@ int main() {
   Serial.begin(115200);
   Notes notes(BPM,BPB,Bars);
   //notes.recordIntern(micros(), false);
-  notes.playLive();
+  //notes.playLive();
+  notes.RecordFromDaw();
+  notes.readRecord();
   //notes.sendMidiToDaw();
   //notes.getNotes();
 }
