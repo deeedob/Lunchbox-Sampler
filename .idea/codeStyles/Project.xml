@@ -145,6 +145,9 @@
     <SybaseCodeStyleSettings version="6">
       <option name="USE_GENERAL_STYLE" value="false" />
     </SybaseCodeStyleSettings>
+    <clangFormatSettings>
+      <option name="ENABLED" value="true" />
+    </clangFormatSettings>
     <codeStyleSettings language="CMake">
       <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
       <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />
