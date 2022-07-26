@@ -1,8 +1,6 @@
 #include <Arduino.h>
-#include "Notes.h"
+#include "notes.hpp"
 
-
-#undef assert
 #undef main
 
 int BPM;
@@ -19,10 +17,8 @@ int main() {
   BPB = 4;
   Serial.begin(115200);
   Notes notes(BPM,BPB,Bars);
-  notes.recordIntern(micros(), false);
-  notes.sendMidiToDaw();
-  notes.getNotes();
+  
+  //notes.recordIntern(micros(), false);
+  //notes.sendMidiToDaw();
+  //notes.getNotes();
 }
-
-
-
