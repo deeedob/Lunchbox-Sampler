@@ -13,13 +13,14 @@ int main() {
   pinMode(buttonPin1, INPUT);
   pinMode(buttonPin2, INPUT);
   BPM = 120;
-  Bars = 6;
+  Bars = 2;
   BPB = 4;
   Serial.begin(115200);
   Notes notes(BPM,BPB,Bars);
   //notes.recordIntern(micros(), false);
   //notes.playLive();
-  notes.RecordFromDaw();
+  notes.recordIntern(micros(),false);
+  notes.Overdub(micros());
   notes.readRecord();
   //notes.sendMidiToDaw();
   //notes.getNotes();

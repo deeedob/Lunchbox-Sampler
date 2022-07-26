@@ -31,8 +31,9 @@ public:
 	void buttonPressed( int buttonPin, int note );
 	void playLive();
 	void sendMidiToDaw();
-	void saveNote(Note data);
+	void saveNote(Note data, boolean isOverdub);
 	void RecordFromDaw();
+	void Overdub(uint32_t startTime);
 	void readRecord();
 	void recordIntern( uint32_t startTime, boolean isMetronom );
 private:
