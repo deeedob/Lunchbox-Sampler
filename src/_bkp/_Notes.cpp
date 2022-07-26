@@ -70,8 +70,7 @@ void _Notes::recordIntern(uint32_t startTime, boolean isMetronom) {
     }
   }
 }
-void _Notes::saveNote( Note data) {
-
+void _Notes::saveNote(Note data) {
   for (Note n : m_notes) {
     auto itPos = m_notes.begin();
     if (n.timing < data.timing) {
