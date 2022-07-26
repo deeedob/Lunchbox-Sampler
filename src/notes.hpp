@@ -22,14 +22,18 @@ public:
 	void setBPM( int bpm );
 	void setBars( int bars );
 	void setBPB( int bpb );
+	void setNotes(std::vector<Notes> n_notes);
 	int getBars();
 	int getBpm();
 	int getBpb();
+	std::vector<Notes> getNotes();
 	/* add function and test ist */
 	void buttonPressed( int buttonPin, int note );
 	void playLive();
+	void sendMidiToDaw();
 	void saveNote(Note data);
 	void RecordFromDaw();
+	void readRecord();
 	void recordIntern( uint32_t startTime, boolean isMetronom );
 private:
 	const int m_buttonPin1 = 24;
