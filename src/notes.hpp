@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
-#include <cstdio>
+#include <Arduino.h>
+#include <MIDI.h>
 
 class Notes
 {
@@ -17,7 +18,19 @@ class Notes
 public:
 	Notes(int bpm, int bpb,int bars );
 	~Notes() = default;
+	//getter & setter:
+	void setBPM( int bpm );
+	void setBars( int bars );
+	void setBPB( int bpb );
+	int getBars();
+	int getBpm();
+	int getBpb();
 	/* add function and test ist */
+	void buttonPressed( int buttonPin, int note );
+	void playLive();
+	void saveNote(Note data);
+	void RecordFromDaw();
+	void recordIntern( uint32_t startTime, boolean isMetronom );
 private:
 	const int m_buttonPin1 = 24;
 	const int m_buttonPin2 = 26;
