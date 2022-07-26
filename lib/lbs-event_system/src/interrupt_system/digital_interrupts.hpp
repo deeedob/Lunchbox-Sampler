@@ -6,6 +6,7 @@
 #include <memory>
 #include "events.hpp"
 #include "define_t40.hpp"
+#include "event_sytem.hpp"
 
 namespace lbs
 {
@@ -14,7 +15,7 @@ namespace lbs
 	{
 		using DigLookup = std::map< Events::DIGITAL, std::tuple< u_int8_t, void ( * )(), u_int8_t>>;
 	public:
-		explicit DigitalInterrupts( const std::shared_ptr< EventSystem >& eventSystem, u_int8_t bounceTime = 5 );
+		explicit DigitalInterrupts( const std::shared_ptr< EventSystem >& eventSystem, u_int8_t bounceTime = 15 );
 		~DigitalInterrupts();
 		void enablePin( Events::DIGITAL e );
 		void enableCustomizedPin( Events::DIGITAL e, void (* function)(), int mode = CHANGE );

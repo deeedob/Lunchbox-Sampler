@@ -31,13 +31,13 @@ void Pots::isr()
 	                          ->getAdc()
 	                          ->adc0
 	                          ->analogReadContinuous();
-	i->update();
 	i->m_values[ i->m_position ] = val;
+	i->update();
 	i->m_parent
 	 ->getEventSystem()
 	 ->enqueueAnalog( static_cast<Events::Analog::POTS>(i->m_position), {
-		 i->m_position, val
-	 } );
+		 i->m_position, val } );
+	
 }
 
 void Pots::enableISR( u_int8_t prio )

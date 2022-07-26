@@ -1,5 +1,4 @@
 #include "digital_interrupts.hpp"
-#include "event_sytem.hpp"
 
 using namespace lbs;
 DigitalInterrupts* DigitalInterrupts::m_instance = nullptr;
@@ -68,7 +67,7 @@ void DigitalInterrupts::isrRotaryA()
 	static unsigned long lastInterruptTime = 0;
 	unsigned long interruptTime = millis();
 	/* if the interrupt comes faster then 5ms assume it's a bounce */
-	if( interruptTime - lastInterruptTime > 5 ) {
+	if( interruptTime - lastInterruptTime > 10 ) {
 		if( digitalRead( C_ROTARY_B ) == HIGH ) {
 			DigitalInterrupts::m_instance->m_eventSystem
 			                             ->enqueueDigital( Events::DIGITAL::ROTARY_L );

@@ -37,25 +37,7 @@ void setupPins()
 
 void setupDigitalInterrupts()
 {
-	auto eventSystem = std::make_shared< EventSystem >();
-	static DigitalInterrupts digitalInterrupts( eventSystem );
-	digitalInterrupts.enableAll();
-	
-	eventSystem->attachDigital( Events::DIGITAL::ROTARY_L, []() {
-		Serial.println( "Rotary Left" );
-	} );
-	eventSystem->attachDigital( Events::DIGITAL::ROTARY_R, []() {
-		Serial.println( "Rotary Right" );
-	} );
-	eventSystem->attachDigital( Events::DIGITAL::BTN_RETURN, []() {
-		Serial.println( "Button Return" );
-	} );
-	eventSystem->attachDigital( Events::DIGITAL::BTN_ENTER, []() {
-		Serial.println( "Button Enter" );
-	} );
-	eventSystem->attachDigital( Events::DIGITAL::BTN_TOGGLE, []() {
-		Serial.println( "Button Toggle" );
-	} );
+
 }
 
 int main()
@@ -77,10 +59,47 @@ int main()
 	playSdWav.play( "01.WAV" );
 	delay( 10 );
 	
-	setupDigitalInterrupts();
+	auto eventSystem = std::make_shared< EventSystem >();
+	DigitalInterrupts digitalInterrupts( eventSystem );
+	digitalInterrupts.enableAll();
+	
+	eventSystem->attachDigital( Events::DIGITAL::ROTARY_L, []() {
+		Serial.println( "Rotary Left" );
+	} );
+	eventSystem->attachDigital( Events::DIGITAL::ROTARY_R, []() {
+		Serial.println( "Rotary Right" );
+	} );
+	eventSystem->attachDigital( Events::DIGITAL::BTN_RETURN, []() {
+		Serial.println( "Button Return" );
+	} );
+	eventSystem->attachDigital( Events::DIGITAL::BTN_ENTER, []() {
+		Serial.println( "Button Enter" );
+	} );
+	eventSystem->attachDigital( Events::DIGITAL::BTN_TOGGLE, []() {
+		Serial.println( "Button Toggle" );
+	} );
+	
+	AnalogInterrupts an_int( eventSystem );
+	
+	
+	
+	
+	an_int.enableAll();
+	auto& pots = an_int.getPots();
+	auto& fsr = an_int.getFSR();
+	//an_int.getPots()->enableISR();
+	//an_int.getPots()->setDelta( 40 );
+	//an_int.getPots()->update();
+	fsr->enableISR();
+	fsr->setDelta( 18 );
+	fsr->update();
 	
 	while( true ) {
-		yield();
+		//pots->update();
+		fsr->update();
+		delay( 200 );
+		//pots->next();
+		fsr->next();
 	}
 	
 	return 0;

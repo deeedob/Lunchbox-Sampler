@@ -7,7 +7,7 @@ namespace lbs
 	public:
 		enum class DIGITAL
 		{
-			ROTARY_L,
+			ROTARY_L = 0,
 			ROTARY_R,
 			BTN_ENTER,
 			BTN_RETURN,

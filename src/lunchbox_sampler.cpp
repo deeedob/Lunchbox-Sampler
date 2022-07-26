@@ -8,6 +8,7 @@ LunchboxSampler::LunchboxSampler()
 	m_analogInterrupts = std::make_unique< AnalogInterrupts >( m_system );
 	setupDigitalEvents();
 	setupAnalogEvents();
+	setupFSREvents();
 #ifdef VERBOSE
 	Serial.println( "::: finished setup :::" );
 #endif
@@ -26,12 +27,13 @@ LunchboxSampler& LunchboxSampler::getInstance()
 {
 	auto& rP = m_analogInterrupts->getPots();
 	auto& rF = m_analogInterrupts->getFSR();
-	rP->setDelta( 100 );
+	rP->setDelta( 50 );
+	rF->setDelta(20);
 	while( true ) {
 		rP->update();
-		rP->next();
-		delay( 200 );
 		rF->update();
+		delay( 200 );
+		rP->next();
 		rF->next();
 	}
 }
@@ -75,6 +77,7 @@ void LunchboxSampler::setupDigitalEvents()
 	m_system->attachDigital( Events::DIGITAL::BTN_TOGGLE, []() {
 		Serial.println( "Button Toggle" );
 	} );
+	m_system->detachDigital(Events::DIGITAL::BTN_ENTER);
 	
 }
 
@@ -86,25 +89,25 @@ void LunchboxSampler::setupAnalogEvents()
 	m_system->attachAnalog( Events::Analog::POTS::POT_0, []( AnalogData d ) {
 		Serial.print( "Analog Pos: " );
 		Serial.print( d.m_pos );
-		Serial.println( " , Data: " );
+		Serial.print( " , Data: " );
 		Serial.println( d.m_data );
 	} );
 	m_system->attachAnalog( Events::Analog::POTS::POT_1, []( AnalogData d ) {
 		Serial.print( "Analog Pos: " );
 		Serial.print( d.m_pos );
-		Serial.println( " , Data: " );
+		Serial.print( " , Data: " );
 		Serial.println( d.m_data );
 	} );
 	m_system->attachAnalog( Events::Analog::POTS::POT_2, []( AnalogData d ) {
 		Serial.print( "Analog Pos: " );
 		Serial.print( d.m_pos );
-		Serial.println( " , Data: " );
+		Serial.print( " , Data: " );
 		Serial.println( d.m_data );
 	} );
 	m_system->attachAnalog( Events::Analog::POTS::POT_3, []( AnalogData d ) {
 		Serial.print( "Analog Pos: " );
 		Serial.print( d.m_pos );
-		Serial.println( " , Data: " );
+		Serial.print( " , Data: " );
 		Serial.println( d.m_data );
 	} );
 }
@@ -117,25 +120,25 @@ void LunchboxSampler::setupFSREvents()
 	m_system->attachAnalog( Events::Analog::FSR::FSR_0, []( AnalogData d ) {
 		Serial.print( "FSR Pos: " );
 		Serial.print( d.m_pos );
-		Serial.println( " , Data: " );
+		Serial.print( " , Data: " );
 		Serial.println( d.m_data );
 	} );
 	m_system->attachAnalog( Events::Analog::FSR::FSR_1, []( AnalogData d ) {
 		Serial.print( "FSR Pos: " );
 		Serial.print( d.m_pos );
-		Serial.println( " , Data: " );
+		Serial.print( " , Data: " );
 		Serial.println( d.m_data );
 	} );
 	m_system->attachAnalog( Events::Analog::FSR::FSR_2, []( AnalogData d ) {
 		Serial.print( "FSR Pos: " );
 		Serial.print( d.m_pos );
-		Serial.println( " , Data: " );
+		Serial.print( " , Data: " );
 		Serial.println( d.m_data );
 	} );
 	m_system->attachAnalog( Events::Analog::FSR::FSR_3, []( AnalogData d ) {
 		Serial.print( "FSR Pos: " );
 		Serial.print( d.m_pos );
-		Serial.println( " , Data: " );
+		Serial.print( " , Data: " );
 		Serial.println( d.m_data );
 	} );
 }

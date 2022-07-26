@@ -26,14 +26,14 @@ void FSR::isr()
 {
 	auto i = FSR::m_isrInstance;
 	auto val = ( u_int16_t ) i->m_parent->getAdc()->analogReadContinuous();
-	i->updateRange();
 	i->m_values[ i->m_position ] = val;
+	i->updateRange();
 	/* TODO: construct MIDI event and enqueue? */
 	i->m_parent
 	 ->getEventSystem()
 	 ->enqueueAnalog( static_cast<Events::Analog::FSR>(i->m_position), {
-		 i->m_position, val
-	 } );
+		 i->m_position, val } );
+	//Serial.println("interrupted");
 }
 
 void FSR::enableISR( u_int8_t prio )
@@ -75,10 +75,10 @@ u_int16_t FSR::recalibrateDelta( u_int16_t padding, u_int16_t samples )
 	noInterrupts();
 	stopScan();
 	m_parent->getAdc()
-	        ->adc0
+	        ->adc1
 	        ->setConversionSpeed( ADC_CONVERSION_SPEED::VERY_HIGH_SPEED );
 	m_parent->getAdc()
-	        ->adc0
+	        ->adc1
 	        ->setSamplingSpeed( ADC_SAMPLING_SPEED::VERY_HIGH_SPEED );
 	u_int16_t lowest;
 	u_int16_t highest;

@@ -1,7 +1,5 @@
 #pragma once
 #include "events.hpp"
-#include "interrupt_system/digital_interrupts.hpp"
-#include "interrupt_system/analog_interrupts.hpp"
 #include "scheduler.hpp"
 #include <cstdio>
 #include <functional>
