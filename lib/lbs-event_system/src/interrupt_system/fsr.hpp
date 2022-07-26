@@ -1,5 +1,7 @@
 #pragma once
 #include "multiplex.hpp"
+#include <array>
+#include <cstdio>
 #include <memory>
 
 namespace lbs

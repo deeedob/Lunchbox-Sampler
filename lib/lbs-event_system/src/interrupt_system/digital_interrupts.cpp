@@ -48,7 +48,7 @@ const DigitalInterrupts::DigLookup& DigitalInterrupts::getTable()
 {
 	static const auto* table = new DigLookup( {
 		                                          //{ Events::DIGITAL::ROTARY_R,   std::make_tuple( ROTARY_B_     , isr_rotaryB    , LOW     )},
-		                                          { Events::DIGITAL::ROTARY_L,   std::make_tuple( C_ROTARY_A, isrRotaryA, LOW ) },
+		                                          { Events::DIGITAL::ROTARY,   std::make_tuple( C_ROTARY_A, isrRotaryA, LOW ) },
 		                                          { Events::DIGITAL::BTN_ENTER,  std::make_tuple( C_BTN_ENTER, isrBtnEnter, CHANGE ) },
 		                                          { Events::DIGITAL::BTN_RETURN, std::make_tuple( C_BTN_RETURN, isrBtnReturn, CHANGE ) },
 		                                          { Events::DIGITAL::BTN_TOGGLE, std::make_tuple( C_BTN_TOGGLE, isrBtnToggle, CHANGE ) }} );
@@ -67,7 +67,7 @@ void DigitalInterrupts::isrRotaryA()
 	static unsigned long lastInterruptTime = 0;
 	unsigned long interruptTime = millis();
 	/* if the interrupt comes faster then 5ms assume it's a bounce */
-	if( interruptTime - lastInterruptTime > 10 ) {
+	if( interruptTime - lastInterruptTime > 5 ) {
 		if( digitalRead( C_ROTARY_B ) == HIGH ) {
 			DigitalInterrupts::m_instance->m_eventSystem
 			                             ->enqueueDigital( Events::DIGITAL::ROTARY_L );

@@ -8,11 +8,9 @@
 
 namespace lbs
 {
-	template< class Func, class Args = void* >
+	template< class Func >
 	class Worker : public Runnable
 	{
-		
-		//static_assert(( std::is_base_of< std::function< void() >, Func >::value ), "Func must be of type std::function" );
 	
 	public:
 		explicit Worker( int waitTime = 50 )
@@ -51,6 +49,6 @@ namespace lbs
 	private:
 		std::atomic< bool > m_done;
 		std::unique_ptr< std::thread > m_runnable;
-		DispatchQueue< Func, Args > m_dispatchQueue;
+		DispatchQueue< Func > m_dispatchQueue;
 	};
 }

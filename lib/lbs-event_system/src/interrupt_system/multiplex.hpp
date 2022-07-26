@@ -17,7 +17,7 @@ namespace lbs
 		
 		/*! @param mpxPin the multiplexer analog Pin.
 		 * */
-		explicit Multiplex( u_int8_t mpxPin, u_int8_t sel0, u_int8_t sel1, u_int8_t sel2 );
+		explicit Multiplex( u_int8_t mpxPin);
 		Multiplex() = default;
 		/*! activate the analog pin on the multiplexer for polling!
 		 * */

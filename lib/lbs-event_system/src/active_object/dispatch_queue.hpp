@@ -16,10 +16,9 @@ namespace lbs
 	 * This Class is a thread-safe wrapper around std::queue.
 	 * A Thread yields until an event arrives and then processes it.
 	 */
-	template< class Func, class Args = void* >
+	template< class Func >
 	class DispatchQueue
 	{
-		//static_assert(( std::is_base_of< std::function< void() >, Func >::value ) || ( std::is_base_of< std::function< void( u_int16_t ) >, Func >::value ), "Func must be a function" );
 	
 	public:
 		explicit DispatchQueue( u_int32_t waitUs )

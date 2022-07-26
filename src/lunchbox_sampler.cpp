@@ -3,9 +3,10 @@
 LunchboxSampler::LunchboxSampler()
 	: m_system( std::make_shared< EventSystem >())
 {
-	setup();
 	m_digitalInterrupts = std::make_unique< DigitalInterrupts >( m_system );
 	m_analogInterrupts = std::make_unique< AnalogInterrupts >( m_system );
+	
+	setup();
 	setupDigitalEvents();
 	setupAnalogEvents();
 	setupFSREvents();
@@ -32,7 +33,7 @@ LunchboxSampler& LunchboxSampler::getInstance()
 	while( true ) {
 		rP->update();
 		rF->update();
-		delay( 200 );
+		delay( 40 );
 		rP->next();
 		rF->next();
 	}
@@ -77,7 +78,6 @@ void LunchboxSampler::setupDigitalEvents()
 	m_system->attachDigital( Events::DIGITAL::BTN_TOGGLE, []() {
 		Serial.println( "Button Toggle" );
 	} );
-	m_system->detachDigital(Events::DIGITAL::BTN_ENTER);
 	
 }
 
