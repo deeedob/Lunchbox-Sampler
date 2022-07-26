@@ -1,13 +1,13 @@
 #include "fsr.hpp"
-#include "event_sytem.hpp" // todo: remove dis
+#include "analog_interrupts.hpp"
+//#include "event_sytem.hpp"
 
 using namespace lbs;
 FSR* FSR::m_isrInstance = nullptr;
 
-FSR::FSR( std::shared_ptr< AnalogInterrupts > parent, u_int8_t mpxPin0, u_int8_t mpxPin1, u_int8_t mpxPin2, u_int8_t mpxPin3, u_int16_t delta )
-	: m_values( { } ), m_delta( delta )
+FSR::FSR( AnalogInterrupts* const parent, u_int8_t mpxPin0, u_int8_t mpxPin1, u_int8_t mpxPin2, u_int8_t mpxPin3, u_int16_t delta )
+	: m_parent( parent ), m_values( { } ), m_delta( delta )
 {
-	m_parent = parent;
 	m_position = 0;
 	m_pads[ 0 ] = Multiplex( mpxPin0, C_FSR_SEL_0, C_FSR_SEL_1, C_FSR_SEL_2 );
 	m_pads[ 1 ] = Multiplex( mpxPin0, C_FSR_SEL_0, C_FSR_SEL_1, C_FSR_SEL_2 );
@@ -17,19 +17,23 @@ FSR::FSR( std::shared_ptr< AnalogInterrupts > parent, u_int8_t mpxPin0, u_int8_t
 	m_isrInstance = this;
 }
 
+FSR::~FSR()
+{
+	delete m_parent;
+}
+
 void FSR::isr()
 {
 	auto i = FSR::m_isrInstance;
-	int val = i->m_parent.get()->getAdc()->analogReadContinuous();
+	auto val = ( u_int16_t ) i->m_parent->getAdc()->analogReadContinuous();
 	i->updateRange();
 	i->m_values[ i->m_position ] = val;
-#ifdef VERBOSE
-	Serial.print( "IRS::FSR:: " );
-	Serial.print( i->m_position );
-	Serial.print( " VAL: " );
-	Serial.println( i->m_values[ i->m_position ] );
-#endif
 	/* TODO: construct MIDI event and enqueue? */
+	i->m_parent
+	 ->getEventSystem()
+	 ->enqueueAnalog( static_cast<Events::Analog::FSR>(i->m_position), {
+		 i->m_position, val
+	 } );
 }
 
 void FSR::enableISR( u_int8_t prio )
@@ -47,7 +51,9 @@ void FSR::update()
 	stopScan();
 	m_pads[ m_position ].setActive();      // select different mpx out
 	int oldVal = m_values[ m_position ];
-	m_parent->getAdc()->adc1->enableCompareRange( oldVal - m_delta, oldVal + m_delta, false, true );
+	m_parent->getAdc()
+	        ->adc1
+	        ->enableCompareRange( oldVal - m_delta, oldVal + m_delta, false, true );
 	m_parent->getAdc()->adc1->startContinuous( C_FSR_POLL );
 }
 
@@ -68,8 +74,12 @@ u_int16_t FSR::recalibrateDelta( u_int16_t padding, u_int16_t samples )
 {
 	noInterrupts();
 	stopScan();
-	m_parent->getAdc()->adc0->setConversionSpeed( ADC_CONVERSION_SPEED::VERY_HIGH_SPEED );
-	m_parent->getAdc()->adc0->setSamplingSpeed( ADC_SAMPLING_SPEED::VERY_HIGH_SPEED );
+	m_parent->getAdc()
+	        ->adc0
+	        ->setConversionSpeed( ADC_CONVERSION_SPEED::VERY_HIGH_SPEED );
+	m_parent->getAdc()
+	        ->adc0
+	        ->setSamplingSpeed( ADC_SAMPLING_SPEED::VERY_HIGH_SPEED );
 	u_int16_t lowest;
 	u_int16_t highest;
 	std::array< u_int16_t, 4 > deltas { 0, 0, 0, 0 };
@@ -130,6 +140,8 @@ void FSR::updateRange()
 {
 	stopScan();
 	int oldVal = m_values[ m_position ];
-	m_parent->getAdc()->adc1->enableCompareRange( oldVal - m_delta, oldVal + m_delta, false, true );
+	m_parent->getAdc()
+	        ->adc1
+	        ->enableCompareRange( oldVal - m_delta, oldVal + m_delta, false, true );
 	m_parent->getAdc()->adc1->startContinuous( C_FSR_POLL );
 }

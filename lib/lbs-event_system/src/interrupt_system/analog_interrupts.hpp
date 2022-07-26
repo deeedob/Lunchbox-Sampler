@@ -2,6 +2,7 @@
 #include <ADC.h>
 #include <memory>
 #include "events.hpp"
+#include "event_sytem.hpp"
 #include "define_t40.hpp"
 #include "pots.hpp"
 #include "fsr.hpp"
@@ -14,9 +15,7 @@
 
 namespace lbs
 {
-	class EventSystem;
-	
-	class AnalogInterrupts : std::enable_shared_from_this< AnalogInterrupts >
+	class AnalogInterrupts
 	{
 	public:
 		explicit AnalogInterrupts( const std::shared_ptr< EventSystem >& eventSystem );

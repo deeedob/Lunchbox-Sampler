@@ -35,6 +35,29 @@ void setupPins()
 	SPI.setMOSI( C_SDCARD_MOSI_PIN );
 }
 
+void setupDigitalInterrupts()
+{
+	auto eventSystem = std::make_shared< EventSystem >();
+	static DigitalInterrupts digitalInterrupts( eventSystem );
+	digitalInterrupts.enableAll();
+	
+	eventSystem->attachDigital( Events::DIGITAL::ROTARY_L, []() {
+		Serial.println( "Rotary Left" );
+	} );
+	eventSystem->attachDigital( Events::DIGITAL::ROTARY_R, []() {
+		Serial.println( "Rotary Right" );
+	} );
+	eventSystem->attachDigital( Events::DIGITAL::BTN_RETURN, []() {
+		Serial.println( "Button Return" );
+	} );
+	eventSystem->attachDigital( Events::DIGITAL::BTN_ENTER, []() {
+		Serial.println( "Button Enter" );
+	} );
+	eventSystem->attachDigital( Events::DIGITAL::BTN_TOGGLE, []() {
+		Serial.println( "Button Toggle" );
+	} );
+}
+
 int main()
 {
 	Serial.begin( 9600 );
@@ -54,25 +77,7 @@ int main()
 	playSdWav.play( "01.WAV" );
 	delay( 10 );
 	
-	auto eventSystem = std::make_shared< EventSystem >();
-	DigitalInterrupts digitalInterrupts( eventSystem );
-	digitalInterrupts.enableAll();
-	
-	eventSystem->attachDigital( Events::DIGITAL::ROTARY_L, []() {
-		Serial.println( "Rotary Left" );
-	} );
-	eventSystem->attachDigital( Events::DIGITAL::ROTARY_R, []() {
-		Serial.println( "Rotary Right" );
-	} );
-	eventSystem->attachDigital( Events::DIGITAL::BTN_RETURN, []() {
-		Serial.println( "Button Return" );
-	} );
-	eventSystem->attachDigital( Events::DIGITAL::BTN_ENTER, []() {
-		Serial.println( "Button Enter" );
-	} );
-	eventSystem->attachDigital( Events::DIGITAL::BTN_TOGGLE, []() {
-		Serial.println( "Button Toggle" );
-	} );
+	setupDigitalInterrupts();
 	
 	while( true ) {
 		yield();

@@ -1,5 +1,4 @@
 #include "analog_interrupts.hpp"
-#include "event_sytem.hpp"
 
 using namespace lbs;
 
@@ -16,8 +15,8 @@ AnalogInterrupts::AnalogInterrupts( const std::shared_ptr< EventSystem >& eventS
 	m_adc->adc0->setSamplingSpeed( ADC_SAMPLING_SPEED::MED_SPEED );
 	m_adc->adc1->setSamplingSpeed( ADC_SAMPLING_SPEED::MED_SPEED );
 	
-	m_pots = std::make_unique< Pots >( shared_from_this(), C_POT_0, C_POT_1, C_POT_2, C_POT_3, 30 );
-	m_fsr = std::make_unique< FSR >( shared_from_this(), C_FSR_MPX_0, C_FSR_MPX_1, C_FSR_MPX_2, C_FSR_MPX_3, 20 );
+	m_pots = std::make_unique< Pots >( this, C_POT_0, C_POT_1, C_POT_2, C_POT_3, 50 );
+	m_fsr = std::make_unique< FSR >( this, C_FSR_MPX_0, C_FSR_MPX_1, C_FSR_MPX_2, C_FSR_MPX_3, 50 );
 }
 
 const std::unique_ptr< Pots >& AnalogInterrupts::getPots() const

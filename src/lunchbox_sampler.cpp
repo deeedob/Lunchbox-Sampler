@@ -1,11 +1,17 @@
 #include "lunchbox_sampler.hpp"
 
 LunchboxSampler::LunchboxSampler()
-	: m_system { }
+	: m_system( std::make_shared< EventSystem >())
 {
-	m_system = std::make_shared< EventSystem >();
 	setup();
-	setupEventSystem();
+	m_digitalInterrupts = std::make_unique< DigitalInterrupts >( m_system );
+	m_analogInterrupts = std::make_unique< AnalogInterrupts >( m_system );
+	setupDigitalEvents();
+	setupAnalogEvents();
+#ifdef VERBOSE
+	Serial.println( "::: finished setup :::" );
+#endif
+
 }
 
 LunchboxSampler::~LunchboxSampler() = default;
@@ -18,18 +24,21 @@ LunchboxSampler& LunchboxSampler::getInstance()
 
 [[noreturn]] void LunchboxSampler::run()
 {
+	auto& rP = m_analogInterrupts->getPots();
+	auto& rF = m_analogInterrupts->getFSR();
+	rP->setDelta( 100 );
 	while( true ) {
-		yield();
+		rP->update();
+		rP->next();
+		delay( 200 );
+		rF->update();
+		rF->next();
 	}
 }
 
 /* TODO: extend properly */
 void LunchboxSampler::setup()
 {
-#ifdef VERBOSE
-	Serial.begin( 9600 );
-	Serial.println( ":::Lunchbox Sampler:::" );
-#endif
 	pinMode( C_BTN_ENTER, INPUT_PULLUP );
 	pinMode( C_BTN_RETURN, INPUT_PULLUP );
 	pinMode( C_BTN_TOGGLE, INPUT_PULLUP );
@@ -40,8 +49,6 @@ void LunchboxSampler::setup()
 	pinMode( C_FSR_SEL_1, OUTPUT );
 	pinMode( C_FSR_SEL_2, OUTPUT );
 	pinMode( C_FSR_POLL, INPUT );
-	SPI.setSCK( C_SDCARD_SCK_PIN );
-	SPI.setMOSI( C_SDCARD_MOSI_PIN );
 }
 
 void LunchboxSampler::setupEventSystem()
@@ -51,21 +58,30 @@ void LunchboxSampler::setupEventSystem()
 
 void LunchboxSampler::setupDigitalEvents()
 {
-	DigitalInterrupts digitalInterrupts( m_system );
-	digitalInterrupts.enableAll();
+	m_digitalInterrupts->enableAll();
 	
-	m_system->attachDigital( Events::DIGITAL::ROTARY_L, []() { Serial.println( "Rotary Left" ); } );
-	m_system->attachDigital( Events::DIGITAL::ROTARY_R, []() { Serial.println( "Rotary Right" ); } );
-	m_system->attachDigital( Events::DIGITAL::BTN_RETURN, []() { Serial.println( "Button Return" ); } );
-	m_system->attachDigital( Events::DIGITAL::BTN_ENTER, []() { Serial.println( "Button Enter" ); } );
-	m_system->attachDigital( Events::DIGITAL::BTN_TOGGLE, []() { Serial.println( "Button Toggle" ); } );
+	m_system->attachDigital( Events::DIGITAL::ROTARY_L, []() {
+		Serial.println( "Rotary Left" );
+	} );
+	m_system->attachDigital( Events::DIGITAL::ROTARY_R, []() {
+		Serial.println( "Rotary Right" );
+	} );
+	m_system->attachDigital( Events::DIGITAL::BTN_RETURN, []() {
+		Serial.println( "Button Return" );
+	} );
+	m_system->attachDigital( Events::DIGITAL::BTN_ENTER, []() {
+		Serial.println( "Button Enter" );
+	} );
+	m_system->attachDigital( Events::DIGITAL::BTN_TOGGLE, []() {
+		Serial.println( "Button Toggle" );
+	} );
+	
 }
 
 void LunchboxSampler::setupAnalogEvents()
 {
 	
-	AnalogInterrupts analogInterrupts( m_system );
-	analogInterrupts.enableAll();
+	m_analogInterrupts->getPots()->enableISR();
 	
 	m_system->attachAnalog( Events::Analog::POTS::POT_0, []( AnalogData d ) {
 		Serial.print( "Analog Pos: " );
@@ -87,6 +103,37 @@ void LunchboxSampler::setupAnalogEvents()
 	} );
 	m_system->attachAnalog( Events::Analog::POTS::POT_3, []( AnalogData d ) {
 		Serial.print( "Analog Pos: " );
+		Serial.print( d.m_pos );
+		Serial.println( " , Data: " );
+		Serial.println( d.m_data );
+	} );
+}
+
+void LunchboxSampler::setupFSREvents()
+{
+	
+	m_analogInterrupts->getFSR()->enableISR();
+	
+	m_system->attachAnalog( Events::Analog::FSR::FSR_0, []( AnalogData d ) {
+		Serial.print( "FSR Pos: " );
+		Serial.print( d.m_pos );
+		Serial.println( " , Data: " );
+		Serial.println( d.m_data );
+	} );
+	m_system->attachAnalog( Events::Analog::FSR::FSR_1, []( AnalogData d ) {
+		Serial.print( "FSR Pos: " );
+		Serial.print( d.m_pos );
+		Serial.println( " , Data: " );
+		Serial.println( d.m_data );
+	} );
+	m_system->attachAnalog( Events::Analog::FSR::FSR_2, []( AnalogData d ) {
+		Serial.print( "FSR Pos: " );
+		Serial.print( d.m_pos );
+		Serial.println( " , Data: " );
+		Serial.println( d.m_data );
+	} );
+	m_system->attachAnalog( Events::Analog::FSR::FSR_3, []( AnalogData d ) {
+		Serial.print( "FSR Pos: " );
 		Serial.print( d.m_pos );
 		Serial.println( " , Data: " );
 		Serial.println( d.m_data );

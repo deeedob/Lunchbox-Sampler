@@ -9,8 +9,12 @@ EventSystem::EventSystem()
 		m_digMapping[ static_cast<Events::DIGITAL>(i) ] = []() { };
 	}
 	
-	for( int i = static_cast<int>(Events::Analog::POTS::POT_0); static_cast<Events::Analog::POTS>(i) < Events::Analog::POTS::POT_3; i++ ) {
+	for( int i = static_cast<int>(Events::Analog::POTS::POT_0); static_cast<Events::Analog::POTS>(i) < Events::Analog::POTS::LAST; i++ ) {
 		m_analogMapping[ static_cast<Events::Analog::POTS>(i) ] = []( AnalogData ) { };
+	}
+	
+	for( int i = static_cast<int>(Events::Analog::FSR::FSR_0); static_cast<Events::Analog::FSR>(i) < Events::Analog::FSR::LAST; i++ ) {
+		m_fsrMapping[ static_cast<Events::Analog::FSR>(i) ] = []( AnalogData ) { };
 	}
 }
 
@@ -24,6 +28,15 @@ void EventSystem::enqueueAnalog( Events::Analog::POTS e, AnalogData value )
 	auto f = m_analogMapping.find( e )->second;
 	std::function< void() > binder = std::bind( m_analogMapping.find( e )
 	                                                           ->second, value );
+	m_scheduler.m_analogListener.send( binder );
+}
+
+void EventSystem::enqueueAnalog( Events::Analog::FSR e, AnalogData value )
+{
+	auto f = m_fsrMapping.find( e )->second;
+	std::function< void() > binder = std::bind( m_fsrMapping.find( e )
+	                                                        ->second, value );
+	m_scheduler.m_analogListener.send( binder );
 }
 
 void EventSystem::attachDigital( Events::DIGITAL e, std::function< void() > f )
@@ -44,4 +57,14 @@ void EventSystem::attachAnalog( Events::Analog::POTS e, std::function< void( Ana
 void EventSystem::detachAnalog( Events::Analog::POTS e )
 {
 	m_analogMapping[ e ] = []( AnalogData ) { };
+}
+
+void EventSystem::attachAnalog( Events::Analog::FSR e, std::function< void( AnalogData ) > f )
+{
+	m_fsrMapping[ e ] = std::move( f );
+}
+
+void EventSystem::detachAnalog( Events::Analog::FSR e )
+{
+	m_fsrMapping[ e ] = []( AnalogData ) { };
 }

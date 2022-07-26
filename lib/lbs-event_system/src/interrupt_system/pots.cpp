@@ -1,13 +1,16 @@
 #include "pots.hpp"
-#include "event_sytem.hpp"
+#include "analog_interrupts.hpp"
+//#include "event_sytem.hpp"
 
 using namespace lbs;
 Pots* Pots::m_isrInstance = nullptr;
 
-Pots::Pots( const std::shared_ptr< AnalogInterrupts >& parent, u_int8_t pot0, u_int8_t pot1, u_int8_t pot2, u_int8_t pot3, u_int16_t delta )
-	: m_values( { 0, 0, 0, 0 } ), m_pots( { pot0, pot1, pot2, pot3 } ), m_delta( delta )
+Pots::Pots( AnalogInterrupts* const parent, u_int8_t pot0, u_int8_t pot1, u_int8_t pot2, u_int8_t pot3, u_int16_t delta )
+	: m_parent( parent ),
+	  m_values( { 0, 0, 0, 0 } ),
+	  m_pots( { pot0, pot1, pot2, pot3 } ),
+	  m_delta( delta )
 {
-	m_parent = parent;
 	m_position = 0;
 	for( auto i : m_pots ) {
 		pinMode( i, INPUT );
@@ -16,22 +19,25 @@ Pots::Pots( const std::shared_ptr< AnalogInterrupts >& parent, u_int8_t pot0, u_
 	m_isrInstance = this;
 }
 
+Pots::~Pots()
+{
+	delete m_parent;
+}
+
 void Pots::isr()
 {
 	auto& i = Pots::m_isrInstance;
-	int val = i->m_parent->getAdc()->adc0->analogReadContinuous();
+	auto val = ( u_int16_t ) i->m_parent
+	                          ->getAdc()
+	                          ->adc0
+	                          ->analogReadContinuous();
 	i->update();
 	i->m_values[ i->m_position ] = val;
 	i->m_parent
 	 ->getEventSystem()
-	 ->enqueueAnalog( static_cast<Events::Analog::POTS>(i->m_position), { i->m_position, val } );
-#ifdef VERBOSE
-	Serial.print( "IRS::POT:: " );
-	Serial.print( i->m_position );
-	Serial.print( " VAL: " );
-	Serial.println( i->m_values[ i->m_position ] );
-#endif
-	/* TODO: enqueue */
+	 ->enqueueAnalog( static_cast<Events::Analog::POTS>(i->m_position), {
+		 i->m_position, val
+	 } );
 }
 
 void Pots::enableISR( u_int8_t prio )
@@ -48,7 +54,9 @@ void Pots::update()
 {
 	stopScan();
 	u_int16_t oldVal = m_values[ m_position ];
-	m_parent->getAdc()->adc0->enableCompareRange( oldVal - m_delta, oldVal + m_delta, false, true );
+	m_parent->getAdc()
+	        ->adc0
+	        ->enableCompareRange( oldVal - m_delta, oldVal + m_delta, false, true );
 	m_parent->getAdc()->adc0->startContinuous( m_pots[ m_position ] );
 }
 
@@ -69,8 +77,12 @@ u_int16_t Pots::recalibrateDelta( u_int16_t padding, u_int16_t samples )
 {
 	noInterrupts();
 	stopScan();
-	m_parent->getAdc()->adc0->setConversionSpeed( ADC_CONVERSION_SPEED::VERY_HIGH_SPEED );
-	m_parent->getAdc()->adc0->setSamplingSpeed( ADC_SAMPLING_SPEED::VERY_HIGH_SPEED );
+	m_parent->getAdc()
+	        ->adc0
+	        ->setConversionSpeed( ADC_CONVERSION_SPEED::VERY_HIGH_SPEED );
+	m_parent->getAdc()
+	        ->adc0
+	        ->setSamplingSpeed( ADC_SAMPLING_SPEED::VERY_HIGH_SPEED );
 	u_int16_t lowest;
 	u_int16_t highest;
 	std::array< u_int16_t, 4 > deltas { 0, 0, 0, 0 };

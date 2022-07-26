@@ -1,6 +1,5 @@
 #pragma once
 #include <Arduino.h>
-#include <SPI.h>
 #include <define_t40.hpp>
 #include <event_sytem.hpp>
 
@@ -21,7 +20,10 @@ private:
 	void setupEventSystem();
 	void setupDigitalEvents();
 	void setupAnalogEvents();
+	void setupFSREvents();
 
 private:
 	std::shared_ptr< EventSystem > m_system;
+	std::unique_ptr< DigitalInterrupts > m_digitalInterrupts;
+	std::unique_ptr< AnalogInterrupts > m_analogInterrupts;
 };

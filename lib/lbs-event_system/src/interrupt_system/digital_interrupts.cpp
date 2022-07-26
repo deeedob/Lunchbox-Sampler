@@ -1,4 +1,5 @@
 #include "digital_interrupts.hpp"
+#include "event_sytem.hpp"
 
 using namespace lbs;
 DigitalInterrupts* DigitalInterrupts::m_instance = nullptr;
@@ -71,19 +72,9 @@ void DigitalInterrupts::isrRotaryA()
 		if( digitalRead( C_ROTARY_B ) == HIGH ) {
 			DigitalInterrupts::m_instance->m_eventSystem
 			                             ->enqueueDigital( Events::DIGITAL::ROTARY_L );
-#ifdef VERBOSE
-			Serial.print( "ISR::ROTARY:: " );
-			Serial.print( C_ROTARY_B );
-			Serial.println( " LEFT" );
-#endif
 		} else {
 			DigitalInterrupts::m_instance->m_eventSystem
 			                             ->enqueueDigital( Events::DIGITAL::ROTARY_R );
-#ifdef VERBOSE
-			Serial.print( "ISR::ROTARY:: " );
-			Serial.print( C_ROTARY_B );
-			Serial.println( " RIGHT" );
-#endif
 		}
 	}
 	lastInterruptTime = interruptTime;
@@ -106,11 +97,6 @@ void DigitalInterrupts::isrBtnEnter()
 	if( DigitalInterrupts::m_instance->m_btnEnter.fallingEdge()) {
 		DigitalInterrupts::m_instance->m_eventSystem
 		                             ->enqueueDigital( Events::DIGITAL::BTN_ENTER );
-#ifdef VERBOSE
-		Serial.print( "ISR::BTN:: " );
-		Serial.print( C_BTN_ENTER );
-		Serial.println( " ENTER" );
-#endif
 	}
 }
 
@@ -121,11 +107,6 @@ void DigitalInterrupts::isrBtnReturn()
 	if( DigitalInterrupts::m_instance->m_btnReturn.fallingEdge()) {
 		DigitalInterrupts::m_instance->m_eventSystem
 		                             ->enqueueDigital( Events::DIGITAL::BTN_RETURN );
-#ifdef VERBOSE
-		Serial.print( "ISR::BTN:: " );
-		Serial.print( C_BTN_RETURN );
-		Serial.println( " RETURN" );
-#endif
 	}
 }
 
@@ -136,10 +117,5 @@ void DigitalInterrupts::isrBtnToggle()
 	if( DigitalInterrupts::m_instance->m_btnToggle.fallingEdge()) {
 		DigitalInterrupts::m_instance->m_eventSystem
 		                             ->enqueueDigital( Events::DIGITAL::BTN_TOGGLE );
-#ifdef VERBOSE
-		Serial.print( "ISR::BTN:: " );
-		Serial.print( C_BTN_TOGGLE );
-		Serial.println( " TOGGLE" );
-#endif
 	}
 }
