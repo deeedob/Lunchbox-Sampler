@@ -12,7 +12,12 @@
 #define C_SDCARD_MOSI_PIN 11
 #define C_SDCARD_SCK_PIN  13
 
+#define C_FLASH_PIN 6
+#define C_FLASHSIZE 16
+
+
 /* Digital Pin */
+
 #define C_ROTARY_A 2
 #define C_ROTARY_B 3
 #define C_BTN_ENTER 4
@@ -45,3 +50,6 @@
 #define C_FSR_MPX_1 1
 #define C_FSR_MPX_2 2
 #define C_FSR_MPX_3 3
+
+#define C_SETTINGS_FILE "/mapping.csv"
+#define C_PACK_DIR "/packs/"
