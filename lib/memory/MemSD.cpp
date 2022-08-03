@@ -3,12 +3,14 @@
 
 using namespace lbs;
 
+
 /**
  * @brief add comma separators to string if not enough commas as specified
  * @param line: input string
  * @return line with added commas (goal: 3 commas per line)
  */
-inline String MemSD::finishCSVLine( String line ) {
+inline String MemSD::finishCSVLine( String line )
+{
 	uint sepcount = 0;
 	for( int i = 0; i < line.length(); i++ ) {
 		if( line[ i ] == ',' ) {
@@ -27,7 +29,13 @@ inline String MemSD::finishCSVLine( String line ) {
 	return line;
 }
 
-MemSD& MemSD::getInstance() {
+/**
+ * @brief TO BE FILLED
+ * @param
+ * @return
+ */
+MemSD& MemSD::getInstance()
+{
 	static MemSD* instance = new MemSD();
 	
 	if( !SD.begin( C_SDCARD_CS_PIN )) {
@@ -40,56 +48,15 @@ MemSD& MemSD::getInstance() {
 	return *instance;
 }
 
-String MemSD::listFlash() {
-	unsigned int count = 0;
-	char filename[64];
-	uint32_t filesize;
-	String filelist;
-	
-	/* announce reading filelist (prob setting file iterator to 0) */
-	SerialFlash.opendir();
-	
-	while( SerialFlash.readdir( filename , sizeof( filename ) , filesize )) {
-		filelist.append( "File " + count );
-		filelist.append( ": " );
-		filelist.append( filename );
-		filelist.append( "  " );
-		filelist.append( filesize );
-		filelist.append( " bytes\n" );
-#ifdef VERBOSE
-		Serial.print("File ");
-		Serial.print(count);
-		Serial.print(F(": "));
-		Serial.print(filename);
-		Serial.print(F("  "));
-		Serial.print(filesize);
-		Serial.print(F(" bytes"));
-		Serial.println();
-#endif
-		count++;
-	}
-	
-	if( count == 0 )
-		Serial.println( "Flash is empty" );
-	
-	return filelist;
-}
-
-void MemSD::purgeFlash() {
-#ifdef VERBOSE
-	Serial.println("purgeFlash: deleting all Files. Please wait until 'ready' (ca.40s)");
-#endif
-	SerialFlash.eraseAll();
-	while( !SerialFlash.ready()) { }
-
-#ifdef VERBOSE
-	Serial.println("ready");
-#endif
-}
-
-std::vector< std::tuple< std::string , int8_t , std::string , std::string>>* MemSD::readSettings( const std::string packName ) {
-	const std::string pack = lbs::packdir + packName;
-	const std::string path = pack + lbs::settingsfile;
+/**
+ * @brief TO BE FILLED
+ * @param
+ * @return
+ */
+std::vector< std::tuple< std::string, int8_t, std::string, std::string>>* MemSD::readSettings( const std::string packName )
+{
+	const std::string pack = C_PACK_DIR + packName;
+	const std::string path = pack + C_SETTINGS_FILE;
 
 #ifdef VERBOSE
 	Serial.println("VERBOSE MODE");
@@ -104,7 +71,7 @@ std::vector< std::tuple< std::string , int8_t , std::string , std::string>>* Mem
 		//TODO: Error handling
 	}
 	
-	File settings = SD.open( path.c_str() , FILE_READ );
+	File settings = SD.open( path.c_str(), FILE_READ );
 	
 	if( !settings ) {
 #ifdef VERBOSE
@@ -113,7 +80,7 @@ std::vector< std::tuple< std::string , int8_t , std::string , std::string>>* Mem
 		//TODO: Error handling
 	}
 	
-	CSV_Parser cp( "scss" , false );
+	CSV_Parser cp( "scss", false );
 	String tmp;
 	uint sepcount = 0;
 	while( settings.available()) {
@@ -130,7 +97,7 @@ std::vector< std::tuple< std::string , int8_t , std::string , std::string>>* Mem
 	int8_t* octaves = ( int8_t* ) cp[ 1 ];
 	char** samples = ( char** ) cp[ 2 ];
 	char** modes = ( char** ) cp[ 3 ];
-	auto* result = new std::vector< std::tuple< std::string , int8_t , std::string , std::string>>;
+	auto* result = new std::vector< std::tuple< std::string, int8_t, std::string, std::string>>;
 	std::string sample;
 	for( int i = 0; i < cp.getRowsCount(); i++ ) {
 		sample = std::string( samples[ i ] );
@@ -138,15 +105,102 @@ std::vector< std::tuple< std::string , int8_t , std::string , std::string>>* Mem
 		if( !SD.exists(( pack + sample ).c_str())) {
 			continue;
 		}
-		result->push_back( std::make_tuple( std::string( notes[ i ] ) , octaves[ i ] , sample , std::string( modes[ i ] )));
+		result->push_back( std::make_tuple( std::string( notes[ i ] ), octaves[ i ], sample, std::string( modes[ i ] )));
 	}
 	
 	return result;
 }
 
-MemSD::MemSD() {
+/**
+ * @brief TO BE FILLED
+ * @param
+ * @return
+ */
+MemSD::MemSD()
+{
 }
 
-bool MemSD::exists( std::string file ) {
-	return SD.exists(( lbs::packdir + file ).c_str());
+/**
+ * @brief TO BE FILLED
+ * @param
+ * @return
+ */
+bool MemSD::exists( std::string file )
+{
+	return SD.exists(( C_PACK_DIR + file ).c_str());
+}
+
+MemSD::OpenFile& MemSD::fileDo()
+{
+	return ofile;
+}
+
+MemSD::OpenFile::OpenFile( std::string filepath )
+{
+	filename = filepath;
+	file = SD.open( filepath.c_str(), FILE_READ );
+}
+
+bool MemSD::OpenFile::isOpen()
+{
+	return file != NULL;
+}
+
+MemSD::OpenFile::~OpenFile()
+{
+	if( isOpen()) {
+		file.close();
+	}
+}
+
+uint64_t MemSD::OpenFile::size()
+{
+	if( isOpen()) {
+		return file.size();
+	}
+	return 0;
+}
+
+uint8_t MemSD::OpenFile::readByte()
+{
+	if( isOpen()) {
+		uint8_t b;
+		if( count < size()) {
+			file.read( &b, 1 );
+			count++;
+			return b;
+		}
+	}
+	return 0;
+}
+
+uint64_t MemSD::OpenFile::remaining()
+{
+	if( isOpen()) {
+		return size() - count;
+	}
+	return 0;
+}
+
+bool MemSD::OpenFile::notAtEnd()
+{
+	if( isOpen()) {
+		return count < size();
+	}
+	return false;
+}
+
+bool MemSD::OpenFile::reset()
+{
+	if( isOpen()) {
+		file.close()
+		file = SD.open( filename.c_str(), FILE_READ );
+		return true;
+	}
+	
+}
+
+std::string MemSD::OpenFile::getFilename()
+{
+	return filename;
 }
