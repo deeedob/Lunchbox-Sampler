@@ -51,66 +51,23 @@ bool MemSample::loadSamplePack( const std::string packName )
 	mf.purgeFlash();
 	
 	// load mapping onto flash memory
+	File* sample;
 	for( auto it = this->mapping.getSampleList()->begin(); it < this->mapping.getSampleList()->end(); it++ ) {
-		if (!ms.openFile(*it)) {
-			this->mapping.removeSample(*it);
-#ifdef VERBOSE
-			Serial.println("loadSamplePack: Failed to open File " + *it + " from SD Card");
-#endif
-			continue;
-		}
-		
-		std::string basename = it->substr(it->find_last_of("/\\") + 1);
-		
-		if (!mf.openFileW(basename, ms.fileDo().size())) {
-#ifdef VERBOSE
-			Serial.println("loadSamplePack: Failed to create File " + *it + " on Flash for writing");
-#endif
-			this->mapping.removeSample(*it);
-			continue;
-		}
-		
-		for (int i = 0; i < ms.fileDo().size(); i++) {
-			mf.fileDo().writeByte(ms.fileDo().readByte());
-		}
-		
+		ms.fileDo().readByte();
+		mf.loadFile( *it, *sample );
 	}
 	
-	return true;
 	//TODO: adjustSize() (strips samplesizes down if size of sample pack too large
+	
 }
 
-void lbs::playSample( uint8_t midiNote )
+bool MemSample::loadSample( std::string name )
 {
-	auto mf = MemFlash::getInstance();
-	auto memsample  = MemSample::getInstance();
-	std::string sample = memsample.mapping.getSampleName(midiNote);
-	mf.playbackFile = SerialFlash.open(sample.c_str());
-	if (!mf.playbackFile) {
-#ifdef VERBOSE
-		Serial.println("playSample: could not load playbackFile");
-#endif
-		return;
-	}
 	
-	WaveHC wave;
-	if(!wave.create(mf.playbackFile)) {
-#ifdef VERBOSE
-		Serial.println("playSample: could not create wave object");
-#endif
-		return;
+	if( ms.openFile( C_PACK_DIR + currentSamplePack + "/" + name )) {
+		while( ms.fileDo().notAtEnd()) {
+		}
 	}
-	
-	if (wave.isplaying) {
-		wave.stop();
-	}
-	
-	wave.play();
-}
-
-void MemSample::playSample( uint8_t note)
-{
-	lbs::playSample(note);
 }
 
 MemSample::MidiMapping::MidiMapping()
@@ -163,27 +120,11 @@ std::vector< std::string >* MemSample::MidiMapping::getSampleList()
 {
 	auto* res = new std::vector< std::string >;
 	for( int i = 0; i < 127; i++ ) {
-		if( this->samples[ i ].compare("") != 0) {
+		if( this->samples[ i ] != "" ) {
 			res->push_back( samples[ i ] );
 		}
 	}
 	return res;
-}
-
-void MemSample::MidiMapping::removeSample( std::string sampleName )
-{
-	for (int i = 0; i < 128; i++) {
-		if (sampleName.compare(samples[i]) == 0) {
-			samples[i] = "";
-			mode[i] = ONESHOT;
-			return;
-		}
-	}
-}
-
-std::string MemSample::MidiMapping::getSampleName( uint8_t midiNote )
-{
-	return this->samples[midiNote];
 }
 
 

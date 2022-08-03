@@ -91,67 +91,24 @@ std::string MemFlash::listFlash()
 	return filelist;
 }
 
-MemFlash::WriteFile& MemFlash::fileDo()
-{
-	return this->wfile;
-}
-
-bool MemFlash::openFileW( std::string filepath, uint64_t length )
-{
-	this->wfile = WriteFile(filepath, length);
-	if (this->wfile.isOpen()) {
-		return true;
-	}
-	return false;
-}
-
-
 /**
  * @brief TO BE FILLED
  * @param
  * @return
  */
-MemFlash::WriteFile::WriteFile( std::string filename, uint64_t length )
+bool MemFlash::loadFile( std::string name, File& file )
 {
-	if (!SerialFlash.create(filename.c_str(), length)) {
-		return;
+	if( SerialFlash.create( name.c_str(), file.size())) {
+		SerialFlashFile flashfile = SerialFlash.open( name.c_str());
+		char[256]
+		buf;
+		uint count = 0;
+		uint n = 0;
+		
+		while( count < file.size()) {
+			n = file.read( &buf, 256 );
+			flashfile.write( &buf, n );
+			count += n;
+		}
 	}
-	this->filename = filename;
-	this->file = SerialFlash.open(filename.c_str());
 }
-
-uint64_t MemFlash::WriteFile::size()
-{
-	return file.size();
-}
-
-bool MemFlash::WriteFile::writeByte( uint8_t byte )
-{
-	return file.write(&byte, 1);
-}
-
-uint64_t MemFlash::WriteFile::remaining()
-{
-	return file.available();
-}
-
-bool MemFlash::WriteFile::notAtEnd()
-{
-	return file.available() > 0;
-}
-
-bool MemFlash::WriteFile::isOpen()
-{
-	return file != NULL;
-}
-
-bool MemFlash::WriteFile::reset()
-{
-	return false;
-}
-
-std::string MemFlash::WriteFile::getFilename()
-{
-	return filename;
-}
-
