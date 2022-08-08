@@ -51,22 +51,40 @@ bool MemSample::loadSamplePack( const std::string packName )
 	mf.purgeFlash();
 	
 	// load mapping onto flash memory
-	File* sample;
 	for( auto it = this->mapping.getSampleList()->begin(); it < this->mapping.getSampleList()->end(); it++ ) {
-		ms.fileDo().readByte();
-		mf.loadFile( *it, *sample );
+		if (!ms.openFile(*it)) {
+			this->mapping.removeSample(*it);
+#ifdef VERBOSE
+			Serial.println("loadSamplePack: Failed to open File " + *it + " from SD Card");
+#endif
+			continue;
+		}
+		
+		std::string basename = it->substr(it->find_last_of("/\\") + 1);
+		
+		if (!mf.openFileW(basename, ms.fileDo().size())) {
+#ifdef VERBOSE
+			Serial.println("loadSamplePack: Failed to create File " + *it + " on Flash for writing");
+#endif
+			this->mapping.removeSample(*it);
+			continue;
+		}
+		
+		for (int i = 0; i < ms.fileDo().size(); i++) {
+			mf.fileDo().writeByte(ms.fileDo().readByte());
+		}
+		
 	}
 	
+	return true;
 	//TODO: adjustSize() (strips samplesizes down if size of sample pack too large
-	
 }
 
-bool MemSample::loadSample( std::string name )
+SerialFlashFile& MemSample::getSample( uint8_t midiNote )
 {
-	
-	if( ms.openFile( C_PACK_DIR + currentSamplePack + "/" + name )) {
-		while( ms.fileDo().notAtEnd()) {
-		}
+	std::string sample = this->mapping.getSampleName(midiNote);
+	if (sample.compare("") != 0) {
+		return mf.g
 	}
 }
 
@@ -120,11 +138,27 @@ std::vector< std::string >* MemSample::MidiMapping::getSampleList()
 {
 	auto* res = new std::vector< std::string >;
 	for( int i = 0; i < 127; i++ ) {
-		if( this->samples[ i ] != "" ) {
+		if( this->samples[ i ].compare("") != 0) {
 			res->push_back( samples[ i ] );
 		}
 	}
 	return res;
+}
+
+void MemSample::MidiMapping::removeSample( std::string sampleName )
+{
+	for (int i = 0; i < 128; i++) {
+		if (sampleName.compare(samples[i]) == 0) {
+			samples[i] = "";
+			mode[i] = ONESHOT;
+			return;
+		}
+	}
+}
+
+std::string MemSample::MidiMapping::getSampleName( uint8_t midiNote )
+{
+	return this->samples[midiNote];
 }
 
 

@@ -2,6 +2,9 @@
 #include <define_t40.hpp>
 #include "MemFlash.hpp"
 #include "MemSD.hpp"
+#ifdef VERBOSE
+#include "Arduino.h"
+#endif
 
 namespace lbs
 {
@@ -15,6 +18,8 @@ namespace lbs
 		
 		public:
 			bool add( std::string pitch, int8_t octave, std::string sample, std::string mode );
+			void removeSample(std::string sampleName);
+			std::string getSampleName(uint8_t midiNote);
 			std::vector< std::string >* getSampleList();
 			MidiMapping();
 		
@@ -36,6 +41,7 @@ namespace lbs
 	public:
 		static MemSample& getInstance();
 		bool loadSamplePack( const std::string packName );
+		SerialFlashFile& getSample(uint8_t midiNote);
 	
 	private:
 		std::string currentSamplePack;
