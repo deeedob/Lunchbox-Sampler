@@ -99,7 +99,9 @@ std::vector< std::tuple< std::string, int8_t, std::string, std::string>>* MemSD:
 	char** modes = ( char** ) cp[ 3 ];
 	auto* result = new std::vector< std::tuple< std::string, int8_t, std::string, std::string>>;
 	std::string sample;
-	for( int i = 0; i < cp.getRowsCount(); i++ ) {
+	for( int i = 0; i < cp.getRowsCount(); i++ ) #ifdef VERBOSE
+			Serial.println("loadSamplePack: Failed to open File " + *it + " from SD Card");
+#endif{
 		sample = std::string( samples[ i ] );
 		// omit adding to result if specified Sample does not exist
 		if( !SD.exists(( pack + sample ).c_str())) {
@@ -118,6 +120,7 @@ std::vector< std::tuple< std::string, int8_t, std::string, std::string>>* MemSD:
  */
 MemSD::MemSD()
 {
+
 }
 
 /**
@@ -133,6 +136,15 @@ bool MemSD::exists( std::string file )
 MemSD::OpenFile& MemSD::fileDo()
 {
 	return ofile;
+}
+
+bool MemSD::openFile( std::string file )
+{
+	this->ofile = OpenFile(file);
+	if ( this->ofile.isOpen()) {
+		return true;
+	}
+	return false;
 }
 
 MemSD::OpenFile::OpenFile( std::string filepath )
@@ -193,11 +205,11 @@ bool MemSD::OpenFile::notAtEnd()
 bool MemSD::OpenFile::reset()
 {
 	if( isOpen()) {
-		file.close()
-		file = SD.open( filename.c_str(), FILE_READ );
-		return true;
+		file.close();
 	}
 	
+	file = SD.open( filename.c_str(), FILE_READ );
+	return true;
 }
 
 std::string MemSD::OpenFile::getFilename()

@@ -25,14 +25,14 @@ namespace lbs
 			bool isOpen();
 			bool reset();
 			std::string getFilename();
+			OpenFile( std::string filepath );
+			~OpenFile();
 		
 		private:
 			std::string filename;
 			uint64_t count = 0;
 			File file;
 			
-			OpenFile( std::string filepath );
-			~OpenFile();
 		};
 	
 	public:
@@ -41,7 +41,6 @@ namespace lbs
 	public:
 		bool exists( std::string file );
 		bool openFile( std::string file );
-		bool fileOpened();
 		OpenFile& fileDo();
 		std::vector< std::tuple< std::string, int8_t, std::string, std::string>>* readSettings( std::string packName );
 	
