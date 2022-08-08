@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager">
+    <generated>
+      <config projectName="mhs" targetName="Production" />
+      <config projectName="mhs" targetName="Z_DUMMY_TARGET" />
+      <config projectName="mhs" targetName="Debug" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="teensy" ENABLED="true" CONFIG_NAME="teensy40" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="82cb3d38-7ee2-47ff-a9aa-469f491dd764" name="Changes" comment="all test outcommented, execpt for loop">
+      <change beforePath="$PROJECT_DIR$/src/Notes.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Notes.cpp" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:teensy" />
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/../.." value="memoryClass" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectApplicationVersion">
+    <option name="ide" value="CLion" />
+    <option name="majorVersion" value="2022" />
+    <option name="minorVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="28ndOTM0W0pRrRIroXm2VnVtLbY" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;cmake.loaded.for.project&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/lenaw/OneDrive/Dokumente/GitHub/Lunchbox-Sampler&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;CMakeSettings&quot;,
+    &quot;structure.view.defaults.are.configured&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\lenaw\OneDrive\Dokumente\GitHub\MHS\code\mhs\lib\include" />
+      <recent name="C:\Users\lenaw\OneDrive\Dokumente\GitHub\MHS\code\mhs\src" />
+      <recent name="C:\Users\lenaw\OneDrive\Dokumente\GitHub\MHS\code\mhs\res" />
+    </key>
+  </component>
+  <component name="RunManager" selected="PlatformIO.PlatformIO Upload (1)">
+    <configuration name="Debug" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="mhs" TARGET_NAME="Debug" CONFIG_NAME="teensy">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Z_DUMMY_TARGET" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="mhs" TARGET_NAME="Z_DUMMY_TARGET" CONFIG_NAME="teensy" RUN_TARGET_PROJECT_NAME="mhs" RUN_TARGET_NAME="Z_DUMMY_TARGET">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PlatformIO Upload (1)" type="platformio" factoryName="PlatformIO Upload" nameIsGenerated="true" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="mhs" TARGET_NAME="Production" CONFIG_NAME="teensy">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PlatformIO Upload" type="platformio" factoryName="PlatformIO Upload" nameIsGenerated="true" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PlatformIO Upload" type="platformio" factoryName="PlatformIO Uploadfs" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="mhs" TARGET_NAME="Production" CONFIG_NAME="teensy">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PlatformIO Upload" type="platformio" factoryName="PlatformIO Upload" nameIsGenerated="true" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="mhs" TARGET_NAME="Production" CONFIG_NAME="teensy">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.Debug" />
+      <item itemvalue="CMake Application.Z_DUMMY_TARGET" />
+      <item itemvalue="PlatformIO.PlatformIO Upload" />
+      <item itemvalue="PlatformIO.PlatformIO Upload (1)" />
+    </list>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="82cb3d38-7ee2-47ff-a9aa-469f491dd764" name="Changes" comment="" />
+      <created>1651856253297</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1651856253297</updated>
+      <workItem from="1651856255428" duration="558000" />
+      <workItem from="1651924507572" duration="10182000" />
+      <workItem from="1651935174405" duration="3815000" />
+      <workItem from="1652003333752" duration="7995000" />
+      <workItem from="1652191444561" duration="2614000" />
+      <workItem from="1652354782700" duration="2294000" />
+      <workItem from="1652357375288" duration="1471000" />
+      <workItem from="1652366911297" duration="69000" />
+      <workItem from="1652534840303" duration="2798000" />
+      <workItem from="1652538742173" duration="3311000" />
+      <workItem from="1652542202223" duration="309000" />
+      <workItem from="1652542691694" duration="887000" />
+      <workItem from="1652543750527" duration="1542000" />
+      <workItem from="1652545414703" duration="961000" />
+      <workItem from="1652546874626" duration="1385000" />
+      <workItem from="1652693770761" duration="790000" />
+      <workItem from="1652694720235" duration="3000" />
+      <workItem from="1652695086190" duration="285000" />
+      <workItem from="1652696051120" duration="309000" />
+      <workItem from="1652697035392" duration="1000" />
+      <workItem from="1652697305205" duration="8821000" />
+      <workItem from="1653052920757" duration="10320000" />
+      <workItem from="1653131662199" duration="13633000" />
+      <workItem from="1653170865541" duration="1433000" />
+      <workItem from="1653202323314" duration="2218000" />
+      <workItem from="1653389309957" duration="1892000" />
+      <workItem from="1656767669190" duration="1859000" />
+      <workItem from="1656934986239" duration="1985000" />
+      <workItem from="1656937678952" duration="1128000" />
+      <workItem from="1657113852593" duration="5008000" />
+      <workItem from="1657447685718" duration="894000" />
+      <workItem from="1658398034097" duration="16474000" />
+      <workItem from="1658472681074" duration="2311000" />
+      <workItem from="1658484256975" duration="17935000" />
+      <workItem from="1658567311918" duration="1551000" />
+      <workItem from="1658570507757" duration="3726000" />
+      <workItem from="1658595173205" duration="7931000" />
+      <workItem from="1658649083178" duration="3598000" />
+      <workItem from="1658655009998" duration="11000" />
+      <workItem from="1658655042846" duration="3630000" />
+      <workItem from="1658742664089" duration="1452000" />
+      <workItem from="1658744436897" duration="148000" />
+      <workItem from="1658744596117" duration="321000" />
+      <workItem from="1658745014430" duration="13000" />
+      <workItem from="1658745178125" duration="962000" />
+      <workItem from="1658777979480" duration="6000" />
+      <workItem from="1658778005191" duration="389000" />
+      <workItem from="1658778439373" duration="364000" />
+      <workItem from="1658829570249" duration="631000" />
+      <workItem from="1658831653522" duration="96000" />
+    </task>
+    <task id="LOCAL-00001" summary="Update Hardware Test, test Flash">
+      <created>1652010626092</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1652010626092</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Update Memory Class">
+      <created>1652546248328</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1652546248328</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Update Memory Class">
+      <created>1652699936652</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1652699936652</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Update Memory Class">
+      <created>1652700642783</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1652700642783</updated>
+    </task>
+    <task id="LOCAL-00005" summary="MemoryClass trying to implement tiggerSample">
+      <created>1652703090465</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1652703090465</updated>
+    </task>
+    <task id="LOCAL-00006" summary="MemoryClass trying to implement tiggerSample">
+      <created>1652703165095</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1652703165095</updated>
+    </task>
+    <task id="LOCAL-00007" summary="all test outcommented, execpt for loop">
+      <created>1652704676397</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1652704676397</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="MIDI" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Update Hardware Test, test Flash" />
+    <MESSAGE value="Update Memory Class" />
+    <MESSAGE value="MemoryClass trying to implement tiggerSample" />
+    <MESSAGE value="all test outcommented, execpt for loop" />
+    <option name="LAST_COMMIT_MESSAGE" value="all test outcommented, execpt for loop" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
