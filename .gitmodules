@@ -1,0 +1,3 @@
+[submodule "lib/SoundZ"]
+	path = lib/SoundZ
+	url = https://github.com/lensdigital/SoundZ.git
