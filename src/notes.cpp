@@ -2,13 +2,13 @@
 Notes::Notes( int bpm, int bpb, int bars )
 	: m_bpm(bpm), m_bars(bars), m_bpb(bpb){}
 
-void Notes::setBPM(int bpm) { m_bpm = bpm; }
+void Notes::setBpm(int bpm) { m_bpm = bpm; }
 void Notes::setBars(int bars) { m_bars = bars; }
-void Notes::setBPB(int bpb) { m_bpb = bpb; }
+void Notes::setBpb(int bpb) { m_bpb = bpb; }
 int Notes::getBars(){ return m_bars; }
 int Notes::getBpm() { return m_bpm; }
 int Notes::getBpb() { return m_bpb; }
-void Notes::recordIntern(uint32_t startTime, boolean isMetronom) {
+void Notes::recordIntern(uint32_t startTime, boolean isMetronom, boolean overdub) {
 	int metro = 0;
 	Serial.println("0");
 	boolean isNote1 = false;
@@ -26,19 +26,22 @@ void Notes::recordIntern(uint32_t startTime, boolean isMetronom) {
 		}
 		if (digitalRead( m_buttonPin1 ) == HIGH && !isNote1) {
 			isNote1 = true;
-			saveNote({41, 70, midi::NoteOn, 1, clock}, false);
+			Serial.println("41");
+			buttonPressed( m_buttonPin1, 41);
+			saveNote({midi::NoteOn, 1, 41, 70, clock}, overdub);
 		}
 		if (digitalRead( m_buttonPin1 ) == LOW && isNote1) {
 			isNote1 = false;
-			saveNote({41, 70, midi::NoteOff, 1, clock},false);
+			saveNote({midi::NoteOff, 1, 41, 70, clock},overdub);
 		}
 		if (digitalRead( m_buttonPin2 ) == HIGH && !isNote2) {
 			isNote2 = true;
-			saveNote({36, 70, midi::NoteOn, 1, clock}, false);
+			buttonPressed( m_buttonPin2, 36);
+			saveNote({midi::NoteOn, 1, 36, 70, clock}, overdub);
 		}
 		if (digitalRead( m_buttonPin2 ) == LOW && isNote2) {
 			isNote2 = false;
-			saveNote({36, 70, midi::NoteOff, 1, clock}, false);
+			saveNote({midi::NoteOff, 1, 36, 70, clock}, overdub);
 		}
 	}
 }
@@ -97,57 +100,21 @@ void Notes::RecordFromDaw() {
 		}
 	}
 }
-void Notes::Overdub(uint32_t startTime){
-	Serial.println("Overdub");
-	boolean isNote1 = false;
-	boolean isNote2 = false;
-	int b=0;
-	int clock;
-	for(int i=0; i<1; i++) {
-		Serial.println("loop");
-		clock=0;
-		while( clock <= ( m_bars * m_bpb * 24 ) ) {
-			if (b == 24*4) {
-				Serial.println("takt");
-				b = 0;
-			}
-			if( micros() - startTime >= ( 60000000 / ( m_bpm * 24 ) ) ) {
-				clock++;
-				b++;
-				startTime = micros();
-			}
-			if( digitalRead( m_buttonPin1 ) == HIGH && !isNote1 ) {
-				isNote1 = true;
-				Serial.println("41");
-				saveNote( { 41, 70, midi::NoteOn, 1, clock }, true );
-			}
-			if( digitalRead( m_buttonPin1 ) == LOW && isNote1 ) {
-				isNote1 = false;
-				saveNote( { 41, 70, midi::NoteOff, 1, clock }, true );
-			}
-			if( digitalRead( m_buttonPin2 ) == HIGH && !isNote2 ) {
-				isNote2 = true;
-				saveNote( { 36, 70, midi::NoteOn, 1, clock }, true );
-			}
-			if( digitalRead( m_buttonPin2 ) == LOW && isNote2 ) {
-				isNote2 = false;
-				saveNote( { 36, 70, midi::NoteOff, 1, clock }, true );
-			}
-		}
-	}
-}
 void Notes::saveNote(Note data, boolean isOverdub) {
 	if(isOverdub) {
-		Serial.println("hi");
+		int pos;
 		for( Note n : m_notes ) {
-			int pos;
+			Serial.print("+");
 			if( n.m_timing < data.m_timing ) {
 				pos++;
-				continue;
 			}
-			if( n.m_timing >= data.m_timing ) { m_notes.insert( m_notes.begin() + pos, data );
-				Serial.println(data.m_timing);
+			else if( n.m_timing > data.m_timing ) {
+				m_notes.insert( (m_notes.begin() + pos), data );
 				    return;
+			}
+			 else if( n.m_timing == data.m_timing ) {
+				m_notes.insert( (m_notes.begin() + pos+1), data );
+				return;
 			}
 		}
 	}
@@ -171,11 +138,16 @@ void Notes::readRecord() {
 	}
 }
 void Notes::sendMidiToDaw() {
-	long prevTiming = 0;
+	Note prevnote=Note();
+	prevnote.m_timing=0;
 	for (Note note : m_notes) {
 		int timing = note.m_timing;
-		delayMicroseconds(((60000000 / (24 * m_bpm )) * (timing - prevTiming)));
+		if(note.m_timing!=prevnote.m_timing)
+		{
+			delayMicroseconds(((60000000 / (24 * m_bpm )) * (timing - prevnote.m_timing)));
+		}
 		byte type = note.m_midiData.type;
+	
 		switch (type) {
 			case midi::NoteOn:
 				if (note.m_midiData.data2 > 0) {
@@ -188,6 +160,6 @@ void Notes::sendMidiToDaw() {
 				usbMIDI.sendNoteOff(note.m_midiData.data1, note.m_midiData.data2, note.m_midiData.channel);
 				break;
 		}
-		prevTiming = note.m_timing;
+		prevnote = note;
 	}
 }

@@ -19,9 +19,10 @@ int main() {
   Notes notes(BPM,BPB,Bars);
   //notes.recordIntern(micros(), false);
   //notes.playLive();
-  notes.recordIntern(micros(),false);
-  notes.Overdub(micros());
+  notes.recordIntern(micros(),false, false);
   notes.readRecord();
-  //notes.sendMidiToDaw();
+  notes.recordIntern(micros(),false, true);
+  notes.readRecord();
+  notes.sendMidiToDaw();
   //notes.getNotes();
 }
