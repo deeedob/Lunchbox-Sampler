@@ -1,50 +1,61 @@
 #pragma once
-#ifdef VERBOSE
-
 #include <Arduino.h>
-
-#endif
-
-#include <algorithm>
-#include <Audio.h>
-#include <cstdio>
-#include <iostream>
 #include <SerialFlash.h>
 #include <SD.h>
-#include <SPI.h>
+#include <iostream>
 #include <string>
-#include <unordered_map>
-#include <vector>
-#include <Wire.h>
-#include <map>
-#include <tuple>
-
-#include <MemGen.hpp>
+#include <cstdio>
 #include <memory>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+#include <SoundZ.h>
 
-namespace lbs {
-    bool transferToFlash(const std::string &filepath);
+namespace lbs
+{
+	
+	class MemFlash
+	{
+	
+	private:
+		class WriteFile
+			{
+			public:
+				uint64_t size();
+				bool writeByte(uint8_t byte);
+				uint64_t remaining();
+				bool notAtEnd();
+				bool isOpen();
+				bool reset();
+				std::string getFilename();
+				
+				WriteFile( std::string filepath, uint64_t length );
+				~WriteFile();
+		
+		private:
+				std::string filename;
+				uint64_t count = 0;
+				SerialFlashFile file;
+			
+			};
 
-    class MemFlash {
+
 /* static part */
-    public:
-        static MemFlash &getInstance();
-
-    public:
-        void purgeFlash();
-
-        void playSample(const std::string &filename);
-
-        std::string listFlash();
-
-        friend bool transferToFlash(const std::string &filepath);
-
-
-    private:
-        static const std::string packfolder;
-        AudioControlSGTL5000 audioShield;
-        AudioPlaySerialflashRaw playFlashRaw1;  //xy=265.1999969482422,1208.1999969482422
-        AudioOutputI2S i2s1;           //xy=613.1999969482422,1207.1999969482422
-        MemFlash();
-    };
+	public:
+		static MemFlash& getInstance();
+	
+	public:
+		void purgeFlash();
+		std::string listFlash();
+		bool openFileW( std::string file, uint64_t length );
+		MemFlash::WriteFile& fileDo();
+		SerialFlashFile& getFile(std::string filename);
+	
+	private:
+		friend void playSample(uint8_t midiNote);
+		static const std::string packfolder;
+		WriteFile wfile;
+		SerialFlashFile playbackFile;
+		MemFlash();
+	};
 }
