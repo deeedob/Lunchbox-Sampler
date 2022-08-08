@@ -80,12 +80,37 @@ bool MemSample::loadSamplePack( const std::string packName )
 	//TODO: adjustSize() (strips samplesizes down if size of sample pack too large
 }
 
-SerialFlashFile& MemSample::getSample( uint8_t midiNote )
+void lbs::playSample( uint8_t midiNote )
 {
-	std::string sample = this->mapping.getSampleName(midiNote);
-	if (sample.compare("") != 0) {
-		return mf.g
+	auto mf = MemFlash::getInstance();
+	auto memsample  = MemSample::getInstance();
+	std::string sample = memsample.mapping.getSampleName(midiNote);
+	mf.playbackFile = SerialFlash.open(sample.c_str());
+	if (!mf.playbackFile) {
+#ifdef VERBOSE
+		Serial.println("playSample: could not load playbackFile");
+#endif
+		return;
 	}
+	
+	WaveHC wave;
+	if(!wave.create(mf.playbackFile)) {
+#ifdef VERBOSE
+		Serial.println("playSample: could not create wave object");
+#endif
+		return;
+	}
+	
+	if (wave.isplaying) {
+		wave.stop();
+	}
+	
+	wave.play();
+}
+
+void MemSample::playSample( uint8_t note)
+{
+	lbs::playSample(note);
 }
 
 MemSample::MidiMapping::MidiMapping()

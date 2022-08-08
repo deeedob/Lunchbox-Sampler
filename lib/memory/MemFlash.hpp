@@ -9,6 +9,7 @@
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
+#include <SoundZ.h>
 
 namespace lbs
 {
@@ -51,8 +52,10 @@ namespace lbs
 		SerialFlashFile& getFile(std::string filename);
 	
 	private:
+		friend void playSample(uint8_t midiNote);
 		static const std::string packfolder;
 		WriteFile wfile;
+		SerialFlashFile playbackFile;
 		MemFlash();
 	};
 }

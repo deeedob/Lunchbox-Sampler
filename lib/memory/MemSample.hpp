@@ -41,7 +41,8 @@ namespace lbs
 	public:
 		static MemSample& getInstance();
 		bool loadSamplePack( const std::string packName );
-		SerialFlashFile& getSample(uint8_t midiNote);
+		friend void playSample(uint8_t midiNote);
+		void playSample(uint8_t Note);
 	
 	private:
 		std::string currentSamplePack;
