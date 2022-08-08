@@ -105,10 +105,6 @@ bool MemFlash::openFileW( std::string filepath, uint64_t length )
 	return false;
 }
 
-void MemFlash::playSample( std::string filename )
-{
-
-}
 
 /**
  * @brief TO BE FILLED
