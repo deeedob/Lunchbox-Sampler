@@ -19,9 +19,9 @@ public:
 	Notes(int bpm, int bpb,int bars );
 	~Notes() = default;
 	//getter & setter:
-	void setBPM( int bpm );
+	void setBpm( int bpm );
 	void setBars( int bars );
-	void setBPB( int bpb );
+	void setBpb( int bpb );
 	void setNotes(std::vector<Notes> n_notes);
 	int getBars();
 	int getBpm();
@@ -33,9 +33,8 @@ public:
 	void sendMidiToDaw();
 	void saveNote(Note data, boolean isOverdub);
 	void RecordFromDaw();
-	void Overdub(uint32_t startTime);
 	void readRecord();
-	void recordIntern( uint32_t startTime, boolean isMetronom );
+	void recordIntern( uint32_t startTime, boolean isMetronom, boolean overdub);
 private:
 	const int m_buttonPin1 = 24;
 	const int m_buttonPin2 = 26;
