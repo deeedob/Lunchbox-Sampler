@@ -1,11 +1,11 @@
 #include "digital_interrupts.hpp"
 
 using namespace lbs;
+
 DigitalInterrupts* DigitalInterrupts::m_instance = nullptr;
 
 DigitalInterrupts::DigitalInterrupts( const std::shared_ptr< EventSystem >& eventSystem, u_int8_t bounceTime )
-	: m_btnEnter( C_BTN_ENTER, bounceTime ),
-	  m_btnReturn( C_BTN_RETURN, bounceTime ),
+	: m_btnEnter( C_BTN_ENTER, bounceTime ), m_btnReturn( C_BTN_RETURN, bounceTime ),
 	  m_btnToggle( C_BTN_TOGGLE, bounceTime )
 {
 	m_eventSystem = eventSystem;
@@ -46,12 +46,10 @@ void DigitalInterrupts::disablePin( Events::DIGITAL e )
 /* Events :: {Pin :: ISR :: Mode } */
 const DigitalInterrupts::DigLookup& DigitalInterrupts::getTable()
 {
-	static const auto* table = new DigLookup( {
-		                                          //{ Events::DIGITAL::ROTARY_R,   std::make_tuple( ROTARY_B_     , isr_rotaryB    , LOW     )},
-		                                          { Events::DIGITAL::ROTARY,   std::make_tuple( C_ROTARY_A, isrRotaryA, LOW ) },
-		                                          { Events::DIGITAL::BTN_ENTER,  std::make_tuple( C_BTN_ENTER, isrBtnEnter, CHANGE ) },
-		                                          { Events::DIGITAL::BTN_RETURN, std::make_tuple( C_BTN_RETURN, isrBtnReturn, CHANGE ) },
-		                                          { Events::DIGITAL::BTN_TOGGLE, std::make_tuple( C_BTN_TOGGLE, isrBtnToggle, CHANGE ) }} );
+	static const auto* table = new DigLookup( {{ Events::DIGITAL::ROTARY,     std::make_tuple( C_ROTARY_A, isrRotaryA, LOW ) },
+	                                           { Events::DIGITAL::BTN_ENTER,  std::make_tuple( C_BTN_ENTER, isrBtnEnter, CHANGE ) },
+	                                           { Events::DIGITAL::BTN_RETURN, std::make_tuple( C_BTN_RETURN, isrBtnReturn, CHANGE ) },
+	                                           { Events::DIGITAL::BTN_TOGGLE, std::make_tuple( C_BTN_TOGGLE, isrBtnToggle, CHANGE ) }} );
 	return *table;
 }
 
@@ -69,11 +67,9 @@ void DigitalInterrupts::isrRotaryA()
 	/* if the interrupt comes faster then 5ms assume it's a bounce */
 	if( interruptTime - lastInterruptTime > 5 ) {
 		if( digitalRead( C_ROTARY_B ) == HIGH ) {
-			DigitalInterrupts::m_instance->m_eventSystem
-			                             ->enqueueDigital( Events::DIGITAL::ROTARY_L );
+			DigitalInterrupts::m_instance->m_eventSystem->enqueueDigital( Events::DIGITAL::ROTARY_L );
 		} else {
-			DigitalInterrupts::m_instance->m_eventSystem
-			                             ->enqueueDigital( Events::DIGITAL::ROTARY_R );
+			DigitalInterrupts::m_instance->m_eventSystem->enqueueDigital( Events::DIGITAL::ROTARY_R );
 		}
 	}
 	lastInterruptTime = interruptTime;
@@ -94,8 +90,7 @@ void DigitalInterrupts::isrBtnEnter()
 	DigitalInterrupts::m_instance->m_btnEnter.update();
 	/* on button enter */
 	if( DigitalInterrupts::m_instance->m_btnEnter.fallingEdge()) {
-		DigitalInterrupts::m_instance->m_eventSystem
-		                             ->enqueueDigital( Events::DIGITAL::BTN_ENTER );
+		DigitalInterrupts::m_instance->m_eventSystem->enqueueDigital( Events::DIGITAL::BTN_ENTER );
 	}
 }
 
@@ -104,8 +99,7 @@ void DigitalInterrupts::isrBtnReturn()
 	DigitalInterrupts::m_instance->m_btnReturn.update();
 	/* on button enter */
 	if( DigitalInterrupts::m_instance->m_btnReturn.fallingEdge()) {
-		DigitalInterrupts::m_instance->m_eventSystem
-		                             ->enqueueDigital( Events::DIGITAL::BTN_RETURN );
+		DigitalInterrupts::m_instance->m_eventSystem->enqueueDigital( Events::DIGITAL::BTN_RETURN );
 	}
 }
 
@@ -114,7 +108,6 @@ void DigitalInterrupts::isrBtnToggle()
 	DigitalInterrupts::m_instance->m_btnToggle.update();
 	/* on button enter */
 	if( DigitalInterrupts::m_instance->m_btnToggle.fallingEdge()) {
-		DigitalInterrupts::m_instance->m_eventSystem
-		                             ->enqueueDigital( Events::DIGITAL::BTN_TOGGLE );
+		DigitalInterrupts::m_instance->m_eventSystem->enqueueDigital( Events::DIGITAL::BTN_TOGGLE );
 	}
 }

@@ -10,10 +10,6 @@ LunchboxSampler::LunchboxSampler()
 	setupDigitalEvents();
 	setupAnalogEvents();
 	setupFSREvents();
-#ifdef VERBOSE
-	Serial.println( "::: finished setup :::" );
-#endif
-
 }
 
 LunchboxSampler::~LunchboxSampler() = default;
@@ -26,10 +22,10 @@ LunchboxSampler& LunchboxSampler::getInstance()
 
 [[noreturn]] void LunchboxSampler::run()
 {
-	auto& rP = m_analogInterrupts->getPots();
-	auto& rF = m_analogInterrupts->getFSR();
+	const auto& rP = m_analogInterrupts->getPots();
+	const auto& rF = m_analogInterrupts->getFSR();
 	rP->setDelta( 50 );
-	rF->setDelta(20);
+	rF->setDelta( 20 );
 	while( true ) {
 		rP->update();
 		rF->update();
@@ -56,7 +52,6 @@ void LunchboxSampler::setup()
 
 void LunchboxSampler::setupEventSystem()
 {
-	setupDigitalEvents();
 }
 
 void LunchboxSampler::setupDigitalEvents()

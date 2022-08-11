@@ -4,8 +4,7 @@
   "description": "Event System for the Teensy architecture",
   "keywords": ["events-system", "active-object", "threads", "events"],
   "authors": "Dennis Oberst",
-
   "frameworks": "arduino",
   "platforms": "teensy40",
-  "dependencies": ["TeensyThreads", "frozen"]
+  "dependencies": ["TeensyThreads"]
 }
