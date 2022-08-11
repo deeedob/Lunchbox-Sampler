@@ -8,40 +8,39 @@ void Notes::setBpb(int bpb) { m_bpb = bpb; }
 int Notes::getBars(){ return m_bars; }
 int Notes::getBpm() { return m_bpm; }
 int Notes::getBpb() { return m_bpb; }
-void Notes::recordIntern(uint32_t startTime, boolean isMetronom, boolean overdub) {
+void Notes::recordInternWithMidiClockGrid(uint32_t startTime, boolean isMetronom, boolean overdub) {
 	int metro = 0;
-	Serial.println("0");
+	Serial.println( "0" );
 	boolean isNote1 = false;
 	boolean isNote2 = false;
 	int clock = 0;
-	while (clock <= ( m_bars * m_bpb * 24)) {
-		if (micros() - startTime >= (60000000 / ( m_bpm * 24))) {
+	while( clock <= ( m_bars * m_bpb * 24 ) ) {
+		if( micros() - startTime >= ( 60000000 / ( m_bpm * 24 ) ) ) {
 			clock++;
 			metro++;
 			startTime = micros();
 		}
-		if (isMetronom && metro == 24) {
-			Serial.println("click");
+		if( isMetronom && metro == 24 ) {
+			Serial.println( "click" );
 			metro = 0;
 		}
-		if (digitalRead( m_buttonPin1 ) == HIGH && !isNote1) {
+		if( digitalRead( m_buttonPin1 ) == HIGH && !isNote1 ) {
 			isNote1 = true;
-			Serial.println("41");
-			buttonPressed( m_buttonPin1, 41);
-			saveNote({midi::NoteOn, 1, 41, 70, clock}, overdub);
+			buttonPressed( m_buttonPin1, 41 );
+			saveNote( { midi::NoteOn, 1, 41, 70, clock }, overdub );
 		}
-		if (digitalRead( m_buttonPin1 ) == LOW && isNote1) {
+		if( digitalRead( m_buttonPin1 ) == LOW && isNote1 ) {
 			isNote1 = false;
-			saveNote({midi::NoteOff, 1, 41, 70, clock},overdub);
+			saveNote( { midi::NoteOff, 1, 41, 70, clock }, overdub );
 		}
-		if (digitalRead( m_buttonPin2 ) == HIGH && !isNote2) {
+		if( digitalRead( m_buttonPin2 ) == HIGH && !isNote2 ) {
 			isNote2 = true;
-			buttonPressed( m_buttonPin2, 36);
-			saveNote({midi::NoteOn, 1, 36, 70, clock}, overdub);
+			buttonPressed( m_buttonPin2, 36 );
+			saveNote( { midi::NoteOn, 1, 36, 70, clock }, overdub );
 		}
-		if (digitalRead( m_buttonPin2 ) == LOW && isNote2) {
+		if( digitalRead( m_buttonPin2 ) == LOW && isNote2 ) {
 			isNote2 = false;
-			saveNote({midi::NoteOff, 1, 36, 70, clock}, overdub);
+			saveNote( { midi::NoteOff, 1, 36, 70, clock }, overdub );
 		}
 	}
 }
@@ -161,5 +160,30 @@ void Notes::sendMidiToDaw() {
 				break;
 		}
 		prevnote = note;
+	}
+}
+void recordInternNoGrid(uint32_t startTime, boolean isMetronom, boolean overdub) {
+	boolean isNote1 = false;
+	boolean isNote2 = false;
+	while( micros() - startTime <= (m_bars * m_bpb *60000000/m_bpm) ) {
+		if( digitalRead( m_buttonPin1 ) == HIGH && !isNote1 ) {
+			isNote1 = true;
+			buttonPressed( m_buttonPin1, 41 );
+			saveNote( { midi::NoteOn, 1, 41, 70, micros() - startTime }, overdub );
+		}
+		if( digitalRead( m_buttonPin1 ) == LOW && isNote1 ) {
+			isNote1 = false;
+			saveNote( { midi::NoteOff, 1, 41, 70, micros() - startTime }, overdub );
+		}
+		if( digitalRead( m_buttonPin2 ) == HIGH && !isNote2 ) {
+			isNote2 = true;
+			buttonPressed( m_buttonPin2, 36 );
+			saveNote( { midi::NoteOn, 1, 36, 70, micros() - startTime }, overdub );
+		}
+		if( digitalRead( m_buttonPin2 ) == LOW && isNote2 ) {
+			isNote2 = false;
+			saveNote( { midi::NoteOff, 1, 36, 70, micros() - startTime }, overdub );
+		}
+		
 	}
 }
