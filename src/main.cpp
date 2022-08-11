@@ -19,10 +19,7 @@ int main() {
   Notes notes(BPM,BPB,Bars);
   //notes.recordIntern(micros(), false);
   //notes.playLive();
-  notes.recordIntern(micros(),false, false);
+  notes.recordInternWithMidiClockGrid(micros(),false, false);
   notes.readRecord();
-  notes.recordIntern(micros(),false, true);
-  notes.readRecord();
-  notes.sendMidiToDaw();
   //notes.getNotes();
 }
