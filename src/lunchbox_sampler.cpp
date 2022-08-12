@@ -1,10 +1,11 @@
 #include "lunchbox_sampler.hpp"
 
 LunchboxSampler::LunchboxSampler()
-	: m_system( std::make_shared< EventSystem >())
+	: m_system( std::make_shared<EventSystem>())
 {
-	m_digitalInterrupts = std::make_unique< DigitalInterrupts >( m_system );
-	m_analogInterrupts = std::make_unique< AnalogInterrupts >( m_system );
+	m_digitalInterrupts = std::make_unique<DigitalInterrupts>( m_system );
+	m_analogInterrupts = std::make_unique<AnalogInterrupts>( m_system );
+	m_ui = std::make_unique<UI>();
 	
 	setup();
 	setupDigitalEvents();
@@ -26,7 +27,7 @@ LunchboxSampler& LunchboxSampler::getInstance()
 	const auto& rF = m_analogInterrupts->getFSR();
 	rP->setDelta( 50 );
 	rF->setDelta( 20 );
-	while( true ) {
+	while ( true ) {
 		rP->update();
 		rF->update();
 		delay( 40 );
