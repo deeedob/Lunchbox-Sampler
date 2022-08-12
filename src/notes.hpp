@@ -1,7 +1,6 @@
 #pragma once
-#include <vector>
-#include <Arduino.h>
 #include <MIDI.h>
+#include <vector>
 
 class Notes
 {
@@ -15,27 +14,29 @@ class Notes
 		MidiData m_midiData;
 		int m_timing;
 	};
+
 public:
-	Notes(int bpm, int bpb,int bars );
+	Notes( int bpm, int bpb, int bars );
 	~Notes() = default;
 	//getter & setter:
 	void setBpm( int bpm );
 	void setBars( int bars );
 	void setBpb( int bpb );
-	void setNotes(std::vector<Notes> n_notes);
+	void setNotes( std::vector< Notes > n_notes );
 	int getBars();
 	int getBpm();
 	int getBpb();
-	std::vector<Notes> getNotes();
+	std::vector< Notes > getNotes();
 	/* add function and test ist */
 	void buttonPressed( int buttonPin, int note );
 	void playLive();
 	void sendMidiToDaw();
-	void saveNote(Note data, bool isOverdub);
+	void saveNote( Note data, bool isOverdub );
 	void RecordFromDaw();
 	void readRecord();
-	void recordInternWithMidiClockGrid(uint32_t startTime, bool isMetronom, bool overdub);
-	void recordInternNoGrid(uint32_t startTime, bool isMetronom, bool overdub);
+	void recordInternWithMidiClockGrid( uint32_t startTime, bool isMetronom, bool overdub );
+	void recordInternNoGrid( uint32_t startTime, bool isMetronom, bool overdub );
+
 private:
 	const int m_buttonPin1 = 24;
 	const int m_buttonPin2 = 26;
