@@ -8,11 +8,11 @@ void Notes::setBpb(int bpb) { m_bpb = bpb; }
 int Notes::getBars(){ return m_bars; }
 int Notes::getBpm() { return m_bpm; }
 int Notes::getBpb() { return m_bpb; }
-void Notes::recordInternWithMidiClockGrid(uint32_t startTime, boolean isMetronom, boolean overdub) {
+void Notes::recordInternWithMidiClockGrid(uint32_t startTime, bool isMetronom, bool overdub) {
 	int metro = 0;
 	Serial.println( "0" );
-	boolean isNote1 = false;
-	boolean isNote2 = false;
+	bool isNote1 = false;
+	bool isNote2 = false;
 	int clock = 0;
 	while( clock <= ( m_bars * m_bpb * 24 ) ) {
 		if( micros() - startTime >= ( 60000000 / ( m_bpm * 24 ) ) ) {
@@ -99,7 +99,7 @@ void Notes::RecordFromDaw() {
 		}
 	}
 }
-void Notes::saveNote(Note data, boolean isOverdub) {
+void Notes::saveNote(Note data, bool isOverdub) {
 	if(isOverdub) {
 		int pos;
 		for( Note n : m_notes ) {
@@ -162,9 +162,9 @@ void Notes::sendMidiToDaw() {
 		prevnote = note;
 	}
 }
-void recordInternNoGrid(uint32_t startTime, boolean isMetronom, boolean overdub) {
-	boolean isNote1 = false;
-	boolean isNote2 = false;
+void Notes::recordInternNoGrid(uint32_t startTime, bool isMetronom, bool overdub) {
+	bool isNote1 = false;
+	bool isNote2 = false;
 	while( micros() - startTime <= (m_bars * m_bpb *60000000/m_bpm) ) {
 		if( digitalRead( m_buttonPin1 ) == HIGH && !isNote1 ) {
 			isNote1 = true;

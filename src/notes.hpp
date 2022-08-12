@@ -31,11 +31,11 @@ public:
 	void buttonPressed( int buttonPin, int note );
 	void playLive();
 	void sendMidiToDaw();
-	void saveNote(Note data, boolean isOverdub);
+	void saveNote(Note data, bool isOverdub);
 	void RecordFromDaw();
 	void readRecord();
-	void recordInternWithMidiClockGrid(uint32_t startTime, boolean isMetronom, boolean overdub);
-	void recordInternNoGrid(uint32_t startTime, boolean isMetronom, boolean overdub);
+	void recordInternWithMidiClockGrid(uint32_t startTime, bool isMetronom, bool overdub);
+	void recordInternNoGrid(uint32_t startTime, bool isMetronom, bool overdub);
 private:
 	const int m_buttonPin1 = 24;
 	const int m_buttonPin2 = 26;
