@@ -1,4 +1,4 @@
-#pragma once;
+#pragma once
 #include <define_t40.hpp>
 #include "MemFlash.hpp"
 #include "MemSD.hpp"
@@ -8,7 +8,7 @@
 
 namespace lbs
 {
-	
+
 	class MemSample
 	{
 	
@@ -39,18 +39,24 @@ namespace lbs
 		};
 	
 	public:
-		static MemSample& getInstance();
-		bool loadSamplePack( const std::string packName );
-		friend void playSample(uint8_t midiNote);
+        static MemSample &getInstance();
+
+        bool loadSamplePack(std::string packName);
+
+        friend void playSample(uint8_t midiNote);
 		void playSample(uint8_t Note);
-	
-	private:
-		std::string currentSamplePack;
-		MidiMapping mapping;
-		lbs::MemFlash& mf = MemFlash::getInstance();
-		lbs::MemSD& ms = MemSD::getInstance();
-		MemSample();
-		
-	};
-	
+
+    private:
+        friend void playSample(uint8_t midiNote);
+
+        std::string currentSamplePack;
+        MidiMapping mapping;
+        lbs::MemFlash &mf = MemFlash::getInstance();
+        lbs::MemSD &ms = MemSD::getInstance();
+
+        MemSample();
+
+    };
+
+    void playSample(uint8_t midiNote);
 }

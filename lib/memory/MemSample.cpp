@@ -21,6 +21,7 @@ std::string& toLower( std::string& str )
 	return str;
 }
 
+
 MemSample::MemSample()
 {
 }
@@ -52,28 +53,7 @@ bool MemSample::loadSamplePack( const std::string packName )
 	
 	// load mapping onto flash memory
 	for( auto it = this->mapping.getSampleList()->begin(); it < this->mapping.getSampleList()->end(); it++ ) {
-		if (!ms.openFile(*it)) {
-			this->mapping.removeSample(*it);
-#ifdef VERBOSE
-			Serial.println("loadSamplePack: Failed to open File " + *it + " from SD Card");
-#endif
-			continue;
-		}
-		
-		std::string basename = it->substr(it->find_last_of("/\\") + 1);
-		
-		if (!mf.openFileW(basename, ms.fileDo().size())) {
-#ifdef VERBOSE
-			Serial.println("loadSamplePack: Failed to create File " + *it + " on Flash for writing");
-#endif
-			this->mapping.removeSample(*it);
-			continue;
-		}
-		
-		for (int i = 0; i < ms.fileDo().size(); i++) {
-			mf.fileDo().writeByte(ms.fileDo().readByte());
-		}
-		
+		transferToFlash(*it);
 	}
 	
 	return true;
@@ -82,30 +62,11 @@ bool MemSample::loadSamplePack( const std::string packName )
 
 void lbs::playSample( uint8_t midiNote )
 {
-	auto mf = MemFlash::getInstance();
+
+    auto mf = MemFlash::getInstance();
 	auto memsample  = MemSample::getInstance();
 	std::string sample = memsample.mapping.getSampleName(midiNote);
-	mf.playbackFile = SerialFlash.open(sample.c_str());
-	if (!mf.playbackFile) {
-#ifdef VERBOSE
-		Serial.println("playSample: could not load playbackFile");
-#endif
-		return;
-	}
 	
-	WaveHC wave;
-	if(!wave.create(mf.playbackFile)) {
-#ifdef VERBOSE
-		Serial.println("playSample: could not create wave object");
-#endif
-		return;
-	}
-	
-	if (wave.isplaying) {
-		wave.stop();
-	}
-	
-	wave.play();
 }
 
 void MemSample::playSample( uint8_t note)

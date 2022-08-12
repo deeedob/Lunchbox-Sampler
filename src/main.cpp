@@ -6,7 +6,6 @@
 
 #include <MemFlash.hpp>
 #include <MemSD.hpp>
-#include "memory.hpp"
 #include "MemSample.hpp"
 
 using namespace lbs;
@@ -20,7 +19,7 @@ void setup()
 	Serial.begin( 9600 );
 	Serial.println( "Starting Memory Class" );
 	
-	MemFlash& ms = MemFlash::getInstance();
+	//MemFlash& ms = MemFlash::getInstance();
 	MemSample& msamp = MemSample::getInstance();
 	
 	Serial.println( "" );

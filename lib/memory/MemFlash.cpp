@@ -91,67 +91,39 @@ std::string MemFlash::listFlash()
 	return filelist;
 }
 
-MemFlash::WriteFile& MemFlash::fileDo()
-{
-	return this->wfile;
-}
+bool lbs::transferToFlash(std::string filepath) {
+    File f = SD.open(filepath.c_str());
 
-bool MemFlash::openFileW( std::string filepath, uint64_t length )
-{
-	this->wfile = WriteFile(filepath, length);
-	if (this->wfile.isOpen()) {
-		return true;
-	}
-	return false;
-}
+    if (!f) {
+#ifdef VERBOSE
+        Serial.println("transferToFlash: error reading file " + filepath + " from SD");
+#endif
+        return false;
+    }
 
+    std::string basename = lbs::getBasename(filepath);
+
+    if (!SerialFlash.create(basename.c_str(), f.size())) {
+#ifdef VERBOSE
+        Serial.println("transferToFlash: error creating file" + basename + " on Flash");
+#endif
+        return false;
+    }
+
+    SerialFlashFile ff = SerialFlash.open(basename.c_str());
+
+    char byte;
+
+    for (uint i = 0; i < f.size(); i++) {
+        f.readBytes(&byte, 1);
+        ff.write(&byte, 1);
+    }
+
+    return true;
+}
 
 /**
  * @brief TO BE FILLED
  * @param
  * @return
  */
-MemFlash::WriteFile::WriteFile( std::string filename, uint64_t length )
-{
-	if (!SerialFlash.create(filename.c_str(), length)) {
-		return;
-	}
-	this->filename = filename;
-	this->file = SerialFlash.open(filename.c_str());
-}
-
-uint64_t MemFlash::WriteFile::size()
-{
-	return file.size();
-}
-
-bool MemFlash::WriteFile::writeByte( uint8_t byte )
-{
-	return file.write(&byte, 1);
-}
-
-uint64_t MemFlash::WriteFile::remaining()
-{
-	return file.available();
-}
-
-bool MemFlash::WriteFile::notAtEnd()
-{
-	return file.available() > 0;
-}
-
-bool MemFlash::WriteFile::isOpen()
-{
-	return file != NULL;
-}
-
-bool MemFlash::WriteFile::reset()
-{
-	return false;
-}
-
-std::string MemFlash::WriteFile::getFilename()
-{
-	return filename;
-}
-
