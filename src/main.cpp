@@ -1,5 +1,6 @@
 #include <lunchbox_sampler.hpp>
 
+/* Arduino ... why u do this shit?! */
 #undef main
 
 int main()

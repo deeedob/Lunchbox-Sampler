@@ -14,7 +14,7 @@ namespace lbs
 	class Pots
 	{
 	public:
-		explicit Pots( AnalogInterrupts* parent, u_int8_t pot0, u_int8_t pot1, u_int8_t pot2, u_int8_t pot3, u_int16_t delta );
+		explicit Pots( const AnalogInterrupts* parent, u_int8_t pot0, u_int8_t pot1, u_int8_t pot2, u_int8_t pot3, u_int16_t delta );
 		~Pots();
 		
 		static void isr();
@@ -30,9 +30,9 @@ namespace lbs
 	private:
 		void rescanAll();
 	private:
-		AnalogInterrupts* const m_parent;
-		std::array< volatile u_int16_t, 4 > m_values;
-		std::array< u_int8_t, 4 > m_pots;
+		const AnalogInterrupts* const m_parent;
+		std::array<volatile u_int16_t, 4> m_values;
+		std::array<u_int8_t, 4> m_pots;
 		u_int8_t m_position;
 		u_int16_t m_delta;
 		

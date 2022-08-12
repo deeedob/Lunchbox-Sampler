@@ -1,7 +1,5 @@
 #pragma once
 
-/* Arduino ... why u do this shit?! */
-#undef main
 
 /* General Pins */
 #define C_DISPLAY_CLK 16

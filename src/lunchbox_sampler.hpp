@@ -2,8 +2,9 @@
 #include <Arduino.h>
 #include <define_t40.hpp>
 #include <event_sytem.hpp>
-#include "interrupt_system/digital_interrupts.hpp"
-#include "interrupt_system/analog_interrupts.hpp"
+#include <interrupt_system/digital_interrupts.hpp>
+#include <interrupt_system/analog_interrupts.hpp>
+#include <ui.hpp>
 
 using namespace lbs;
 
@@ -25,7 +26,8 @@ private:
 	void setupFSREvents();
 
 private:
-	std::shared_ptr< EventSystem > m_system;
-	std::unique_ptr< DigitalInterrupts > m_digitalInterrupts;
-	std::unique_ptr< AnalogInterrupts > m_analogInterrupts;
+	std::shared_ptr<EventSystem> m_system;
+	std::unique_ptr<DigitalInterrupts> m_digitalInterrupts;
+	std::unique_ptr<AnalogInterrupts> m_analogInterrupts;
+	std::unique_ptr<UI> m_ui;
 };

@@ -22,6 +22,7 @@ public:
 		setRecord,
 		setMainsettings
 	};
+	
 	explicit UI( u_int8_t w = 128, u_int8_t h = 128, TwoWire* wire = &Wire1, int8_t display_rst = C_DISPLAY_RST, uint32_t preclk = 400000, uint32_t postclk = 100000 );
 	void start();
 

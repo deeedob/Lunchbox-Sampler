@@ -6,7 +6,7 @@ using namespace lbs;
 
 Pots* Pots::m_isrInstance = nullptr;
 
-Pots::Pots( AnalogInterrupts* const parent, u_int8_t pot0, u_int8_t pot1, u_int8_t pot2, u_int8_t pot3, u_int16_t delta )
+Pots::Pots( const AnalogInterrupts* const parent, u_int8_t pot0, u_int8_t pot1, u_int8_t pot2, u_int8_t pot3, u_int16_t delta )
 	: m_parent( parent ), m_values( { 0, 0, 0, 0 } ), m_pots( { pot0, pot1, pot2, pot3 } ), m_delta( delta )
 {
 	m_position = 0;
@@ -25,7 +25,7 @@ Pots::~Pots()
 void Pots::isr()
 {
 	auto& i = Pots::m_isrInstance;
-	auto val = ( u_int16_t ) i->m_parent->getAdc()->adc0->analogReadContinuous();
+	auto val = (u_int16_t) i->m_parent->getAdc()->adc0->analogReadContinuous();
 	i->m_values[ i->m_position ] = val;
 	i->update();
 	i->m_parent->getEventSystem()
@@ -73,7 +73,7 @@ u_int16_t Pots::recalibrateDelta( u_int16_t padding, u_int16_t samples )
 	m_parent->getAdc()->adc0->setSamplingSpeed( ADC_SAMPLING_SPEED::VERY_HIGH_SPEED );
 	u_int16_t lowest;
 	u_int16_t highest;
-	std::array< u_int16_t, 4 > deltas { 0, 0, 0, 0 };
+	std::array<u_int16_t, 4> deltas { 0, 0, 0, 0 };
 	
 	for( int i = 0; i < 4; i++ ) {       //cycle through the 4 pots
 		lowest = m_parent->getAdc()->adc0->analogRead( m_pots[ i ] );
