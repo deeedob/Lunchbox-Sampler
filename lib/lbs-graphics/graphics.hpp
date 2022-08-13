@@ -1,14 +1,13 @@
 #pragma once
 #include <Adafruit_SSD1327.h>
-#include "window.hpp"
 #include <vector>
+#include "window.hpp"
 
 namespace lbs
 {
-	
 	class Graphics : public Adafruit_SSD1327
 	{
-		using Windows = std::vector< Window >;
+		using Windows = std::vector<std::pair<Window, String>>;
 	public:
 		Graphics( u_int8_t w, u_int8_t h, TwoWire* twi = &Wire1, int8_t rst_pin = -1, u_int32_t preclk = 400000, u_int32_t postclk = 100000 );
 		Graphics( const Graphics& other ) = default;
@@ -18,8 +17,10 @@ namespace lbs
 		~Graphics() = default;
 		
 		void drawPixelFast( u_int8_t x, u_int8_t y, uint8_t color ) noexcept;
+		void drawWindow( Window& win );
 	
 	private:
 		Windows m_windows;
+		std::shared_ptr<UISettings> m_settings;
 	};
 }

@@ -10,23 +10,44 @@ Graphics::Graphics( u_int8_t w, u_int8_t h, TwoWire* twi, int8_t rst_pin, u_int3
 {
 	pinMode( C_DISPLAY_RST, OUTPUT );
 	
-	while( !begin( 0x3d )) {
+	while ( !begin( 0x3d )) {
 		yield();
 	}
+	
 	clearDisplay();
 	Adafruit_SSD1327::display();
 	
-	setFont( &MLReg5pt7b );
-	GFXcanvas1 canvas( 64, 64 );
-	canvas.println( "Mono Lisa is a very nice Font! - . , + # * ' # ! § $ % & / ( ) = ? ` ´ " );
-	drawBitmap( 63, 20, canvas.getBuffer(), 64, 64, 0xff, 0x55 );
+	m_settings = std::make_shared<UISettings>();
 	
-	//String msg( "Mono Lisa is a very nice Font! - . , + # * ' # ! § $ % & / ( ) = ? ` ´ " );
-	//int16_t x1, y1;
-	//uint16_t width, height;
-	//getTextBounds( msg, 30, 30, &x1, &y1, &width, &height );
-	//setTextSize( 1 );
-	//Adafruit_SSD1327::println( "Mono Lisa is a nice Font!" );
+	Window canvas( UISettings::WindowSize( { 0, 0, 128, 128 } ));
+	canvas.setFont( &MLReg5pt7b );
+	
+	//m_settings->setTextPadding( { 15, 0 } );
+	//m_settings->setTextSpacing( { 2, 2 } );
+	
+	for( int y = 0; y < canvas.height(); y++ ) {
+		for( int x = 0; x < canvas.width(); x++ ) {
+			canvas.drawPixel( x, y, 0xff );
+		}
+	}
+	canvas.setTextWrap( true );
+	canvas.setTextColor( 0x00 );
+	canvas.println( "Mono Lisa is a very nice Font!" );
+	canvas.fillScreen( 0x00 );
+	
+	canvas.resize( 128, 128 );
+	canvas.fillScreen( 0xff );
+	canvas.drawWindowBorder( { 4, 4 }, 4, 0x00, 2 );
+	canvas.println( "qwerzweiurzwioerskjdahkjsasdfsdskdalhskjdhfksljadhksjdhfksajldhklsajdhksjdahksldjfhiukfhsdjkfhskaldjhfdskfjghdklfjghkldsfjhlkdsjfhkdsjfhgkljdsfhgkljdshfgkjhdsfklgjhdskjfhkdsjfhgkljdsfhgkjdhsfkgjhdkjfgldkfögkldsfgiweoprtuerDSFGDSFGDFSdhfxymcnvbmyxnb" );
+	//canvas.setCursor( m_settings->getTextPadding().xAxis, m_settings->getTextPadding().yAxis + 10 );
+	//canvas.printlnCentered( "Item 1" );
+	//canvas.printlnCentered( "a" );
+	//canvas.printlnCentered( "31" );
+	//canvas.printlnCentered( "ABC" );
+	
+	//drawGrayscaleBitmap( 0, 0, canvas.getBuffer(), canvas.width(), canvas.height());
+	canvas.setWindowOffsets( 10, 10 );
+	drawWindow( canvas );
 	
 	window_x1 = 0;
 	window_y1 = 0;
@@ -54,5 +75,16 @@ void Graphics::drawPixelFast( u_int8_t x, u_int8_t y, uint8_t color ) noexcept
 		uint8_t t = pixelptr[ 0 ] & 0xF0;
 		t |= color & 0xF;
 		pixelptr[ 0 ] = t;
+	}
+}
+
+void Graphics::drawWindow( Window& win )
+{
+	const auto size = win.getWindowSize();
+	int16_t y = size.y0;
+	for( int16_t j = 0; j < size.height; j++, y++ ) {
+		for( int16_t i = 0; i < size.width; i++ ) {
+			writePixel( size.x0 + i, y, win.getBuffer()[ j * size.width + i ] );
+		}
 	}
 }

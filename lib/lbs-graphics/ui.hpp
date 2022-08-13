@@ -4,12 +4,11 @@
 #include <memory>
 #include <Arduino.h>
 #include "graphics.hpp"
-#include "ui_settings.hpp"
 
 namespace lbs
 {
 	
-	class UI : public Settings
+	class UI
 	{
 		enum class State
 		{
@@ -27,13 +26,12 @@ namespace lbs
 			setRecord,
 			setMainsettings
 		};
-		using Transitions = std::map< State, std::vector< std::pair< Trigger, State>> >;
+		using Transitions = std::map<State, std::vector<std::pair<Trigger, State>>>;
 	public:
 		UI();
 		void start();
 	private:
 		Transitions m_transitionTable;
-		std::unique_ptr< Graphics > m_graphics;
-		std::unique_ptr< Settings > m_settings;
+		std::unique_ptr<Graphics> m_graphics;
 	};
 }
