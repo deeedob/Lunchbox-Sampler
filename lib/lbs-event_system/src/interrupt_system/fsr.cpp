@@ -124,11 +124,13 @@ void FSR::setDelta( u_int16_t mDelta )
 	m_delta = mDelta;
 }
 
+//TODO: fix only rescanning 3rd
 void FSR::rescanAll()
 {
-	for( int i = 0; i < 4; i++ ) {
+	stopScan();
+	for( int i = 0; i < m_pads.size(); i++ ) {
 		m_pads[ i ].setActive();
-		m_values[ i ] = m_parent->getAdc()->adc1->analogRead( C_FSR_POLL );
+		m_values[ i ] = m_parent->getAdc()->analogRead( C_FSR_POLL );
 #ifdef VERBOSE
 		Serial.print( "FSR: " );
 		Serial.print( i );
