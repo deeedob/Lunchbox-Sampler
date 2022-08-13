@@ -33,8 +33,6 @@
       <option name="KEEP_CASE_EXPRESSIONS_IN_ONE_LINE" value="true" />
       <option name="NAMESPACE_BRACE_PLACEMENT" value="2" />
       <option name="FUNCTION_BRACE_PLACEMENT" value="5" />
-      <option name="FUNCTION_NON_TOP_AFTER_RETURN_TYPE_WRAP" value="0" />
-      <option name="FUNCTION_TOP_AFTER_RETURN_TYPE_WRAP" value="0" />
       <option name="FUNCTION_PARAMETERS_WRAP" value="0" />
       <option name="FUNCTION_PARAMETERS_ALIGN_MULTILINE_PARS" value="true" />
       <option name="LAMBDA_CAPTURE_LIST_ALIGN_MULTILINE" value="true" />
