@@ -1,4 +1,5 @@
 #include "window.hpp"
+#include "fonts/MLReg_5pt.h"
 
 using namespace lbs;
 
@@ -24,15 +25,19 @@ inline GFXglyph* pgm_read_glyph_ptr( const GFXfont* gfxFont, uint8_t c )
 #endif //__AVR__
 }
 
-Window::Window( UISettings::WindowSize size )
-	: Adafruit_GFX( size.width, size.height )
+Window::Window( WindowSize size )
+	: Adafruit_GFX( size.width, size.height ), WindowSettings()
 {
-	uint32_t bytes = size.width * size.height;
+	m_windowSize = size;
+	uint32_t bytes = size.getX2() * size.getY2();
 	if( bytes > 0 ) {
 		if(( m_buffer = (uint8_t*) malloc( bytes ))) {
 			memset( m_buffer, 0, bytes );
+			setActiveRegion( size );
+			setFont( &MLReg5pt7b );
+			setTextSpacing( { 0, -2 } );
+			setTextColor( 0x00 );
 		}
-		cursor_y = textsize_y * 8;
 	}
 }
 
@@ -50,6 +55,7 @@ size_t Window::write( const uint8_t* buffer, size_t size )
 	return count;
 }
 
+// TODO implement?
 void Window::flush()
 {
 	Print::flush();
@@ -60,7 +66,7 @@ void Window::drawPixel( int16_t x, int16_t y, uint16_t color )
 	if( !m_buffer )
 		return;
 	
-	if(( x < 0 ) || ( y < 0 ) || ( x >= _width ) || ( y >= _height ))
+	if(( x < 0 ) || ( y < 0 ) || ( x >= m_windowSize.width ) || ( y >= m_windowSize.height ))
 		return;
 	
 	m_buffer[ x + y * WIDTH ] = color;
@@ -239,29 +245,25 @@ void Window::drawRect( int16_t x, int16_t y, int16_t w, int16_t h, uint16_t colo
 /* print / println -> write(u_int8, u_int8) -> write(u_int8) */
 size_t Window::write( uint8_t c )
 {
-	UISettings::Spacer pad = m_textPadding + m_paddedWindow;
-	UISettings::Spacer spacing = m_textSpacing;
 	if( !gfxFont ) { // 'Classic' built-in font
 		if( c == '\n' ) {              // Newline?
-			cursor_x = pad.xAxis;               // Reset x to zero,
-			cursor_y += ( textsize_y * 8 ) + spacing.yAxis; // advance y one line
+			cursor_x = m_activeRegion.offset_x + m_textPadding.xAxis;               // Reset x to zero,
+			cursor_y += ( textsize_y * 8 ) + m_textSpacing.yAxis; // advance y one line
 		} else if( c != '\r' ) {       // Ignore carriage returns
-			if( wrap && (( cursor_x + textsize_x * 6 ) > ( _width - pad.xAxis ))) { // Off right?
-				cursor_x = pad.xAxis;                                       // Reset x to zero,
-				cursor_y += ( textsize_y * 8 ) + spacing.yAxis; // advance y one line
+			if( wrap && (( cursor_x + textsize_x * 6 ) > ( m_activeRegion.getX2() - m_textPadding.xAxis ))) { // Off right?
+				cursor_x = m_activeRegion.offset_x + m_textPadding.xAxis; // Reset x to zero,
+				cursor_y += ( textsize_y * 8 ) + m_textSpacing.yAxis; // advance y one line
 			}
-			if( cursor_y + ( textsize_y * 8 ) > _height - pad.yAxis )
+			if( cursor_y + ( textsize_y * 8 ) > ( m_activeRegion.getY2() - m_textPadding.yAxis ))
 				return 1;
 			drawChar( cursor_x, cursor_y, c, textcolor, textbgcolor, textsize_x,
 			          textsize_y );
-			cursor_x += ( textsize_x * 6 ) + spacing.xAxis; // Advance x one char
+			cursor_x += ( textsize_x * 6 ) + m_textSpacing.xAxis; // Advance x one char
 		}
-		
 	} else { // Custom font
 		if( c == '\n' ) {
-			cursor_x = pad.xAxis;
-			cursor_y +=
-				((int16_t) textsize_y * (uint8_t) pgm_read_byte( &gfxFont->yAdvance )) + spacing.yAxis;
+			cursor_x = m_activeRegion.offset_x + m_textPadding.xAxis;
+			cursor_y += ((int16_t) textsize_y * (uint8_t) pgm_read_byte( &gfxFont->yAdvance )) + m_textSpacing.yAxis;
 		} else if( c != '\r' ) {
 			uint8_t first = pgm_read_byte( &gfxFont->first );
 			if(( c >= first ) && ( c <= (uint8_t) pgm_read_byte( &gfxFont->last ))) {
@@ -270,20 +272,49 @@ size_t Window::write( uint8_t c )
 					h = pgm_read_byte( &glyph->height );
 				if(( w > 0 ) && ( h > 0 )) { // Is there an associated bitmap?
 					int16_t xo = (int8_t) pgm_read_byte( &glyph->xOffset ); // sic
-					if( wrap && (( cursor_x + textsize_x * ( xo + w )) > _width - pad.xAxis )) {
-						cursor_x = pad.xAxis;
-						cursor_y += ((int16_t) textsize_y * (uint8_t) pgm_read_byte( &gfxFont->yAdvance )) + spacing.yAxis;
+					if( wrap && (( cursor_x + textsize_x * ( xo + w )) > ( m_activeRegion.getX2() - m_textPadding.xAxis ))) {
+						cursor_x = m_activeRegion.offset_x + m_textPadding.xAxis;
+						cursor_y += ((int16_t) textsize_y * (uint8_t) pgm_read_byte( &gfxFont->yAdvance )) + m_textSpacing.yAxis;
 					}
-					if( cursor_y + ( textsize_y * 8 ) > _height - pad.yAxis )
+					if( cursor_y + ( textsize_y * 8 ) > ( m_activeRegion.getY2() - m_textPadding.yAxis ))
 						return 1;
 					drawChar( cursor_x, cursor_y, c, textcolor, textbgcolor, textsize_x,
 					          textsize_y );
 				}
-				cursor_x += ((uint8_t) pgm_read_byte( &glyph->xAdvance ) * (int16_t) textsize_x ) + spacing.xAxis;
+				cursor_x += ((uint8_t) pgm_read_byte( &glyph->xAdvance ) * (int16_t) textsize_x ) + m_textSpacing.xAxis;
 			}
 		}
 	}
 	return 1;
+}
+
+void Window::printlnCentered( const char* s )
+{
+	auto temp = m_textPadding;
+	m_textPadding = { 0, temp.yAxis };
+	int16_t x1, y1;
+	uint16_t w, h;
+	getTextBounds( s, getCursorX(), getCursorY(), &x1, &y1, &w, &h );
+	int16_t cent_screen = ( getActiveRegion().width / 2 ) + getActiveRegion().offset_x;
+	int16_t cent_box = w / 2;
+	auto offset = cent_screen - cent_box;
+	setCursor( offset, getCursorY());
+	println( s );
+	m_textPadding = temp;
+}
+
+void Window::printlnRight( const char* s )
+{
+	int16_t x1, y1;
+	uint16_t w, h;
+	getTextBounds( s, getCursorX(), getCursorY(), &x1, &y1, &w, &h );
+	
+	w += m_textPadding.xAxis;
+	if( gfxFont ) {
+		w += 6;
+	}
+	setCursor( m_activeRegion.getX2() - w, getCursorY());
+	println( s );
 }
 
 void Window::resize( u_int16_t w, uint16_t h )
@@ -291,21 +322,21 @@ void Window::resize( u_int16_t w, uint16_t h )
 	uint32_t bytes = w * h;
 	if( bytes > 0 ) {
 		if( m_buffer ) {
+			// reset old window to 0
+			memset( m_buffer, 0, WIDTH * HEIGHT );
 			free( m_buffer );
 		}
 		
 		if(( m_buffer = (uint8_t*) malloc( bytes ))) {
 			memset( m_buffer, 0, bytes );
-			
 			WIDTH = w;
-			HEIGHT = h;
+			HEIGHT = w;
+			// TODO: dont use _width / _height anymore?
 			_width = WIDTH;
 			_height = HEIGHT;
-			textsize_x = textsize_y = 1;
-			cursor_x = 0;
-			cursor_y = textsize_y * 8;
 			m_windowSize.width = w;
 			m_windowSize.height = h;
+			setActiveRegion( m_windowSize );
 		}
 	}
 }
@@ -351,82 +382,53 @@ int Window::availableForWrite( void )
 	return Print::availableForWrite();
 }
 
-void Window::printlnCentered( const char* s )
+void Window::drawWindowBorder( Spacer padding, u_int8_t roundness, u_int16_t color, u_int8_t iterations )
 {
-	auto temp = m_textPadding;
-	m_textPadding = { 0, temp.yAxis };
-	int16_t x1, y1;
-	uint16_t w, h;
-	getTextBounds( s, getCursorX(), getCursorY(), &x1, &y1, &w, &h );
-	int16_t cent_screen = width() / 2;
-	int16_t cent_box = w / 2;
-	setCursor( cent_screen - cent_box, getCursorY());
-	println( s );
-	m_textPadding = temp;
-}
-
-void Window::drawWindowBorder( UISettings::Spacer padding, u_int8_t roundness, u_int16_t color, u_int8_t iterations )
-{
-	u_int8_t x_0, y_0, x_1, y_1;
-	
+	u_int8_t x_0, y_0, w, h;
+	auto glob_pad = padding;
 	for( int i = 0; i < iterations; i++ ) {
-		x_0 = m_windowSize.x0 + padding.xAxis;
-		y_0 = m_windowSize.y0 + padding.yAxis;
-		x_1 = m_windowSize.width - ( 2 * padding.xAxis );
-		y_1 = m_windowSize.height - ( 2 * padding.yAxis );
-		Serial.print( "padx:" );
-		Serial.println( padding.xAxis );
-		Serial.print( "width:" );
-		Serial.println( m_windowSize.width );
-		Serial.print( "x0:" );
-		Serial.println( x_0 );
-		Serial.print( "y0:" );
-		Serial.println( y_0 );
-		Serial.print( "x1:" );
-		Serial.println( x_1 );
-		Serial.print( "y1:" );
-		Serial.println( y_1 );
-		drawRoundRect( x_0, y_0, x_1, y_1, roundness, color );
-		padding += padding;
+		x_0 = padding.xAxis;
+		y_0 = padding.yAxis;
+		w = m_windowSize.width - ( 2 * padding.xAxis );
+		h = m_windowSize.height - ( 2 * padding.yAxis );
+		if( roundness <= 0 )
+			drawRect( x_0, y_0, w, h, color );
+		else
+			drawRoundRect( x_0, y_0, w, h, roundness, color );
+		padding += glob_pad;
 	}
-	m_paddedWindow = padding;
-	m_paddedWindow.xAxis -= 4;
-	m_paddedWindow.yAxis -= 4;
-	setCursor( getCursorX() + m_paddedWindow.xAxis, getCursorY() + m_paddedWindow.yAxis );
-}
-
-const UISettings::WindowSize& Window::getWindowSize() const
-{
-	return m_windowSize;
-}
-
-void Window::setWindowSize( const UISettings::WindowSize& window_size )
-{
-	m_windowSize = window_size;
+	setActiveRegion( WindowSize { x_0, y_0, w, h, 0 } );
 }
 
 void Window::setWindowOffsets( uint16_t x0, uint16_t y0 ) noexcept
 {
-	m_windowSize.x0 = x0;
-	m_windowSize.y0 = y0;
+	m_windowSize.offset_x = x0;
+	m_windowSize.offset_y = y0;
 }
 
-const UISettings::Spacer& Window::getTextSpacing() const
-{
-	return m_textSpacing;
-}
-
-void Window::setTextSpacing( const UISettings::Spacer& text_spacing )
-{
-	m_textSpacing = text_spacing;
-}
-
-const UISettings::Spacer& Window::getTextPadding() const
-{
-	return m_textPadding;
-}
-
-void Window::setTextPadding( const UISettings::Spacer& text_padding )
+void Window::setTextPadding( const Spacer& text_padding )
 {
 	m_textPadding = text_padding;
+	setCursor( getCursorX() + m_textPadding.xAxis, getCursorY() + m_textPadding.yAxis );
+}
+
+Window::SplitScreen Window::createSplitScreen( float split_val, SPLIT s, u_int16_t screen_x, u_int16_t screen_y )
+{
+	if( split_val < 0 || split_val > 1.0 ) { split_val = 0.5; }
+	--screen_x;
+	--screen_y;
+	
+	if( s == SPLIT::HORIZONTAL ) {
+		auto split = static_cast<u_int16_t>((float) screen_y * split_val);
+		Window top( WindowSize( 0, 0, screen_x, split, 0 ));
+		Window bottom( WindowSize( 0, split, screen_x, split, 0 ));
+		return { top, bottom };
+	}
+	if( s == SPLIT::VERTICAL ) {
+		auto split = static_cast<u_int16_t>((float) screen_x * split_val);
+		Window left( WindowSize( 0, 0, split, screen_y, 0 ));
+		Window right( WindowSize( split, 0, screen_x - split, screen_y, 0 ));
+		return { left, right };
+	}
+	
 }

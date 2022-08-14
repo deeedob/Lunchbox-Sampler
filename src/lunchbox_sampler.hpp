@@ -5,6 +5,10 @@
 #include <interrupt_system/digital_interrupts.hpp>
 #include <interrupt_system/analog_interrupts.hpp>
 #include <ui.hpp>
+#include "modules/module_load.hpp"
+#include "modules/module_audio.hpp"
+#include "modules/module_sound_manager.hpp"
+#include "modules/module_main_menu.hpp"
 
 using namespace lbs;
 
