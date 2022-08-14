@@ -31,7 +31,8 @@ namespace lbs
 		UI();
 		void start();
 	private:
-		Transitions m_transitionTable;
 		std::unique_ptr<Graphics> m_graphics;
+		Transitions m_transitionTable;
+		State m_currentState;
 	};
 }

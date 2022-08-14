@@ -1,13 +1,15 @@
 #pragma once
+#include "graphics.hpp"
 
-class Event; //forward declaration
-
-class AbstractModule
+namespace lbs
 {
-public:
-	/* enable*/
-	virtual void enter() = 0;
-	virtual void update( Event e ) = 0;
-	virtual void exit() = 0;
-	virtual ~AbstractModule() = 0;
-};
+	class AbstractModule
+	{
+	public:
+		/* enable*/
+		virtual void enter( Graphics* g ) = 0;
+		virtual void update( Graphics* g ) = 0;
+		virtual void exit() = 0;
+		virtual ~AbstractModule() = 0;
+	};
+}

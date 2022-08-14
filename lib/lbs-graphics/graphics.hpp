@@ -16,11 +16,22 @@ namespace lbs
 		Graphics& operator=( Graphics&& other ) = default;
 		~Graphics() = default;
 		
-		void drawPixelFast( u_int8_t x, u_int8_t y, uint8_t color ) noexcept;
-		void drawWindow( Window& win );
+		void drawWindow( const Window& win );
+		void drawWindow( const Window::SplitScreen& wins );
+		
+		void drawAll();
+		void removeWindow( const String& win_name );
+		
+		template<typename T, typename U>
+		typename std::enable_if<std::is_same<Window, T>::value &&
+		                        std::is_assignable<String, U>::value>::type
+		addWindow( T&& window, U&& win_name )
+		{
+			m_windows.push_back( std::forward<std::pair<T, U>>( { window, win_name } ));
+		}
 	
 	private:
 		Windows m_windows;
-		std::shared_ptr<UISettings> m_settings;
+		std::shared_ptr<WindowSettings> m_settings;
 	};
 }

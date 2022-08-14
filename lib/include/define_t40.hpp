@@ -5,6 +5,8 @@
 #define C_DISPLAY_CLK 16
 #define C_DISPLAY_SDA 17
 #define C_DISPLAY_RST 9
+#define C_DISPLAY_WIDTH 128
+#define C_DISPLAY_HEIGHT 128
 
 #define C_SDCARD_CS_PIN   10
 #define C_SDCARD_MOSI_PIN 11
