@@ -26,3 +26,13 @@ UI::UI()
 		{ Trigger::setRecord, State::RECORD },
 	};
 }
+
+const std::list<String>& UI::getTransitionList() const
+{
+	return m_transitionList;
+}
+
+void UI::setTransitionList( const std::list<String>& transition_list )
+{
+	m_transitionList = transition_list;
+}
