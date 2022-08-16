@@ -12,23 +12,26 @@ using namespace lbs;
 
 void setup()
 {
-	
-	SPI.setSCK( C_SDCARD_SCK_PIN );
-	SPI.setMOSI( C_SDCARD_MOSI_PIN );
-	
-	Serial.begin( 9600 );
-	Serial.println( "Starting Memory Class" );
-	
-	//MemFlash& ms = MemFlash::getInstance();
-	MemSample& msamp = MemSample::getInstance();
-	
-	Serial.println( "" );
-	Serial.println( "Printing" );
-	
-	msamp.loadSamplePack("SamplePack02");
-	msamp.playSample(60);
-	
-	//MemFlash *msamp = MemFlash::getInstance();
+
+    SPI.setSCK(C_SDCARD_SCK_PIN);
+    SPI.setMOSI(C_SDCARD_MOSI_PIN);
+
+    Serial.begin(9600);
+    Serial.println("Starting Memory Class");
+    Serial.println("Test TEST HALLOOOOOOO");
+
+    //MemFlash& ms = MemFlash::getInstance();
+
+    Serial.println("");
+    Serial.println("Printing");
+
+    MemSample &msamp = MemSample::getInstance();
+    msamp.loadSamplePack("SamplePack02");
+    std::string filelist = MemFlash::getInstance().listFlash();
+    Serial.println(filelist.c_str());
+    msamp.playSample(60);
+
+    //MemFlash *msamp = MemFlash::getInstance();
 
 /*
     msamp->loadSamplePack("SamplePack01");

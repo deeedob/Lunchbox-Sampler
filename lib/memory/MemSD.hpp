@@ -8,21 +8,19 @@
 #include <tuple>
 #include <CSV_Parser.h>
 
-namespace lbs
-{
-	
-	class MemSD
-	{
-	public:
-		static MemSD& getInstance();
-	
-	public:
-		bool exists( std::string file );
-		std::vector<std::tuple<std::string, int8_t, std::string, std::string>> *readSettings(std::string packName);
+namespace lbs {
 
-        friend bool transferToFlash(std::string filepath);
-	
-	private:
-		static inline String finishCSVLine( String line );
-	};
+    class MemSD {
+    public:
+        static MemSD &getInstance();
+
+    public:
+        bool exists(std::string file);
+
+        std::vector<std::tuple<std::string, int8_t, std::string, std::string>> *readSettings(std::string packName);
+
+
+    private:
+        static inline String finishCSVLine(String line);
+    };
 }

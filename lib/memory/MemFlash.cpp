@@ -1,10 +1,9 @@
 #include <define_t40.hpp>
-#include <map>
-#include <tuple>
 #include "MemSD.hpp"
 #include "MemFlash.hpp"
 
 using namespace lbs;
+
 
 /**
  * @brief TO BE FILLED
@@ -13,7 +12,7 @@ using namespace lbs;
  */
 MemFlash& MemFlash::getInstance()
 {
-	static MemFlash* instance = new MemFlash();
+	static auto *instance = new MemFlash();
 	
 	if( !SerialFlash.begin( C_FLASH_PIN )) {
 #ifdef VERBOSE
@@ -31,8 +30,7 @@ MemFlash& MemFlash::getInstance()
  * @return
  */
 MemFlash::MemFlash()
-{
-}
+= default;
 
 /**
  * @brief TO BE FILLED
@@ -68,44 +66,76 @@ std::string MemFlash::listFlash()
 	SerialFlash.opendir();
 	
 	while( SerialFlash.readdir( filename, sizeof( filename ), filesize )) {
-		filelist += filename;
-		filelist += "  " + filesize;
-		filelist += "bytes\n";
+        filelist += filename;
+        filelist += "  ";
+        filelist += std::string(String(filesize).c_str());
+        filelist += "bytes\n";
 
 #ifdef VERBOSE
-		Serial.print("File ");
-		Serial.print(count);
-		Serial.print(F(": "));
-		Serial.print(filename);
-		Serial.print(F("  "));
-		Serial.print(filesize);
-		Serial.print(F(" bytes"));
-		Serial.println();
+        Serial.print("File ");
+        Serial.print(count);
+        Serial.print(F(": "));
+        Serial.print(filename);
+        Serial.print(F("  "));
+        Serial.print(filesize);
+        Serial.print(F(" bytes"));
+        Serial.println();
 #endif
-		count++;
-	}
-	
-	if( count == 0 )
-		Serial.println( "Flash is empty" );
-	
-	return filelist;
+        count++;
+    }
+
+    if (count == 0)
+        Serial.println("Flash is empty");
+
+    return filelist;
 }
 
-bool lbs::transferToFlash(std::string filepath) {
+
+/**
+ * @brief TO BE FILLED
+ * @param
+ * @return
+ */
+void MemFlash::playSample(const std::string &filename) {
+    Serial.println("PlaySample trigger");
+    AudioConnection patchCord1(MemFlash::playFlashRaw1,
+    0, i2s1, 0);
+    AudioConnection patchCord2(MemFlash::playFlashRaw1,
+    0, i2s1, 1);
+    AudioMemory(10);
+    audioShield.enable();
+    audioShield.volume(0.5);
+    if (this->playFlashRaw1.play(filename.c_str())) {
+#ifdef VERBOSE
+        Serial.println("Success playing sample");
+#endif
+    } else {
+#ifdef VERBOSE
+        Serial.println("Error playing sample");
+#endif
+    }
+}
+
+
+bool lbs::transferToFlash(const std::string &filepath) {
     File f = SD.open(filepath.c_str());
 
     if (!f) {
 #ifdef VERBOSE
-        Serial.println("transferToFlash: error reading file " + filepath + " from SD");
+        Serial.print("transferToFlash: error reading file ");
+        Serial.print(filepath.c_str());
+        Serial.println(" from SD");
 #endif
         return false;
     }
 
-    std::string basename = lbs::getBasename(filepath);
+    std::string basename = lbs::getBasename(const_cast<std::string &>(filepath));
 
     if (!SerialFlash.create(basename.c_str(), f.size())) {
 #ifdef VERBOSE
-        Serial.println("transferToFlash: error creating file" + basename + " on Flash");
+        Serial.print("transferToFlash: error creating file");
+        Serial.print(basename.c_str());
+        Serial.println(" on Flash");
 #endif
         return false;
     }
@@ -121,9 +151,3 @@ bool lbs::transferToFlash(std::string filepath) {
 
     return true;
 }
-
-/**
- * @brief TO BE FILLED
- * @param
- * @return
- */
