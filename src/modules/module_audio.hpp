@@ -10,6 +10,7 @@ using namespace lbs;
 class ModuleAudio : public AbstractModule
 {
 public:
+	ModuleAudio();
 	void enter( Graphics* g ) override;
 	void update( Graphics* g ) override;
 	void exit() override;

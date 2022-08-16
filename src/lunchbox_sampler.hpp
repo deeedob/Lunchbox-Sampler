@@ -4,11 +4,7 @@
 #include <event_sytem.hpp>
 #include <interrupt_system/digital_interrupts.hpp>
 #include <interrupt_system/analog_interrupts.hpp>
-#include <ui.hpp>
-#include "modules/module_load.hpp"
-#include "modules/module_audio.hpp"
-#include "modules/module_sound_manager.hpp"
-#include "modules/module_main_menu.hpp"
+#include <base_states.hpp>
 
 using namespace lbs;
 
@@ -33,5 +29,5 @@ private:
 	std::shared_ptr<EventSystem> m_system;
 	std::unique_ptr<DigitalInterrupts> m_digitalInterrupts;
 	std::unique_ptr<AnalogInterrupts> m_analogInterrupts;
-	std::unique_ptr<UI> m_ui;
+	std::unique_ptr<BaseStates> m_states;
 };
