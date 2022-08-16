@@ -26,7 +26,7 @@ void setup()
     Serial.println("Printing");
 
     MemSample &msamp = MemSample::getInstance();
-    msamp.loadSamplePack("SamplePack02");
+    msamp.loadSamplePack("SamplePack01");
     std::string filelist = MemFlash::getInstance().listFlash();
     Serial.println(filelist.c_str());
     msamp.playSample(60);
