@@ -8,9 +8,16 @@ Graphics::Graphics( u_int8_t w, u_int8_t h, TwoWire* twi, int8_t rst_pin, u_int3
 {
 	pinMode( C_DISPLAY_RST, OUTPUT );
 	
-	while ( !begin( 0x3d )) {
+	while ( !begin( SSD1327_I2C_ADDRESS )) {
 		yield();
+		#ifdef VERBOSE
+		Serial.println( "Error @: Graphics -- Display not found" );
+		delay( 500 );
+		#endif
 	}
+	#ifdef VERBOSE
+	Serial.println( "Graphics initialization successful" );
+	#endif
 	
 	window_x1 = 0;
 	window_y1 = 0;
@@ -18,8 +25,8 @@ Graphics::Graphics( u_int8_t w, u_int8_t h, TwoWire* twi, int8_t rst_pin, u_int3
 	window_y2 = 127;
 	
 	clearDisplay();
+	Adafruit_SSD1327::fillScreen( 0xff );
 	Adafruit_SSD1327::display();
-	
 }
 
 void Graphics::drawWindow( const Window& win )

@@ -32,6 +32,5 @@ namespace lbs
 	
 	private:
 		Windows m_windows;
-		std::shared_ptr<WindowSettings> m_settings;
 	};
 }

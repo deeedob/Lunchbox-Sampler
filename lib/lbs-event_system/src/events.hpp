@@ -5,12 +5,26 @@ namespace lbs
 	class Events
 	{
 	public:
+		enum class DIGITAL
+		{
+			ROTARY_L = 0,
+			ROTARY_R,
+			ROTARY,
+			BTN_ENTER,
+			BTN_RETURN,
+			BTN_TOGGLE,
+			LAST,
+		};
+		
 		class Analog
 		{
 		public:
 			enum class POTS
 			{
-				
+				POT_0 = 0,
+				POT_1 = 1,
+				POT_2 = 2,
+				POT_3 = 3,
 				LAST,
 			};
 			enum class FSR
@@ -21,29 +35,6 @@ namespace lbs
 				FSR_3 = 3,
 				LAST,
 			};
-		};
-	};
-	
-	class DIGITAL : public Events
-	{
-	public:
-		static const uint8_t ROTARY_L = 0;
-		static const uint8_t ROTARY_R = 1;
-		static const uint8_t ROTARY = 2;
-		static const uint8_t BTN_ENTER = 3;
-		static const uint8_t BTN_RETURN = 4;
-		static const uint8_t BTN_TOGGLE = 5;
-	};
-	
-	class ANALOG : public Events
-	{
-	public:
-		class POTS : public Events
-		{
-			static const uint8_t POT_0 = 0;
-			static const uint8_t POT_1 = 1;
-			static const uint8_t POT_2 = 2;
-			static const uint8_t POT_3 = 3;
 		};
 	};
 }
