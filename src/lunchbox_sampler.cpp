@@ -64,16 +64,16 @@ void LunchboxSampler::setupDigitalEvents()
 	m_digitalInterrupts->enableAll();
 	
 	m_system->attachDigital( Events::DIGITAL::ROTARY_L, [ & ]( Events::DIGITAL e ) {
-		m_states->changeState( e );
+		m_states->baseUpdate( e );
 	} );
 	m_system->attachDigital( Events::DIGITAL::ROTARY_R, [ & ]( Events::DIGITAL e ) {
-		m_states->changeState( e );
+		m_states->baseUpdate( e );
 	} );
 	m_system->attachDigital( Events::DIGITAL::BTN_ENTER, [ & ]( Events::DIGITAL e ) {
-		m_states->changeState( e );
+		m_states->baseUpdate( e );
 	} );
 	m_system->attachDigital( Events::DIGITAL::BTN_RETURN, [ & ]( Events::DIGITAL e ) {
-		m_states->changeState( e );
+		m_states->baseUpdate( e );
 	} );
 	m_system->attachDigital( Events::DIGITAL::BTN_TOGGLE, []() {
 		Serial.println( "Button Toggle" );

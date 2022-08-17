@@ -11,6 +11,7 @@ public:
 	void update( Graphics* g, Events::DIGITAL e ) override;
 	void exit() override;
 private:
-	Window m_top;
-	Window m_bottom;
+	Window m_topNav;
+	Window m_left;
+	Window m_right;
 };

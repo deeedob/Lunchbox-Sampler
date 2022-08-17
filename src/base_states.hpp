@@ -2,6 +2,7 @@
 #include <graphics.hpp>
 #include <memory>
 #include <list>
+#include <observer.hpp>
 
 #include "modules/module_load.hpp"
 #include "modules/module_audio.hpp"
@@ -11,12 +12,12 @@
 
 using namespace lbs;
 
-class BaseStates
+class BaseStates : public Observer<AbstractModule>
 {
 	
 	enum class STATE
 	{
-		MAIN_MENU,
+		MAIN_MENU,      // this class
 		LOAD,
 		MANAGESOUND,
 		AUDIO,
@@ -28,8 +29,13 @@ class BaseStates
 	using TransitionList = std::list<Transition>;
 public:
 	BaseStates();
-	void changeState( Events::DIGITAL e );
+	void baseUpdate( Events::DIGITAL e );
 private:
+	/*!
+	 * @brief Gets emitted when a derived module exits!
+	 * @param src The derived module
+	 */
+	void emit( AbstractModule& src ) override;
 	void increment_state();
 	void decrement_state();
 	void draw_main_menu();

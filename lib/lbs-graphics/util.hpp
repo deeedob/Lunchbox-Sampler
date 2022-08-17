@@ -34,8 +34,8 @@ namespace lbs
 	{
 		WindowSize() = default;
 		
-		WindowSize( uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z )
-			: offset_x( x0 ), offset_y( y0 ), width( x1 ), height( y1 ), z( z )
+		WindowSize( uint16_t x0, uint16_t y0, uint16_t width, uint16_t height, uint8_t z )
+			: offset_x( x0 ), offset_y( y0 ), width( width ), height( height ), z( z )
 		{ };
 		
 		static std::pair<WindowSize, WindowSize> createSplitScreen( UTIL split, float split_factor = 0.5f, uint16_t max_screen_x = 128, uint16_t max_screen_y = 128 )
@@ -58,11 +58,24 @@ namespace lbs
 				WindowSize right( splitter, 0, max_screen_x - splitter, max_screen_y, 0 );
 				return { left, right };
 			}
-			
-			auto splitter = static_cast<u_int16_t>((float) max_screen_x * split_factor);
-			WindowSize left( 0, 0, splitter, max_screen_y, 0 );
-			WindowSize right( splitter, 0, max_screen_x - splitter, max_screen_y, 0 );
-			return { left, right };
+			return { };
+		}
+		
+		static std::pair<WindowSize, WindowSize> divideWindow( UTIL split, float split_factor, const WindowSize& to_split )
+		{
+			if( split == UTIL::HORIZONTAL ) {
+				auto splitter = static_cast<uint16_t>((float) to_split.height * split_factor);
+				WindowSize left( to_split.offset_x, to_split.offset_y, to_split.width, splitter, 0 );
+				WindowSize right( to_split.offset_x, to_split.offset_y + splitter, to_split.width, to_split.height - splitter, 0 );
+				return { left, right };
+			}
+			if( split == UTIL::VERTICAL ) {
+				auto splitter = static_cast<uint16_t>((float) to_split.width * split_factor);
+				WindowSize left( to_split.offset_x, to_split.offset_y, splitter, to_split.height, 0 );
+				WindowSize right( to_split.offset_x + splitter, to_split.offset_y, to_split.width - splitter, to_split.height, 0 );
+				return { left, right };
+			}
+			return { };
 		}
 		
 		u_int16_t getX2()
