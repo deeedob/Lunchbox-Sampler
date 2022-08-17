@@ -17,18 +17,19 @@ namespace lbs
 	class EventSystem
 	{
 		
-		using AnalogMapping = std::map< Events::Analog::POTS, std::function< void( AnalogData ) > >;
-		using FSRMapping = std::map< Events::Analog::FSR, std::function< void( AnalogData ) > >;
-		using DigitalMapping = std::map< Events::DIGITAL, std::function< void() > >;
+		using AnalogMapping = std::map<Events::Analog::POTS, std::function<void( AnalogData )> >;
+		using FSRMapping = std::map<Events::Analog::FSR, std::function<void( AnalogData )> >;
+		using DigitalMapping = std::map<Events::DIGITAL, std::function<void( Events::DIGITAL )> >;
 	
 	public:
 		EventSystem();
-		void attachDigital( Events::DIGITAL e, std::function< void() > f );
+		void attachDigital( Events::DIGITAL e, std::function<void( Events::DIGITAL )> f );
+		void attachDigital( Events::DIGITAL e, const std::function<void()>& f );
 		void detachDigital( Events::DIGITAL e );
 		
-		void attachAnalog( Events::Analog::POTS e, std::function< void( AnalogData ) > f );
+		void attachAnalog( Events::Analog::POTS e, std::function<void( AnalogData )> f );
 		void detachAnalog( Events::Analog::POTS e );
-		void attachAnalog( Events::Analog::FSR e, std::function< void( AnalogData ) > f );
+		void attachAnalog( Events::Analog::FSR e, std::function<void( AnalogData )> f );
 		void detachAnalog( Events::Analog::FSR e );
 		
 		/* TODO: pimpl or so?*/

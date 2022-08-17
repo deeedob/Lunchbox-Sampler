@@ -18,7 +18,7 @@ namespace lbs
 		//using Windows = std::vector<WindowSize>;
 		
 		WindowSettings()
-			: m_textSpacing(), m_textPadding()
+			: m_textSpacing(), m_textPadding(), m_textSize()
 		{ }
 		
 		WindowSettings( const WindowSettings& other ) = default;
@@ -77,7 +77,7 @@ namespace lbs
 		Spacer m_textPadding;
 		WindowSize m_windowSize;
 		WindowSize m_activeRegion;
-		
+		TextSize m_textSize;
 	};
 	
 }

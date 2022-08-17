@@ -9,15 +9,14 @@ namespace lbs
 	class Window : public Adafruit_GFX, public WindowSettings
 	{
 	public:
-		using SplitScreen = std::pair<Window, Window>;
-		enum class SPLIT
-		{
-			HORIZONTAL,
-			VERTICAL
-		};
 		
-		explicit Window( WindowSize size );
-		static SplitScreen createSplitScreen( float split_val, SPLIT s, u_int16_t screen_x, u_int16_t screen_y );
+		using SplitScreen = std::pair<Window, Window>;
+		
+		explicit Window( WindowSize size = { 0, 0, 128, 128, 0 } );
+		Window( const Window& other );
+		Window( Window&& other ) noexcept;
+		Window& operator=( const Window& other );
+		Window& operator=( Window&& other ) noexcept;
 		~Window();
 		
 		// CORE DRAW API
@@ -40,7 +39,9 @@ namespace lbs
 		void drawRect( int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color ) override;
 		
 		// Print API
+		void printlnHCentered( const char s[] );
 		void printlnCentered( const char s[] );
+		void printlnHoverCenter( const char s[], uint16_t color );
 		void printlnRight( const char s[] );
 		
 		size_t write( uint8_t c ) override;
@@ -78,7 +79,6 @@ namespace lbs
 	
 	private:
 		uint8_t* m_buffer;
-		WindowSettings m_settings;
 #ifdef __AVR__
 		// Bitmask tables of 0x80>>X and ~(0x80>>X), because X>>Y is slow on AVR
 	static const uint8_t PROGMEM GFXsetBit[], GFXclrBit[];

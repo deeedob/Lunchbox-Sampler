@@ -12,7 +12,7 @@ LunchboxSampler::LunchboxSampler()
 	setupAnalogEvents();
 	setupFSREvents();
 	m_analogInterrupts->disableAll();
-	m_digitalInterrupts->disableAll();
+	//m_digitalInterrupts->disableAll();
 }
 
 LunchboxSampler::~LunchboxSampler() = default;
@@ -35,6 +35,8 @@ LunchboxSampler& LunchboxSampler::getInstance()
 		delay( 40 );
 		rP->next();
 		rF->next();
+		delay( 500 );
+		Serial.print( "u" );
 	}
 }
 
@@ -61,17 +63,17 @@ void LunchboxSampler::setupDigitalEvents()
 {
 	m_digitalInterrupts->enableAll();
 	
-	m_system->attachDigital( Events::DIGITAL::ROTARY_L, []() {
-		Serial.println( "Rotary Left" );
+	m_system->attachDigital( Events::DIGITAL::ROTARY_L, [ & ]( Events::DIGITAL e ) {
+		m_states->changeState( e );
 	} );
-	m_system->attachDigital( Events::DIGITAL::ROTARY_R, []() {
-		Serial.println( "Rotary Right" );
+	m_system->attachDigital( Events::DIGITAL::ROTARY_R, [ & ]( Events::DIGITAL e ) {
+		m_states->changeState( e );
 	} );
-	m_system->attachDigital( Events::DIGITAL::BTN_RETURN, []() {
-		Serial.println( "Button Return" );
+	m_system->attachDigital( Events::DIGITAL::BTN_ENTER, [ & ]( Events::DIGITAL e ) {
+		m_states->changeState( e );
 	} );
-	m_system->attachDigital( Events::DIGITAL::BTN_ENTER, []() {
-		Serial.println( "Button Enter" );
+	m_system->attachDigital( Events::DIGITAL::BTN_RETURN, [ & ]( Events::DIGITAL e ) {
+		m_states->changeState( e );
 	} );
 	m_system->attachDigital( Events::DIGITAL::BTN_TOGGLE, []() {
 		Serial.println( "Button Toggle" );

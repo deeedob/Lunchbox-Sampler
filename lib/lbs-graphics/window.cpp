@@ -1,5 +1,6 @@
 #include "window.hpp"
 #include "fonts/MLReg_5pt.h"
+#include <cstring>
 
 using namespace lbs;
 
@@ -35,6 +36,7 @@ Window::Window( WindowSize size )
 			memset( m_buffer, 0, bytes );
 			setActiveRegion( size );
 			setFont( &MLReg5pt7b );
+			m_textSize = { textsize_y * 8, textsize_x * 8 };
 			setTextSpacing( { 0, -2 } );
 			setTextColor( 0x00 );
 		}
@@ -43,8 +45,67 @@ Window::Window( WindowSize size )
 
 Window::~Window()
 {
-	if( m_buffer )
-		free( m_buffer );
+	delete[] m_buffer;
+}
+
+Window::Window( const Window& other )
+	: Adafruit_GFX( other ), WindowSettings( other )
+{
+	//get size of m_buffer
+	size_t n = sizeof( other.m_buffer ) / sizeof( other.m_buffer[ 0 ] );
+	std::memcpy( m_buffer, other.m_buffer, n );
+	size_t n2 = sizeof( other.gfxFont ) / sizeof( other.gfxFont[ 0 ] );
+	std::memcpy( gfxFont, other.gfxFont, n2 );
+}
+
+Window::Window( Window&& other ) noexcept
+{
+	/* thanks Adafruit_GFX for not implementing a proper move constructor... */
+	WIDTH = std::move( other.WIDTH );
+	HEIGHT = std::move( other.HEIGHT );
+	_width = std::move( other._width );
+	_height = std::move( other._height );
+	cursor_x = std::move( other.cursor_x );
+	cursor_y = std::move( other.cursor_y );
+	textcolor = std::move( other.textcolor );
+	textbgcolor = std::move( other.textbgcolor );
+	textsize_x = std::move( other.textsize_x );
+	textsize_y = std::move( other.textsize_y );
+	rotation = std::move( other.rotation );
+	wrap = std::move( other.wrap );
+	_cp437 = std::move( other._cp437 );
+	gfxFont = std::exchange( other.gfxFont, nullptr );
+	m_buffer = std::exchange( other.m_buffer, nullptr );
+	WindowSettings::operator=( std::move( other ));
+}
+
+Window& Window::operator=( const Window& other )
+{
+	if( this == &other )
+		return *this;
+	return *this = Window( other );
+}
+
+Window& Window::operator=( Window&& other ) noexcept
+{
+	/* thanks Adafruit_GFX for not implementing a proper move constructor... */
+	WIDTH = std::move( other.WIDTH );
+	HEIGHT = std::move( other.HEIGHT );
+	_width = std::move( other._width );
+	_height = std::move( other._height );
+	cursor_x = std::move( other.cursor_x );
+	cursor_y = std::move( other.cursor_y );
+	textcolor = std::move( other.textcolor );
+	textbgcolor = std::move( other.textbgcolor );
+	textsize_x = std::move( other.textsize_x );
+	textsize_y = std::move( other.textsize_y );
+	rotation = std::move( other.rotation );
+	wrap = std::move( other.wrap );
+	_cp437 = std::move( other._cp437 );
+	gfxFont = std::exchange( other.gfxFont, nullptr );
+	m_buffer = std::exchange( other.m_buffer, nullptr );
+	WindowSettings::operator=( std::move( other ));
+	return *this;
 }
 
 size_t Window::write( const uint8_t* buffer, size_t size )
@@ -288,7 +349,7 @@ size_t Window::write( uint8_t c )
 	return 1;
 }
 
-void Window::printlnCentered( const char* s )
+void Window::printlnHCentered( const char* s )
 {
 	auto temp = m_textPadding;
 	m_textPadding = { 0, temp.yAxis };
@@ -299,6 +360,30 @@ void Window::printlnCentered( const char* s )
 	int16_t cent_box = w / 2;
 	auto offset = cent_screen - cent_box;
 	setCursor( offset, getCursorY());
+	println( s );
+	m_textPadding = temp;
+}
+
+void Window::printlnHoverCenter( const char* s, uint16_t color )
+{
+	fillRect( getActiveRegion().offset_x, getCursorY() - m_textSize.text_y - 1, getActiveRegion().width, m_textSize.text_y + 3, color );
+	printlnHCentered( s );
+}
+
+void Window::printlnCentered( const char* s )
+{
+	auto temp = m_textPadding;
+	m_textPadding = { 0, 0 };
+	int16_t x1, y1;
+	uint16_t w, h;
+	getTextBounds( s, getCursorX(), getCursorY(), &x1, &y1, &w, &h );
+	int16_t cent_screen_x = ( getActiveRegion().width / 2 ) + getActiveRegion().offset_x;
+	int16_t cent_box_x = w / 2;
+	auto offset_x = cent_screen_x - cent_box_x;
+	int16_t cent_screen_y = ( getActiveRegion().height / 2 ) + ( textsize_y * 8 ) + 1;
+	int16_t cent_box_y = h / 2;
+	auto offset_y = cent_screen_y - cent_box_y;
+	setCursor( offset_x, offset_y );
 	println( s );
 	m_textPadding = temp;
 }
@@ -397,7 +482,7 @@ void Window::drawWindowBorder( Spacer padding, u_int8_t roundness, u_int16_t col
 			drawRoundRect( x_0, y_0, w, h, roundness, color );
 		padding += glob_pad;
 	}
-	setActiveRegion( WindowSize { x_0, y_0, w, h, 0 } );
+	setActiveRegion( WindowSize { x_0 + 1, y_0 + 1, w - 2, h - 2, 0 } );
 }
 
 void Window::setWindowOffsets( uint16_t x0, uint16_t y0 ) noexcept
@@ -410,25 +495,4 @@ void Window::setTextPadding( const Spacer& text_padding )
 {
 	m_textPadding = text_padding;
 	setCursor( getCursorX() + m_textPadding.xAxis, getCursorY() + m_textPadding.yAxis );
-}
-
-Window::SplitScreen Window::createSplitScreen( float split_val, SPLIT s, u_int16_t screen_x, u_int16_t screen_y )
-{
-	if( split_val < 0 || split_val > 1.0 ) { split_val = 0.5; }
-	--screen_x;
-	--screen_y;
-	
-	if( s == SPLIT::HORIZONTAL ) {
-		auto split = static_cast<u_int16_t>((float) screen_y * split_val);
-		Window top( WindowSize( 0, 0, screen_x, split, 0 ));
-		Window bottom( WindowSize( 0, split, screen_x, split, 0 ));
-		return { top, bottom };
-	}
-	if( s == SPLIT::VERTICAL ) {
-		auto split = static_cast<u_int16_t>((float) screen_x * split_val);
-		Window left( WindowSize( 0, 0, split, screen_y, 0 ));
-		Window right( WindowSize( split, 0, screen_x - split, screen_y, 0 ));
-		return { left, right };
-	}
-	
 }

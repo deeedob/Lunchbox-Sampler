@@ -25,8 +25,8 @@ Graphics::Graphics( u_int8_t w, u_int8_t h, TwoWire* twi, int8_t rst_pin, u_int3
 	window_y2 = 127;
 	
 	clearDisplay();
-	Adafruit_SSD1327::fillScreen( 0xff );
-	Adafruit_SSD1327::display();
+	fillScreen( 0x00 );
+	display();
 }
 
 void Graphics::drawWindow( const Window& win )

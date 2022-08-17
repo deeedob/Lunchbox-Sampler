@@ -12,7 +12,6 @@ class ModuleSoundManager : public AbstractModule
 public:
 	ModuleSoundManager();
 	void enter( Graphics* g ) override;
-	void update( Graphics* g ) override;
+	void update( Graphics* g, Events::DIGITAL e ) override;
 	void exit() override;
-	~ModuleSoundManager() override;
 };
