@@ -337,8 +337,9 @@ size_t Window::write( uint8_t c )
 						cursor_x = m_activeRegion.offset_x + m_textPadding.xAxis;
 						cursor_y += ((int16_t) textsize_y * (uint8_t) pgm_read_byte( &gfxFont->yAdvance )) + m_textSpacing.yAxis;
 					}
-					if( cursor_y + ( textsize_y * 8 ) > ( m_activeRegion.getY2() - m_textPadding.yAxis ))
-						return 1;
+					//TODO: make this correct!
+					//if( cursor_y + ( textsize_y * 8 ) > ( m_activeRegion.height - m_textPadding.yAxis ))
+					//	return 1;
 					drawChar( cursor_x, cursor_y, c, textcolor, textbgcolor, textsize_x,
 					          textsize_y );
 				}
@@ -380,9 +381,9 @@ void Window::printlnCentered( const char* s )
 	int16_t cent_screen_x = ( getActiveRegion().width / 2 ) + getActiveRegion().offset_x;
 	int16_t cent_box_x = w / 2;
 	auto offset_x = cent_screen_x - cent_box_x;
-	int16_t cent_screen_y = ( getActiveRegion().height / 2 ) + ( textsize_y * 8 ) + 1;
+	int16_t cent_screen_y = ( getActiveRegion().height / 2 );
 	int16_t cent_box_y = h / 2;
-	auto offset_y = cent_screen_y - cent_box_y;
+	auto offset_y = cent_screen_y - cent_box_y + h + 2;
 	setCursor( offset_x, offset_y );
 	println( s );
 	m_textPadding = temp;

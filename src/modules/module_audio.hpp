@@ -16,5 +16,4 @@ public:
 	void exit() override;
 	~ModuleAudio() override;
 private:
-
 };
