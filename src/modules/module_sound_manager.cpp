@@ -5,21 +5,15 @@
 #include "module_sound_manager.hpp"
 
 ModuleSoundManager::ModuleSoundManager()
-{
-
-}
-
-ModuleSoundManager::~ModuleSoundManager()
-{
-
-}
+	: AbstractModule( "Sound Manager" )
+{ }
 
 void ModuleSoundManager::enter( Graphics* g )
 {
 
 }
 
-void ModuleSoundManager::update( Graphics* g )
+void ModuleSoundManager::update( Graphics* g, Events::DIGITAL e )
 {
 
 }

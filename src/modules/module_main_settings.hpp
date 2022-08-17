@@ -3,12 +3,11 @@
 
 using namespace lbs;
 
-class ModuleMainMenu : public AbstractModule
+class ModuleMainSettings : public AbstractModule
 {
 public:
-	ModuleMainMenu();
+	ModuleMainSettings();
 	void enter( Graphics* g ) override;
-	void update( Graphics* g ) override;
+	void update( Graphics* g, Events::DIGITAL e ) override;
 	void exit() override;
-	~ModuleMainMenu() override;
 };

@@ -8,7 +8,7 @@
 
 namespace lbs
 {
-	template< class Func >
+	template<class Func>
 	class Worker : public Runnable
 	{
 	
@@ -16,7 +16,7 @@ namespace lbs
 		explicit Worker( int waitTime = 50 )
 			: m_done( false ), m_dispatchQueue( waitTime )
 		{
-			m_runnable = std::make_unique< std::thread >( &Runnable::runThread, this );
+			m_runnable = std::make_unique<std::thread>( &Runnable::runThread, this );
 			m_runnable->detach();
 		}
 		
@@ -30,7 +30,7 @@ namespace lbs
 		
 		void runTarget( void* arg ) override
 		{
-			while( !m_done ) {
+			while ( !m_done ) {
 				Func item = m_dispatchQueue.take();
 				item();
 			}
@@ -47,8 +47,8 @@ namespace lbs
 		};
 	
 	private:
-		std::atomic< bool > m_done;
-		std::unique_ptr< std::thread > m_runnable;
-		DispatchQueue< Func > m_dispatchQueue;
+		std::atomic<bool> m_done;
+		std::unique_ptr<std::thread> m_runnable;
+		DispatchQueue<Func> m_dispatchQueue;
 	};
 }

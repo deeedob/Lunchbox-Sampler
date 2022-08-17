@@ -6,7 +6,7 @@ EventSystem::EventSystem()
 {
 	/* we can't call nullptr in the consumer so init to real void func! */
 	for( int i = static_cast<int>(Events::DIGITAL::ROTARY_L); static_cast<Events::DIGITAL>(i) < Events::DIGITAL::LAST; i++ ) {
-		m_digMapping[ static_cast<Events::DIGITAL>(i) ] = []() {
+		m_digMapping[ static_cast<Events::DIGITAL>(i) ] = []( Events::DIGITAL ) {
 		};
 	}
 	
@@ -23,14 +23,16 @@ EventSystem::EventSystem()
 
 void EventSystem::enqueueDigital( Events::DIGITAL e )
 {
-	m_scheduler.m_digitalListener.send( m_digMapping.find( e )->second );
+	auto f = m_digMapping.find( e )->second;
+	std::function<void()> binder = std::bind( f, e );
+	m_scheduler.m_digitalListener.send( binder );
 }
 
 void EventSystem::enqueueAnalog( Events::Analog::POTS e, AnalogData value )
 {
 	auto f = m_analogMapping.find( e )->second;
 	//TODO: auto?
-	std::function< void() > binder = std::bind( m_analogMapping.find( e )->second, value );
+	std::function<void()> binder = std::bind( f, value );
 	m_scheduler.m_analogListener.send( binder );
 }
 
@@ -38,22 +40,30 @@ void EventSystem::enqueueAnalog( Events::Analog::FSR e, AnalogData value )
 {
 	auto f = m_fsrMapping.find( e )->second;
 	//TODO: auto?
-	std::function< void() > binder = std::bind( m_fsrMapping.find( e )->second, value );
+	std::function<void()> binder = std::bind( f, value );
 	m_scheduler.m_analogListener.send( binder );
 }
 
-void EventSystem::attachDigital( Events::DIGITAL e, std::function< void() > f )
+void EventSystem::attachDigital( Events::DIGITAL e, std::function<void( Events::DIGITAL )> f )
 {
 	m_digMapping[ e ] = std::move( f );
 }
 
+void EventSystem::attachDigital( Events::DIGITAL e, const std::function<void()>& f )
+{
+	auto func = [ = ]( Events::DIGITAL ) {
+		f();
+	};
+	m_digMapping[ e ] = std::move( func );
+}
+
 void EventSystem::detachDigital( Events::DIGITAL e )
 {
-	m_digMapping[ e ] = []() {
+	m_digMapping[ e ] = []( Events::DIGITAL ) {
 	};
 }
 
-void EventSystem::attachAnalog( Events::Analog::POTS e, std::function< void( AnalogData ) > f )
+void EventSystem::attachAnalog( Events::Analog::POTS e, std::function<void( AnalogData )> f )
 {
 	m_analogMapping[ e ] = std::move( f );
 }
@@ -64,7 +74,7 @@ void EventSystem::detachAnalog( Events::Analog::POTS e )
 	};
 }
 
-void EventSystem::attachAnalog( Events::Analog::FSR e, std::function< void( AnalogData ) > f )
+void EventSystem::attachAnalog( Events::Analog::FSR e, std::function<void( AnalogData )> f )
 {
 	m_fsrMapping[ e ] = std::move( f );
 }

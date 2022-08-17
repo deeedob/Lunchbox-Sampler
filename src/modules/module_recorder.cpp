@@ -2,29 +2,27 @@
  * Copyright (c) 2022. Dennis Oberst                                                              *
  **************************************************************************************************/
 
-#include "module_main_menu.hpp"
+#include "module_recorder.hpp"
 
-ModuleMainMenu::ModuleMainMenu()
+using namespace lbs;
+
+ModuleRecorder::ModuleRecorder()
+	: AbstractModule( "Record" )
 {
 
 }
 
-ModuleMainMenu::~ModuleMainMenu()
+void ModuleRecorder::enter( Graphics* g )
 {
 
 }
 
-void ModuleMainMenu::enter( Graphics* g )
+void ModuleRecorder::update( Graphics* g, Events::DIGITAL e )
 {
 
 }
 
-void ModuleMainMenu::update( Graphics* g )
-{
-
-}
-
-void ModuleMainMenu::exit()
+void ModuleRecorder::exit()
 {
 
 }

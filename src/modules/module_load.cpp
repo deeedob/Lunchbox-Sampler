@@ -3,28 +3,29 @@
 using namespace lbs;
 
 ModuleLoad::ModuleLoad()
+	: AbstractModule( "Load Samples" )
 {
-
-}
-
-ModuleLoad::~ModuleLoad()
-{
-
+	auto split_screens = WindowSize::createSplitScreen( UTIL::HORIZONTAL, 0.2f );
+	m_top = Window( split_screens.first );
+	m_bottom = Window( split_screens.second );
 }
 
 void ModuleLoad::enter( Graphics* g )
 {
-	Window::SplitScreen screens = Window::createSplitScreen( 0.45f, Window::SPLIT::VERTICAL, g->width(), g->height());
-	auto& left = screens.first;
-	auto& right = screens.second;
+	m_top.fillScreen( 0xff );
+	m_top.drawWindowBorder( { 2, 2 }, 0, 0x00, 1 );
+	m_top.printlnCentered( m_moduleName.c_str());
 	
-	left.drawWindowBorder( { 2, 2 }, 0, 0x00, 2 );
-	right.drawWindowBorder( { 2, 2 }, 0, 0x00, 2 );
+	m_bottom.fillScreen( 0x44 );
+	m_bottom.drawWindowBorder( { 4, 4 }, 2, 0xbb, 2 );
+	m_bottom.setTextPadding( { 4, 4 } );
 	
-	g->drawWindow( screens );
+	g->drawWindow( m_top );
+	g->drawWindow( m_bottom );
+	g->display();
 }
 
-void ModuleLoad::update( Graphics* g )
+void ModuleLoad::update( Graphics* g, Events::DIGITAL e )
 {
 
 }

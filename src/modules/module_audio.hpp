@@ -12,7 +12,9 @@ class ModuleAudio : public AbstractModule
 public:
 	ModuleAudio();
 	void enter( Graphics* g ) override;
-	void update( Graphics* g ) override;
+	void update( Graphics* g, Events::DIGITAL e ) override;
 	void exit() override;
 	~ModuleAudio() override;
+private:
+
 };

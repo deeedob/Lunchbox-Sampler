@@ -3,14 +3,11 @@
 
 using namespace lbs;
 
-class ModuleLoad : public AbstractModule
+class ModuleRecorder : public AbstractModule
 {
 public:
-	ModuleLoad();
+	ModuleRecorder();
 	void enter( Graphics* g ) override;
 	void update( Graphics* g, Events::DIGITAL e ) override;
 	void exit() override;
-private:
-	Window m_top;
-	Window m_bottom;
 };
