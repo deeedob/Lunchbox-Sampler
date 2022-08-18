@@ -15,20 +15,9 @@ int main() {
 
     auto list = mf.getAllFromFlash();
 
-    Serial.println("Files on Flash:");
-    for (const auto &i: list) {
-        Serial.println(i.c_str());
-    }
-
-    Serial.println("Transferring file");
-
     mf.transferSingleToFlash("packs/Samplepack01/01.wav");
 
     list = mf.getAllFromFlash();
-    Serial.println("Files on Flash:");
-    for (const auto &i: list) {
-        Serial.println(i.c_str());
-    }
 
 
 }
