@@ -17,7 +17,6 @@ void MidiControl::midiReadContinuous() noexcept {
 				auto data1 = usbMIDI.getData1();
 				auto vel = usbMIDI.getData2();
 				Note note( { type, channel, data1, vel } );
-				//note send to Memory
 			}
 		}
 	}
