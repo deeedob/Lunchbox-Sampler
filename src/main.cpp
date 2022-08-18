@@ -1,31 +1,23 @@
-#include "main_memory.hpp"
+#include <mem_sd.hpp>
+#include <mem_flash.hpp>
 
 /* Arduino ... why u do this shit?! */
 #undef main
 
 int main() {
 #ifdef VERBOSE
-	Serial.begin( 9600 );
-	Serial.println( ":::Lunchbox Sampler:::" );
+    Serial.begin(9600);
+    Serial.println(":::Lunchbox Sampler:::");
 #endif
 
-	auto mf = lbs::MainMemory();
+    auto mf = lbs::MemFlash();
+    auto ms = lbs::MemSD();
 
-	//auto list = mf.getAllFromFlash();
+    auto list = mf.getAllFromFlash();
 
-	auto list = mf.getSampleNamesFromPack( "Samplepack01" );
-	Serial.println( "Files on Samplepack01" );
-	for( const auto& i : list ) { Serial.println( i.c_str() ); }
+    mf.transferSingleToFlash("packs/Samplepack01/01.wav");
 
-	mf.eraseFlash();
+    list = mf.getAllFromFlash();
 
-	auto flashlist = mf.getFilelistFromFlash();
-	Serial.println( "Files on Flash:" );
-	for( const auto& i : flashlist ) { Serial.println( i.c_str() ); }
 
-	mf.loadSamplepack( "Samplepack01" );
-
-	flashlist = mf.getFilelistFromFlash();
-	Serial.println( "Files on Flash:" );
-	for( const auto& i : flashlist ) { Serial.println( i.c_str() ); }
 }
