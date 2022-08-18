@@ -58,8 +58,7 @@ Window::Window( const Window& other )
 	std::memcpy( gfxFont, other.gfxFont, n2 );
 }
 
-Window::Window( Window&& other ) noexcept
-{
+Window::Window(int16_t w, int16_t h, Window &&other) noexcept: Adafruit_GFX(w, h) {
 	/* thanks Adafruit_GFX for not implementing a proper move constructor... */
 	WIDTH = std::move( other.WIDTH );
 	HEIGHT = std::move( other.HEIGHT );
