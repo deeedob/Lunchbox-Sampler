@@ -14,7 +14,7 @@ namespace lbs
 		
 		explicit Window( WindowSize size = { 0, 0, 128, 128, 0 } );
 		Window( const Window& other );
-		Window( Window&& other ) noexcept;
+		Window(int16_t w, int16_t h, Window &&other) noexcept;
 		Window& operator=( const Window& other );
 		Window& operator=( Window&& other ) noexcept;
 		~Window();
