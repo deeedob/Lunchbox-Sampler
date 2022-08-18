@@ -5,7 +5,6 @@
 #include <SD.h>
 #include <vector>
 #include <string>
-#include <mem_generic.h>
 #include "define_t40.hpp"
 
 namespace lbs {
