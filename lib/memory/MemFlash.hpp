@@ -9,49 +9,53 @@
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
+#include <SoundZ.h>
 
-#define SDCARD_CS_PIN   10
-#define SDCARD_MOSI_PIN 11
-#define SDCARD_SCK_PIN  13
-#define FLASH_PIN 6
+namespace lbs
+{
+	
+	class MemFlash
+	{
+	
+	private:
+		class WriteFile
+			{
+			public:
+				uint64_t size();
+				bool writeByte(uint8_t byte);
+				uint64_t remaining();
+				bool notAtEnd();
+				bool isOpen();
+				bool reset();
+				std::string getFilename();
+				
+				WriteFile( std::string filepath, uint64_t length );
+				~WriteFile();
+		
+		private:
+				std::string filename;
+				uint64_t count = 0;
+				SerialFlashFile file;
+			
+			};
 
-#define FLASHSIZE 16
-
-namespace lbs {
-
-    class MemFlash {
-
-        class MidiMapping {
-
-        public:
-            bool add(std::string pitch, int8_t octave, std::string sample, std::string mode);
-            std::vector<std::string> *getSampleList();
-            MidiMapping();
-
-        private:
-            enum PlaybackMode {
-                ONESHOT, LOOP, TOGGLE
-            };
-            static inline PlaybackMode getModeFromString(std::string mode);
-            static const std::unordered_map<std::string, uint8_t> pitches;
-
-            std::string samples[128];
-            PlaybackMode mode[128];
-
-        };
 
 /* static part */
-    public:
-        static MemFlash &getInstance();
-
-    public:
-        bool loadSamplePack(std::string packName);
-
-    private:
-        MidiMapping mapping;
-        static const std::string packfolder;
-        std::string currentSamplePack;
-
-        MemFlash();
-    };
+	public:
+		static MemFlash& getInstance();
+	
+	public:
+		void purgeFlash();
+		std::string listFlash();
+		bool openFileW( std::string file, uint64_t length );
+		MemFlash::WriteFile& fileDo();
+		SerialFlashFile& getFile(std::string filename);
+	
+	private:
+		friend void playSample(uint8_t midiNote);
+		static const std::string packfolder;
+		WriteFile wfile;
+		SerialFlashFile playbackFile;
+		MemFlash();
+	};
 }
