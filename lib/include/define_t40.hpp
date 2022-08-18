@@ -1,6 +1,5 @@
 #pragma once
 
-
 /* General Pins */
 #define C_DISPLAY_CLK 16
 #define C_DISPLAY_SDA 17
@@ -44,3 +43,9 @@
 #define C_FSR_MPX_1 1
 #define C_FSR_MPX_2 2
 #define C_FSR_MPX_3 3
+
+#define C_FLASH_PIN 6
+#define C_FLASHSIZE 16
+
+#define C_SETTINGS_FILE "/mapping.csv"
+#define C_PACK_DIR "/packs/"
