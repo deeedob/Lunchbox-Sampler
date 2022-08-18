@@ -2,6 +2,10 @@
 
 namespace lbs {
 
+    inline std::string getBasename(const std::string &filepath) {
+        return filepath.substr(filepath.find_last_of("/\\") + 1);
+    }
+
     std::vector<std::string> MemFlash::getAllFromFlash() {
         unsigned int count = 0;
         char filename[64];
@@ -73,5 +77,11 @@ namespace lbs {
             f.readBytes(&byte, 1);
             ff.write(&byte, 1);
         }
+    }
+
+    MemFlash::MemFlash() {
+
+        SerialFlash.begin(C_FLASH_PIN)
+
     }
 }
