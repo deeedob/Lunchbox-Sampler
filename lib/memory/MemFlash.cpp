@@ -1,10 +1,9 @@
 #include <define_t40.hpp>
-#include <map>
-#include <tuple>
 #include "MemSD.hpp"
 #include "MemFlash.hpp"
 
 using namespace lbs;
+
 
 /**
  * @brief TO BE FILLED
@@ -13,7 +12,7 @@ using namespace lbs;
  */
 MemFlash& MemFlash::getInstance()
 {
-	static MemFlash* instance = new MemFlash();
+	static auto *instance = new MemFlash();
 	
 	if( !SerialFlash.begin( C_FLASH_PIN )) {
 #ifdef VERBOSE
@@ -31,8 +30,7 @@ MemFlash& MemFlash::getInstance()
  * @return
  */
 MemFlash::MemFlash()
-{
-}
+= default;
 
 /**
  * @brief TO BE FILLED
@@ -68,41 +66,28 @@ std::string MemFlash::listFlash()
 	SerialFlash.opendir();
 	
 	while( SerialFlash.readdir( filename, sizeof( filename ), filesize )) {
-		filelist += filename;
-		filelist += "  " + filesize;
-		filelist += "bytes\n";
+        filelist += filename;
+        filelist += "  ";
+        filelist += std::string(String(filesize).c_str());
+        filelist += "bytes\n";
 
 #ifdef VERBOSE
-		Serial.print("File ");
-		Serial.print(count);
-		Serial.print(F(": "));
-		Serial.print(filename);
-		Serial.print(F("  "));
-		Serial.print(filesize);
-		Serial.print(F(" bytes"));
-		Serial.println();
+        Serial.print("File ");
+        Serial.print(count);
+        Serial.print(F(": "));
+        Serial.print(filename);
+        Serial.print(F("  "));
+        Serial.print(filesize);
+        Serial.print(F(" bytes"));
+        Serial.println();
 #endif
-		count++;
-	}
-	
-	if( count == 0 )
-		Serial.println( "Flash is empty" );
-	
-	return filelist;
-}
+        count++;
+    }
 
-MemFlash::WriteFile& MemFlash::fileDo()
-{
-	return this->wfile;
-}
+    if (count == 0)
+        Serial.println("Flash is empty");
 
-bool MemFlash::openFileW( std::string filepath, uint64_t length )
-{
-	this->wfile = WriteFile(filepath, length);
-	if (this->wfile.isOpen()) {
-		return true;
-	}
-	return false;
+    return filelist;
 }
 
 
@@ -111,47 +96,56 @@ bool MemFlash::openFileW( std::string filepath, uint64_t length )
  * @param
  * @return
  */
-MemFlash::WriteFile::WriteFile( std::string filename, uint64_t length )
-{
-	if (!SerialFlash.create(filename.c_str(), length)) {
-		return;
-	}
-	this->filename = filename;
-	this->file = SerialFlash.open(filename.c_str());
+void MemFlash::playSample(const std::string &filename) {
+    Serial.println("PlaySample trigger");
+    AudioConnection patchCord1(MemFlash::playFlashRaw1,
+    0, i2s1, 0);
+    AudioConnection patchCord2(MemFlash::playFlashRaw1,
+    0, i2s1, 1);
+    AudioMemory(10);
+    audioShield.enable();
+    audioShield.volume(0.5);
+    if (this->playFlashRaw1.play(filename.c_str())) {
+#ifdef VERBOSE
+        Serial.println("Success playing sample");
+#endif
+    } else {
+#ifdef VERBOSE
+        Serial.println("Error playing sample");
+#endif
+    }
 }
 
-uint64_t MemFlash::WriteFile::size()
-{
-	return file.size();
-}
+bool lbs::transferToFlash(const std::string &filepath) {
+    File f = SD.open(filepath.c_str());
 
-bool MemFlash::WriteFile::writeByte( uint8_t byte )
-{
-	return file.write(&byte, 1);
-}
+    if (!f) {
+#ifdef VERBOSE
+        Serial.print("transferToFlash: error reading file ");
+        Serial.print(filepath.c_str());
+        Serial.println(" from SD");
+#endif
+        return false;
+    }
 
-uint64_t MemFlash::WriteFile::remaining()
-{
-	return file.available();
-}
+    std::string basename = lbs::getBasename(const_cast<std::string &>(filepath));
 
-bool MemFlash::WriteFile::notAtEnd()
-{
-	return file.available() > 0;
-}
+    if (!SerialFlash.create(basename.c_str(), f.size())) {
+#ifdef VERBOSE
+        Serial.print("transferToFlash: error creating file");
+        Serial.print(basename.c_str());
+        Serial.println(" on Flash");
+#endif
+        return false;
+    }
 
-bool MemFlash::WriteFile::isOpen()
-{
-	return file != NULL;
-}
+    SerialFlashFile ff = SerialFlash.open(basename.c_str());
 
-bool MemFlash::WriteFile::reset()
-{
-	return false;
-}
+    char byte;
 
-std::string MemFlash::WriteFile::getFilename()
-{
-	return filename;
+    for (uint i = 0; i < f.size(); i++) {
+        f.readBytes(&byte, 1);
+        ff.write(&byte, 1);
+    }
+    return true;
 }
-
