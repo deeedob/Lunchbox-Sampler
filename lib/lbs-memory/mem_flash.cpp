@@ -91,4 +91,10 @@ namespace lbs {
         Serial.println("ready");
 #endif
     }
+
+    MemFlash::MemFlash() {
+
+        SerialFlash.begin(C_FLASH_PIN)
+
+    }
 }
