@@ -1,5 +1,6 @@
 #include <define_t40.hpp>
 #include "MemSD.hpp"
+#include "mem_sd.hpp"
 
 using namespace lbs;
 
@@ -116,9 +117,7 @@ std::vector< std::tuple< std::string, int8_t, std::string, std::string>>* MemSD:
  * @param
  * @return
  */
-MemSD::MemSD()
-{
-}
+
 
 /**
  * @brief TO BE FILLED
