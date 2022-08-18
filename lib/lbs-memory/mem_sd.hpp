@@ -1,6 +1,7 @@
 #pragma once
 #include <SD.h>
 #include <SPI.h>
+#include <vector>
 #include <define_t40.hpp>
 
 namespace lbs
@@ -9,7 +10,10 @@ namespace lbs
 	{
 	public:
 		MemSD();
-		void printAllFiles( File dir, int numSpaces );
+		std::vector<String> getAllFiles();
+		std::vector<String> getAllSamplepacks();
+		std::vector<String> getAllSamples( const String& samplepack );
+		void initializeSamplepack( const String& samplepack );
 	private:
 	};
 }
