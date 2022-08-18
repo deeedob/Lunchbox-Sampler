@@ -62,6 +62,10 @@ Window::Window( Window&& other ) noexcept
 	: Adafruit_GFX(other.WIDTH, other.HEIGHT)
 {
 	/* thanks Adafruit_GFX for not implementing a proper move constructor... */
+	WIDTH = std::move( other.WIDTH );
+	HEIGHT = std::move( other.HEIGHT );
+	_width = std::move( other._width );
+	_height = std::move( other._height );
 	cursor_x = std::move( other.cursor_x );
 	cursor_y = std::move( other.cursor_y );
 	textcolor = std::move( other.textcolor );
