@@ -1,14 +1,23 @@
-#include <lunchbox_sampler.hpp>
+#include <mem_sd.hpp>
+#include <mem_flash.hpp>
 
 /* Arduino ... why u do this shit?! */
 #undef main
 
-int main()
-{
+int main() {
 #ifdef VERBOSE
-	Serial.begin( 9600 );
-	Serial.println( ":::Lunchbox Sampler:::" );
+    Serial.begin(9600);
+    Serial.println(":::Lunchbox Sampler:::");
 #endif
-	LunchboxSampler& sampler = LunchboxSampler::getInstance();
-	sampler.run();
+
+    auto mf = lbs::MemFlash();
+    auto ms = lbs::MemSD();
+
+    auto list = mf.getAllFromFlash();
+
+    mf.transferSingleToFlash("packs/Samplepack01/01.wav");
+
+    list = mf.getAllFromFlash();
+
+
 }
