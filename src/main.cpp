@@ -6,30 +6,26 @@
 
 #include <MemFlash.hpp>
 #include <MemSD.hpp>
-#include "memory.hpp"
-#include "MemSample.hpp"
 
 using namespace lbs;
 
 void setup()
 {
-	
-	SPI.setSCK( C_SDCARD_SCK_PIN );
-	SPI.setMOSI( C_SDCARD_MOSI_PIN );
-	
-	Serial.begin( 9600 );
-	Serial.println( "Starting Memory Class" );
-	
-	MemFlash& ms = MemFlash::getInstance();
-	MemSample& msamp = MemSample::getInstance();
-	
-	Serial.println( "" );
-	Serial.println( "Printing" );
-	
-	msamp.loadSamplePack("SamplePack02");
-	msamp.playSample(60);
-	
-	//MemFlash *msamp = MemFlash::getInstance();
+
+    SPI.setSCK(SDCARD_SCK_PIN);
+    SPI.setMOSI(SDCARD_MOSI_PIN);
+
+    Serial.begin(9600);
+    Serial.println("Starting Memory Class");
+
+    MemFlash &ms = MemFlash::getInstance();
+
+
+    Serial.println("");
+    Serial.println("Printing");
+    ms.loadSamplePack("SamplePack02");
+
+    //MemFlash *msamp = MemFlash::getInstance();
 
 /*
     msamp->loadSamplePack("SamplePack01");
@@ -45,4 +41,13 @@ void setup()
 void loop()
 {
 
+}
+int main()
+{
+#ifdef VERBOSE
+	Serial.begin( 9600 );
+	Serial.println( ":::Lunchbox Sampler:::" );
+#endif
+	LunchboxSampler& sampler = LunchboxSampler::getInstance();
+	sampler.run();
 }
