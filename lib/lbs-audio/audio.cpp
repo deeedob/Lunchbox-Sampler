@@ -1,8 +1,41 @@
 #include "audio.hpp"
+#include <define_t40.hpp>
+void enableSD()
+{
+	SPI.setMOSI(C_SDCARD_MOSI_PIN);
+	SPI.setSCK(C_SDCARD_SCK_PIN);
+	if( !( SD.begin( C_SDCARD_CS_PIN ))) {
+		while( 1 ) {
+			Serial.println( "Unable to access the SD card" );
+			delay( 500 );
+		}
+	}
+}
 
 Audio::Audio()
 {
+	m_audioControlSgtl5000.enable();
 	m_audioControlSgtl5000.volume(1.0f);
+	m_mixer0Left.gain(0, 0.5f);
+	m_mixer0Left.gain( 1, 0.5f );
+	m_mixer0Left.gain( 2, 0.5f );
+	m_mixer0Left.gain( 3, 0.5f );
+	m_mixer0Right.gain( 0, 0.5f );
+	m_mixer0Right.gain( 1, 0.5f );
+	m_mixer0Right.gain( 2, 0.5f );
+	m_mixer0Right.gain( 3, 0.5f );
+	
+	m_filterLadderLeft.frequency(1000);
+	m_filterLadderLeft.resonance(0.5f);
+	m_filterLadderRight.frequency( 1000 );
+	m_filterLadderRight.resonance( 0.5f );
+	
+	/* TODO: watch this closely grow or shrink and update appropriate! */
+	AudioMemory(12);
+	initializeBase();
+	
+	enableSD();
+	m_rawFlash1.play("packs/Samplepack01/01.wav");
 }
 
 void Audio::initializeBase()

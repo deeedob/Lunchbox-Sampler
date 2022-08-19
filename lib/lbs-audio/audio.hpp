@@ -13,8 +13,9 @@ public:
 	Audio();
 	void initializeBase();
 private:
+	// AudioPlayQueue m_queue; this queue maybe better ?
 	AudioControlSGTL5000 m_audioControlSgtl5000;
-	AudioPlaySerialflashRaw m_rawFlash1;
+	AudioPlaySdWav m_rawFlash1;
 	AudioPlaySerialflashRaw m_rawFlash2;
 	AudioPlaySerialflashRaw m_rawFlash3;
 	AudioPlaySerialflashRaw m_rawFlash4;
