@@ -16,4 +16,7 @@ public:
 	void exit() override;
 	~ModuleAudio() override;
 private:
+	Window m_topNav;
+	Window m_midiVisualisation;
+	Window m_information;
 };
