@@ -15,6 +15,8 @@ int main() {
 
     auto list = mf.getAllFromFlash();
 
+    mf.eraseFlash();
+
     Serial.println("Files on Flash:");
     for (const auto &i: list) {
         Serial.println(i.c_str());
