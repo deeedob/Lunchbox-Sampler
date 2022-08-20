@@ -2,12 +2,16 @@
 
 namespace lbs
 {
+	inline std::string toLower( std::string str ) {
+		std::transform( str.begin(), str.end(), str.begin(), ::tolower );
+		return str;
+	}
 
 	inline std::string getBasename( const std::string& filepath ) {
 		return filepath.substr( filepath.find_last_of( "/\\" ) + 1 );
 	}
 
-	std::vector< std::string > MainMemory::getAllFromFlash() {
+	std::vector< std::string > MainMemory::getFilelistFromFlash() {
 		unsigned int count = 0;
 		char filename[ 64 ];
 		uint32_t filesize;
@@ -32,7 +36,9 @@ namespace lbs
 			count++;
 		}
 
+#ifdef VERBOSE
 		if( count == 0 ) Serial.println( "Flash is empty" );
+#endif
 
 		return filelist;
 	}
@@ -63,9 +69,15 @@ namespace lbs
 
 		SerialFlashFile ff = SerialFlash.open( basename.c_str() );
 
-		char* buf = new char[ ff.size() ];
-		f.read( buf, ff.size() );
-		ff.write( buf, ff.size() );
+		//char* buf = new char[ ff.size() ];
+		//f.read( buf, ff.size() );
+		//ff.write( buf, ff.size() );
+
+		char byte;
+		for( int i = 0; i < ff.size(); i++ ) {
+			f.read( &byte, 1 );
+			ff.write( &byte, 1 );
+		}
 	}
 
 	MainMemory::MainMemory() {
@@ -91,6 +103,46 @@ namespace lbs
 #ifdef VERBOSE
 		Serial.println( "ready" );
 #endif
+	}
+
+	void MainMemory::loadSamplepack( const std::string& pack_name ) {
+		std::string fullpath;
+		auto list = getSampleNamesFromPack( pack_name );
+		for( auto& i : list ) {
+			// Clang Tidy because of unnecessary string concatenation
+			fullpath = C_PACK_DIR + pack_name;
+			fullpath += "/" + i;
+			transferSingleToFlash( fullpath );
+		}
+	}
+
+	std::vector< std::string > MainMemory::getSampleNamesFromPack( const std::string& pack_name ) {
+		std::string path = C_PACK_DIR + pack_name;
+#ifdef VERBOSE
+		Serial.print( "Opening path: " );
+		Serial.println( path.c_str() );
+#endif
+		File sample_dir = SD.open( path.c_str() );
+		std::vector< std::string > filelist;
+
+		File entry;
+		size_t delimiter_pos;
+		while( ( entry = sample_dir.openNextFile() ) ) {
+			std::string name = std::string( entry.name() );
+			delimiter_pos = name.find( '.' );
+			if( !entry.isDirectory() && lbs::toLower( name.substr( delimiter_pos, name.length() - 1 ) ) == ".wav" ) {
+#ifdef VERBOSE
+				Serial.print( "Wav file found: " );
+				Serial.println( name.c_str() );
+#endif
+				filelist.emplace_back( name );
+			}
+		}
+
+		entry.close();
+		sample_dir.close();
+
+		return filelist;
 	}
 
 }// namespace lbs
