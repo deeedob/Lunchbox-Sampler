@@ -3,16 +3,19 @@
 LunchboxSampler::LunchboxSampler()
 	: m_system( std::make_shared<EventSystem>())
 {
+	setup();
 	m_digitalInterrupts = std::make_unique<DigitalInterrupts>( m_system );
 	m_analogInterrupts = std::make_unique<AnalogInterrupts>( m_system );
-	m_states = std::make_unique<BaseStates>();
 	
-	setup();
 	setupDigitalEvents();
 	setupAnalogEvents();
 	setupFSREvents();
 	m_analogInterrupts->disableAll();
 	//m_digitalInterrupts->disableAll();
+	
+	m_states = std::make_unique<BaseStates>();
+	m_audio = std::make_unique< Audio >();
+
 }
 
 LunchboxSampler::~LunchboxSampler() = default;

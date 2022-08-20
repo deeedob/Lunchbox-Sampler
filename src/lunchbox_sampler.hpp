@@ -5,6 +5,7 @@
 #include <interrupt_system/digital_interrupts.hpp>
 #include <interrupt_system/analog_interrupts.hpp>
 #include <base_states.hpp>
+#include <audio.hpp>
 
 using namespace lbs;
 
@@ -30,4 +31,5 @@ private:
 	std::unique_ptr<DigitalInterrupts> m_digitalInterrupts;
 	std::unique_ptr<AnalogInterrupts> m_analogInterrupts;
 	std::unique_ptr<BaseStates> m_states;
+	std::unique_ptr< Audio > m_audio;
 };
