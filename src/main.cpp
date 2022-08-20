@@ -3,7 +3,8 @@
 /* Arduino ... why u do this shit?! */
 #undef main
 
-int main() {
+int main()
+{
 #ifdef VERBOSE
 	Serial.begin( 9600 );
 	Serial.println( ":::Lunchbox Sampler:::" );
@@ -15,14 +16,15 @@ int main() {
 	Serial.println( "Files from Samplepack01:" );
 	for( auto& i : samplelist ) { Serial.println( i.c_str() ); }
 
-	Serial.println( "Files on Flash:" );
+	mf.eraseFlash();
 	auto flashlist = mf.getFilelistFromFlash();
+	Serial.println( "Files on Flash:" );
 	for( auto& i : flashlist ) { Serial.println( i.c_str() ); }
 
 	Serial.println( "Load Samplepack to Flash" );
 	mf.loadSamplepack( "SamplePack01" );
 
-	Serial.println( "Files on Flash:" );
 	flashlist = mf.getFilelistFromFlash();
+	Serial.println( "Files on Flash:" );
 	for( auto& i : flashlist ) { Serial.println( i.c_str() ); }
 }
