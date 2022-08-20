@@ -79,6 +79,9 @@ namespace lbs
 			f.read( &byte, 1 );
 			ff.write( &byte, 1 );
 		}
+
+		f.close();
+		ff.close();
 	}
 
 	MainMemory::MainMemory() {
