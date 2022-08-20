@@ -3,6 +3,7 @@
 #include "define_t40.hpp"
 #include <SD.h>
 #include <SerialFlash.h>
+#include <algorithm>
 #include <string>
 #include <vector>
 
@@ -14,12 +15,14 @@ namespace lbs
 
 	public:
 		MainMemory();
-		static std::vector< std::string > getAllFromFlash();
+		static std::vector< std::string > getFilelistFromFlash();
 
 		//int getFreeSpaceinMB();
 		static void eraseFlash();
 
 		static void transferSingleToFlash( const std::string& filepath );
+		static void loadSamplepack( const std::string& pack_name );
+		static std::vector< std::string > getSampleNamesFromPack( const std::string& pack_name );
 		//static void transferFolderToFlash( const std::string& filepath );
 		//std::vector< String > getAllSamplepacks();
 		//std::vector<String> getAllFiles();
