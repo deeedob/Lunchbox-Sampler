@@ -20,6 +20,7 @@ int main() {
 	Serial.begin( 9600 );
 	Serial.println( ":::Lunchbox Sampler:::" );
 #endif
+	//Reserve memory for audio connections (taken from SamplePlayer example in audiolibrary)
 	AudioMemory( 10 );
 
 	auto mf = lbs::MainMemory();
