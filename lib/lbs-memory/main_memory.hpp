@@ -9,6 +9,12 @@
 
 namespace lbs
 {
+	enum AUDIOTYPE
+	{
+		INVALID = 0,
+		WAV = 1,
+		RAW = 2
+	};
 
 	class MainMemory
 	{
@@ -23,8 +29,8 @@ namespace lbs
 		//bool flashEmpty()
 		
 		static void eraseFlash();
-		static std::vector<String> getFilelistFromFlash();
-		static void transferSingleToFlash( const String& filepath );
+		static std::vector< String > getFilelistFromFlash();
+		static void transferSampleToFlash( const String& filepath );
 		static void loadSamplepack( const String& pack_name );
 		static std::vector<String> getSampleNamesFromPack( const String& pack_name );
 		static void printAllFilesFromSD();
