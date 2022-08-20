@@ -45,7 +45,7 @@ namespace lbs
 
 	void MainMemory::transferSingleToFlash( const std::string& filepath ) {
 
-		Serial.print( "Transfer to Flash function begin upload of" );
+		Serial.print( "Transfer to Flash function begin upload of " );
 		Serial.println( filepath.c_str() );
 
 		File f = SD.open( filepath.c_str() );
