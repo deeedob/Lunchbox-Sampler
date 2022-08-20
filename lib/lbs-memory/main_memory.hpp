@@ -9,6 +9,12 @@
 
 namespace lbs
 {
+	enum AUDIOTYPE
+	{
+		INVALID = 0,
+		WAV = 1,
+		RAW = 2
+	};
 
 	class MainMemory
 	{

@@ -45,7 +45,7 @@ int main() {
 	g_audioShield.enable();
 	g_audioShield.volume( 0.5 );
 	Serial.println( "Playing sample" );
-	g_playFlashRaw1.play( "1.wav" );
+	g_playFlashRaw1.play( "1" );
 	while( g_playFlashRaw1.isPlaying() ) {}
 	Serial.println( "Playing sample finished" );
 }

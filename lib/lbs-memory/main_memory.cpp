@@ -4,14 +4,24 @@ using namespace lbs;
 
 const String MainMemory::m_packRootDir = "/samplepacks/";
 
-MainMemory::MainMemory()
-{
+AUDIOTYPE getAudioType( const String& sample_name ) {
+	String ext = sample_name.substring( sample_name.lastIndexOf( "." ) ).toLowerCase();
+	if( ext.compareTo( ".wav" ) == 0 ) {
+		return AUDIOTYPE::WAV;
+	} else if( ext.compareTo( ".raw" ) == 0 ) {
+		return AUDIOTYPE::RAW;
+	}
+
+	return AUDIOTYPE::INVALID;
+}
+
+MainMemory::MainMemory() {
 	SPI.setMOSI( C_SDCARD_MOSI_PIN );
 	SPI.setSCK( C_SDCARD_SCK_PIN );
-	
-	if( !SD.begin( C_SDCARD_CS_PIN )) { Serial.println( "SD Card: initialization failed!" ); }
-	
-	if( !SerialFlash.begin( C_FLASH_PIN )) {
+
+	if( !SD.begin( C_SDCARD_CS_PIN ) ) { Serial.println( "SD Card: initialization failed!" ); }
+
+	if( !SerialFlash.begin( C_FLASH_PIN ) ) {
 #ifdef VERBOSE
 		Serial.println( "Error initializing Flash Chip!" );
 #endif
@@ -25,9 +35,9 @@ std::vector< String > MainMemory::getFilelistFromFlash() {
 	std::vector< String > filelist;
 
 	/* announce reading filelist (prob setting file iterator to 0) */
-	SerialFlash.opendir();
+	SerialFlashChip::opendir();
 
-	while( SerialFlash.readdir( filename, sizeof( filename ), filesize ) ) {
+	while( SerialFlashChip::readdir( filename, sizeof( filename ), filesize ) ) {
 		filelist.emplace_back( filename );
 
 #ifdef VERBOSE
@@ -52,7 +62,7 @@ std::vector< String > MainMemory::getFilelistFromFlash() {
 
 void MainMemory::transferSingleToFlash( const String& filepath ) {
 
-	Serial.print( "Transfer to Flash function begin upload of" );
+	Serial.print( "Transfer to Flash function begin upload of " );
 	Serial.println( filepath.c_str() );
 
 	File f = SD.open( filepath.c_str() );
@@ -64,25 +74,44 @@ void MainMemory::transferSingleToFlash( const String& filepath ) {
 		Serial.println( " from SD" );
 #endif
 	}
-	auto last_of = [](char s, const String& str) {
-		for( int i = str.length() - 1; i >= 0 ; i-- ) {
-			if( str[i] == s )
-				return i;
-		}
-		return -1;
-	};
-	auto pos = last_of('/', filepath);
-	String basename;
-	if( pos < 0 )
-		basename = filepath;
-	else
-		basename = filepath.substring(pos);
+	String basename = filepath.substring( filepath.lastIndexOf( '/' ) + 1 );
 
-	if( !SerialFlashChip::createErasable( basename.c_str(), f.size() ) ) {
+	if( getAudioType( basename ) == AUDIOTYPE::WAV ) {
+		uint skip_bytes = 0;
+		char byte[ 4 ];
+		while( f.available() ) {
+			f.read( &byte, 1 );
+			skip_bytes++;
+			if( byte[ 0 ] == 'd' && f.available() > 3 && f.peek() == 'a' ) {
+				f.read( &byte, 3 );
+				skip_bytes += 3;
+				byte[ 3 ] = '\0';
+				if( strcmp( byte, "ata" ) == 0 ) {
 #ifdef VERBOSE
-		Serial.print( "transferToFlash: error creating file" );
+					Serial.print( "Skipped " );
+					Serial.print( skip_bytes );
+					Serial.print( " byte header on " );
+					Serial.println( basename );
+#endif
+					break;
+				}
+			}
+		}
+#ifdef VERBOSE
+		if( f.available() < 1 ) {
+			Serial.println( "WARNING: WAV file will be loaded with header!" );
+			f.seek( 0 );
+		}
+#endif
+	}
+
+	basename = basename.substring( 0, basename.lastIndexOf( '.' ) );
+
+	if( !SerialFlashChip::createErasable( basename.c_str(), f.available() ) ) {
+#ifdef VERBOSE
+		Serial.print( "transferToFlash: error creating file \"" );
 		Serial.print( basename.c_str() );
-		Serial.println( " on Flash" );
+		Serial.println( "\" on Flash" );
 #endif
 	}
 
@@ -101,7 +130,6 @@ void MainMemory::transferSingleToFlash( const String& filepath ) {
 	f.close();
 	ff.close();
 }
-
 
 void MainMemory::eraseFlash() {
 #ifdef VERBOSE
@@ -127,15 +155,30 @@ void MainMemory::loadSamplepack( const String& pack_name ) {
 }
 
 std::vector<String> MainMemory::getSampleNamesFromPack( const String& pack_name ) {
-	std::vector<String> filelist;
+	std::vector< String > filelist;
 	String path = m_packRootDir + pack_name;
+#ifdef VERBOSE
+	Serial.print( "Listing Samples from " );
+	Serial.println( path );
+#endif
 
-	File sample_dir = SD.open( path.c_str());
+	File sample_dir = SD.open( path.c_str() );
 	File entry;
-	while( ( entry = sample_dir.openNextFile()  ) ) {
+	while( ( entry = sample_dir.openNextFile() ) ) {
 		String name = entry.name();
-		if( !entry.isDirectory() && !name.endsWith(".csv")) {
+		if( !entry.isDirectory() && getAudioType( name ) != AUDIOTYPE::INVALID ) {
+#ifdef VERBOSE
+			Serial.print( "Audio file " );
+			Serial.print( entry.name() );
+			Serial.println( " found" );
+#endif
 			filelist.push_back( name );
+		} else {
+#ifdef VERBOSE
+			Serial.print( "Skipping " );
+			Serial.print( entry.name() );
+			Serial.println( ", no audio file" );
+#endif
 		}
 	}
 
@@ -172,23 +215,23 @@ void printTime( const DateTimeFields tm )
 	Serial.print( tm.year + 1900 );
 }
 
-void printDirectory(File dir, int numSpaces) {
-	while ( true ) {
+void printDirectory( File dir, int num_spaces ) {
+	while( true ) {
 		File entry = dir.openNextFile();
 		if( !entry ) {
 			//Serial.println("** no more files **");
 			break;
 		}
-		printSpaces( numSpaces );
-		Serial.print( entry.name());
-		if( entry.isDirectory()) {
+		printSpaces( num_spaces );
+		Serial.print( entry.name() );
+		if( entry.isDirectory() ) {
 			Serial.println( "/" );
-			printDirectory( entry, numSpaces + 2 );
+			printDirectory( entry, num_spaces + 2 );
 		} else {
 			// files have sizes, directories do not
 			unsigned int n = log10( entry.size());
 			if( n > 10 ) n = 10;
-			printSpaces( 50 - numSpaces - strlen( entry.name()) - n );
+			printSpaces( 50 - num_spaces - strlen( entry.name() ) - n );
 			Serial.print( "  " );
 			Serial.print( entry.size(), DEC );
 			DateTimeFields datetime;
