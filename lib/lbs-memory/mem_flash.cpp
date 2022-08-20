@@ -40,7 +40,14 @@ namespace lbs {
 
     void MemFlash::transferSingleToFlash(const std::string &filepath) {
 
-        Serial.println("Transfer to Flash function begin");
+        SPI.setMOSI(C_SDCARD_MOSI_PIN);
+        SPI.setSCK(C_SDCARD_SCK_PIN);
+
+        if (!SD.begin(C_SDCARD_CS_PIN)) {
+#ifdef VERBOSE
+            Serial.println("SD Card: initialization failed!");
+#endif
+        }
 
         File f = SD.open(filepath.c_str());
 
@@ -54,7 +61,7 @@ namespace lbs {
 
         std::string basename = lbs::getBasename(const_cast<std::string &>(filepath));
 
-        if (!SerialFlash.createErasable(basename.c_str(), f.size())) {
+        if (!SerialFlash.create(basename.c_str(), f.size())) {
 #ifdef VERBOSE
             Serial.print("transferToFlash: error creating file");
             Serial.print(basename.c_str());
@@ -64,32 +71,12 @@ namespace lbs {
 
         SerialFlashFile ff = SerialFlash.open(basename.c_str());
 
-        char *buf = new char[ff.size()];
-        f.read(buf, ff.size());
-        ff.write(buf, ff.size());
+        char byte;
 
-    }
-
-    MemFlash::MemFlash() {
-
-        if (!SerialFlash.begin(C_FLASH_PIN)) {
-#ifdef VERBOSE
-            Serial.println("Error initializing Flash Chip!");
-#endif
+        for (uint i = 0; i < f.size(); i++) {
+            f.readBytes(&byte, 1);
+            ff.write(&byte, 1);
         }
-
-    }
-
-    void MemFlash::eraseFlash() {
-#ifdef VERBOSE
-        Serial.println("purgeFlash: deleting all Files. Please wait until 'ready' (ca.40s)");
-#endif
-        SerialFlash.eraseAll();
-        while (!SerialFlash.ready()) {}
-
-#ifdef VERBOSE
-        Serial.println("ready");
-#endif
     }
 
     MemFlash::MemFlash() {
