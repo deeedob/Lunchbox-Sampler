@@ -2,7 +2,7 @@
 
 
 LunchboxSampler::LunchboxSampler()
-	: m_system( std::make_shared<EventSystem>())
+	: m_system( std::make_shared<EventSystem>()), m_memory()
 {
 	setup();
 	m_digitalInterrupts = std::make_unique<DigitalInterrupts>( m_system );
@@ -13,10 +13,13 @@ LunchboxSampler::LunchboxSampler()
 	setupFSREvents();
 	m_analogInterrupts->disableAll();
 	//m_digitalInterrupts->disableAll();
-	
 	m_states = std::make_unique<BaseStates>();
 	m_audio = std::make_unique< Audio >();
-	
+	auto flash_files = MainMemory::getFilelistFromFlash();
+	Serial.println("File on Flash:");
+	for(auto& item : flash_files) {
+		Serial.println(item.c_str());
+	}
 }
 
 LunchboxSampler::~LunchboxSampler() = default;

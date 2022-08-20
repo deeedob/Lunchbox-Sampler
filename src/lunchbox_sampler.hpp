@@ -6,6 +6,7 @@
 #include <base_states.hpp>
 #include <audio.hpp>
 #include <midi_listener.hpp>
+#include <main_memory.hpp>
 
 using namespace lbs;
 
@@ -32,4 +33,5 @@ private:
 	std::unique_ptr<AnalogInterrupts> m_analogInterrupts;
 	std::unique_ptr<BaseStates> m_states;
 	std::unique_ptr< Audio > m_audio;
+	MainMemory m_memory;
 };

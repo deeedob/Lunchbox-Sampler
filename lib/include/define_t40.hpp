@@ -48,4 +48,3 @@
 #define C_FLASHSIZE 16
 
 #define C_SETTINGS_FILE "/mapping.csv"
-#define C_PACK_DIR "/packs/"
