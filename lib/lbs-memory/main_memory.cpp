@@ -60,7 +60,7 @@ std::vector< String > MainMemory::getFilelistFromFlash() {
 	return filelist;
 }
 
-void MainMemory::transferSingleToFlash( const String& filepath ) {
+void MainMemory::transferSampleToFlash( const String& filepath ) {
 
 	Serial.print( "Transfer to Flash function begin upload of " );
 	Serial.println( filepath.c_str() );
