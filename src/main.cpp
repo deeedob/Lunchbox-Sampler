@@ -1,5 +1,4 @@
-#include <mem_sd.hpp>
-#include <mem_flash.hpp>
+#include "main_memory.hpp"
 
 /* Arduino ... why u do this shit?! */
 #undef main
@@ -11,12 +10,11 @@ int main()
     Serial.println(":::Lunchbox Sampler:::");
 #endif
 
-    auto mf = lbs::MemFlash();
-    auto ms = lbs::MemSD();
+	auto mf = lbs::MainMemory();
 
-    auto list = mf.getAllFromFlash();
+	auto list = mf.getAllFromFlash();
 
-    mf.eraseFlash();
+	mf.eraseFlash();
 
     Serial.println("Files on Flash:");
     for (const auto &i: list) {
