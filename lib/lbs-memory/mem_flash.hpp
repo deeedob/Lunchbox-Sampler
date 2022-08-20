@@ -13,10 +13,11 @@ namespace lbs {
     public:
         MemFlash();
 
-        std::vector<std::string> getAllFromFlash();
+        static std::vector<std::string> getAllFromFlash();
 
         //int getFreeSpaceinMB();
-        //void eraseAll();
-        void transferSingleToFlash(const std::string &filepath);
+        static void eraseFlash();
+
+        static void transferSingleToFlash(const std::string &filepath);
     };
 }
