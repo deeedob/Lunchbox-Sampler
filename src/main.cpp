@@ -9,5 +9,6 @@ int main()
 	Serial.println( ":::Lunchbox Sampler:::" );
 #endif
 	auto& sampler = LunchboxSampler::getInstance();
+	
 	sampler.run();
 }

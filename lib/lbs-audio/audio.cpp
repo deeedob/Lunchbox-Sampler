@@ -15,17 +15,12 @@ void enableSD()
 
 Audio::Audio()
 {
-	Serial.println("init");
 	m_audioControlSgtl5000.enable();
 	m_audioControlSgtl5000.volume(0.7f);
-	m_mixer0Left.gain(0, 0.2f);
-	m_mixer0Right.gain( 0, 0.2f );
-	m_mixer0Left.gain( 1, 0.5f );
-	m_mixer0Right.gain( 1, 0.5f );
-	m_mixer0Left.gain( 2, 0.5f );
-	m_mixer0Right.gain( 2, 0.5f );
-	m_mixer0Left.gain( 3, 0.5f );
-	m_mixer0Right.gain( 3, 0.5f );
+	m_mixer01.gain(0, 0.2f);
+	m_mixer01.gain( 1, 0.2f );
+	m_mixer01.gain( 2, 0.5f );
+	m_mixer01.gain( 3, 0.5f );
 	
 	m_filterLadderLeft.frequency(10000);
 	m_filterLadderLeft.resonance(0.5f);
@@ -37,30 +32,20 @@ Audio::Audio()
 	initializeConnections();
 	
 	enableSD();
-	m_rawFlash1.play("02.WAV");
-	Serial.println( "done" );
+	m_rawFlash1.play("/18.wav");
+	//m_rawFlash0.play("/16.wav");
+	//m_rawFlash3.play("/10.wav");
+	//m_rawFlash2.play("/13.wav");
+	//m_rawFlash3.play("/18.wav");
 }
 
 void Audio::initializeConnections()
 {
-	Serial.println( "base" );
-	/* 4 FlashFiles to Mixer*/
-	p_rawToMixer1L = std::make_unique< AudioConnection >( m_rawFlash1, 0, m_mixer0Left, 0 );
-	p_rawToMixer1R = std::make_unique< AudioConnection >( m_rawFlash1, 1, m_mixer0Right, 0 );
+	p_f0LTm01 = std::make_unique<AudioConnection>( m_rawFlash0, 0, m_mixer01, 0 );
+	//p_f0RTm01 = std::make_unique<AudioConnection>( m_rawFlash0, 1, m_mixer01, 1 );
+	p_f1LTm01 = std::make_unique<AudioConnection>( m_rawFlash1, 0, m_mixer01, 2 );
+	//p_f1RTm01 = std::make_unique<AudioConnection>( m_rawFlash1, 1, m_mixer01, 3 );
 	
-	
-	p_rawToMixer2L = std::make_unique< AudioConnection >( m_rawFlash2, 0, m_mixer0Left, 1 );
-	p_rawToMixer2R = std::make_unique< AudioConnection >( m_rawFlash2, 1, m_mixer0Right, 1 );
-	
-	p_rawToMixer3L = std::make_unique< AudioConnection >( m_rawFlash3, 0, m_mixer0Left, 2 );
-	p_rawToMixer3R = std::make_unique< AudioConnection >( m_rawFlash3, 1, m_mixer0Right, 2 );
-	
-	p_rawToMixer4L = std::make_unique< AudioConnection >( m_rawFlash4, 0, m_mixer0Left, 3 );
-	p_rawToMixer4R = std::make_unique< AudioConnection >( m_rawFlash4, 1, m_mixer0Right, 3 );
-	/* Mixer to Ladder Filter */
-	p_mixer0L = std::make_unique< AudioConnection >( m_mixer0Left, 0, m_filterLadderLeft, 0 );
-	p_mixer0R = std::make_unique< AudioConnection >( m_mixer0Right, 0, m_filterLadderRight, 0 );
-	/* Ladder to output */
-	p_ladderL = std::make_unique< AudioConnection >( m_filterLadderLeft, 0, m_outputI2S, 0 );
-	p_ladderR = std::make_unique< AudioConnection >( m_filterLadderRight, 0, m_outputI2S, 1 );
+	p_m01ToutL = std::make_unique<AudioConnection>(m_mixer01, 0, m_outputI2S, 0);
+	p_m01ToutR = std::make_unique<AudioConnection>( m_mixer01, 0, m_outputI2S, 1 );
 }

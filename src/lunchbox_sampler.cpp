@@ -15,11 +15,7 @@ LunchboxSampler::LunchboxSampler()
 	//m_digitalInterrupts->disableAll();
 	m_states = std::make_unique<BaseStates>();
 	m_audio = std::make_unique< Audio >();
-	auto flash_files = MainMemory::getFilelistFromFlash();
-	Serial.println("File on Flash:");
-	for(auto& item : flash_files) {
-		Serial.println(item.c_str());
-	}
+
 }
 
 LunchboxSampler::~LunchboxSampler() = default;
