@@ -1,4 +1,5 @@
 #pragma once
+#include <TeensyThreads.h>
 
 /**
  * Runnable is an abstract Interface that gives us the opportunity

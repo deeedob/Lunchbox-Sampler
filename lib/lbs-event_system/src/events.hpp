@@ -16,6 +16,15 @@ namespace lbs
 			LAST,
 		};
 		
+		enum class MIDI
+		{
+			FSR = 0,
+			USB_HOST,
+			CONNECTOR_IN,
+			CONNECTOR_OUT,
+			LAST
+		};
+		
 		class Analog
 		{
 		public:

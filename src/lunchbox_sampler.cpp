@@ -1,5 +1,6 @@
 #include "lunchbox_sampler.hpp"
 
+
 LunchboxSampler::LunchboxSampler()
 	: m_system( std::make_shared<EventSystem>())
 {
@@ -15,7 +16,7 @@ LunchboxSampler::LunchboxSampler()
 	
 	m_states = std::make_unique<BaseStates>();
 	m_audio = std::make_unique< Audio >();
-
+	
 }
 
 LunchboxSampler::~LunchboxSampler() = default;

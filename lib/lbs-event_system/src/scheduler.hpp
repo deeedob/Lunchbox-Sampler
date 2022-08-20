@@ -1,6 +1,7 @@
 #pragma once
 #include "active_object/worker.hpp"
 #include <TeensyThreads.h>
+#include <midi_listener.hpp>
 
 namespace lbs
 {
@@ -11,13 +12,13 @@ namespace lbs
 		Scheduler( Scheduler& ) = delete;
 		void operator=( Scheduler& ) = delete;
 		void dispatch();
-		void enqueue();
 	
 	private:
 		friend class EventSystem;
 		
-		Worker< std::function< void()>> m_digitalListener;
-		Worker< std::function< void() >> m_analogListener;
-		//Worker< std::function< void( u_int16_t ) >> m_midiListener;
+		Worker< std::function< void() >> m_digitalWorker;
+		Worker< std::function< void() >> m_analogWorker;
+		Worker< std::function< void() >> m_audioWorker;
+		MidiListener m_midiListener;
 	};
 }

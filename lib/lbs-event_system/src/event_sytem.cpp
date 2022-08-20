@@ -25,7 +25,7 @@ void EventSystem::enqueueDigital( Events::DIGITAL e )
 {
 	auto f = m_digMapping.find( e )->second;
 	std::function<void()> binder = std::bind( f, e );
-	m_scheduler.m_digitalListener.send( binder );
+	m_scheduler.m_digitalWorker.send( binder );
 }
 
 void EventSystem::enqueueAnalog( Events::Analog::POTS e, AnalogData value )
@@ -33,7 +33,7 @@ void EventSystem::enqueueAnalog( Events::Analog::POTS e, AnalogData value )
 	auto f = m_analogMapping.find( e )->second;
 	//TODO: auto?
 	std::function<void()> binder = std::bind( f, value );
-	m_scheduler.m_analogListener.send( binder );
+	m_scheduler.m_analogWorker.send( binder );
 }
 
 void EventSystem::enqueueAnalog( Events::Analog::FSR e, AnalogData value )
@@ -41,7 +41,7 @@ void EventSystem::enqueueAnalog( Events::Analog::FSR e, AnalogData value )
 	auto f = m_fsrMapping.find( e )->second;
 	//TODO: auto?
 	std::function<void()> binder = std::bind( f, value );
-	m_scheduler.m_analogListener.send( binder );
+	m_scheduler.m_analogWorker.send( binder );
 }
 
 void EventSystem::attachDigital( Events::DIGITAL e, std::function<void( Events::DIGITAL )> f )

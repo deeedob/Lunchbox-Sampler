@@ -1,11 +1,11 @@
 #pragma once
-#include <Arduino.h>
 #include <define_t40.hpp>
 #include <event_sytem.hpp>
 #include <interrupt_system/digital_interrupts.hpp>
 #include <interrupt_system/analog_interrupts.hpp>
 #include <base_states.hpp>
 #include <audio.hpp>
+#include <midi_listener.hpp>
 
 using namespace lbs;
 

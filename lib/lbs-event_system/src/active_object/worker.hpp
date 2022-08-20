@@ -1,7 +1,6 @@
 #pragma once
 #include <atomic>
 #include <memory>
-#include <TeensyThreads.h>
 
 #include "dispatch_queue.hpp"
 #include "runnable.hpp"
@@ -17,7 +16,6 @@ namespace lbs
 			: m_done( false ), m_dispatchQueue( waitTime )
 		{
 			m_runnable = std::make_unique<std::thread>( &Runnable::runThread, this );
-			m_runnable->detach();
 		}
 		
 		~Worker() override
@@ -26,7 +24,9 @@ namespace lbs
 			m_runnable->join();
 		};
 		Worker( const Worker& ) = delete;
-		void operator=( Worker& ) = delete;
+		Worker& operator=( Worker& ) = delete;
+		Worker(Worker&&) = delete;
+		Worker& operator=(Worker&& ) = delete;
 		
 		void runTarget( void* arg ) override
 		{
