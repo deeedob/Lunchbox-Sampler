@@ -5,29 +5,24 @@
 
 int main() {
 #ifdef VERBOSE
-    Serial.begin(9600);
-    Serial.println(":::Lunchbox Sampler:::");
+	Serial.begin( 9600 );
+	Serial.println( ":::Lunchbox Sampler:::" );
 #endif
 
 	auto mf = lbs::MainMemory();
 
-	auto list = mf.getAllFromFlash();
+	auto samplelist = mf.getSampleNamesFromPack( "SamplePack01" );
+	Serial.println( "Files from Samplepack01:" );
+	for( auto& i : samplelist ) { Serial.println( i.c_str() ); }
 
-	mf.eraseFlash();
+	Serial.println( "Files on Flash:" );
+	auto flashlist = mf.getFilelistFromFlash();
+	for( auto& i : flashlist ) { Serial.println( i.c_str() ); }
 
-    Serial.println("Files on Flash:");
-    for (const auto &i: list) {
-        Serial.println(i.c_str());
-    }
+	Serial.println( "Load Samplepack to Flash" );
+	mf.loadSamplepack( "SamplePack01" );
 
-    Serial.println("Transferring file");
-
-    mf.transferSingleToFlash("packs/Samplepack01/01.wav");
-
-    list = mf.getAllFromFlash();
-    Serial.println("Files on Flash:");
-    for (const auto &i: list) {
-        Serial.println(i.c_str());
-    }
-
+	Serial.println( "Files on Flash:" );
+	flashlist = mf.getFilelistFromFlash();
+	for( auto& i : flashlist ) { Serial.println( i.c_str() ); }
 }
