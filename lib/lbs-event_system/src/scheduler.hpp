@@ -18,7 +18,5 @@ namespace lbs
 		
 		Worker< std::function< void() >> m_digitalWorker;
 		Worker< std::function< void() >> m_analogWorker;
-		Worker< std::function< void() >> m_audioWorker;
-		MidiListener m_midiListener;
 	};
 }

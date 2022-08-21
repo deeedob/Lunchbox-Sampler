@@ -6,16 +6,26 @@ const String MainMemory::m_packRootDir = "/samplepacks/";
 
 MainMemory::MainMemory()
 {
+	init();
+}
+
+void MainMemory::init()
+{
 	SPI.setMOSI( C_SDCARD_MOSI_PIN );
 	SPI.setSCK( C_SDCARD_SCK_PIN );
 	
-	if( !SD.begin( C_SDCARD_CS_PIN )) { Serial.println( "SD Card: initialization failed!" ); }
-	
-	if( !SerialFlash.begin( C_FLASH_PIN )) {
-#ifdef VERBOSE
-		Serial.println( "Error initializing Flash Chip!" );
-#endif
+	if( !SD.begin( C_SDCARD_CS_PIN )) {
+		#ifdef VERBOSE
+			Serial.println( "SD Card: initialization failed!" );
+		#endif
 	}
+	delay( 200 );
+	if( !SerialFlash.begin( C_FLASH_PIN )) {
+		#ifdef VERBOSE
+			Serial.println( "Error initializing Flash Chip!" );
+		#endif
+	}
+	delay(200);
 }
 
 std::vector< String > MainMemory::getFilelistFromFlash() {

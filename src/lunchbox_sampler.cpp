@@ -5,6 +5,7 @@ LunchboxSampler::LunchboxSampler()
 	: m_system( std::make_shared<EventSystem>()), m_memory()
 {
 	setup();
+	MainMemory::init();
 	m_digitalInterrupts = std::make_unique<DigitalInterrupts>( m_system );
 	m_analogInterrupts = std::make_unique<AnalogInterrupts>( m_system );
 	
@@ -14,7 +15,8 @@ LunchboxSampler::LunchboxSampler()
 	m_analogInterrupts->disableAll();
 	//m_digitalInterrupts->disableAll();
 	m_states = std::make_unique<BaseStates>();
-	m_audio = std::make_unique< Audio >();
+	m_audio = std::make_shared< Audio >();
+	m_midiListener = std::make_unique<MidiListener>(m_audio);
 
 }
 
@@ -33,13 +35,14 @@ LunchboxSampler& LunchboxSampler::getInstance()
 	rP->setDelta( 50 );
 	rF->setDelta( 20 );
 	while ( true ) {
-		rP->update();
-		rF->update();
-		delay( 40 );
-		rP->next();
-		rF->next();
-		delay( 500 );
-		Serial.print( "u" );
+		yield();
+		//rP->update();
+		//rF->update();
+		//delay( 40 );
+		//rP->next();
+		//rF->next();
+		//delay( 500 );
+		//Serial.print( "u" );
 	}
 }
 

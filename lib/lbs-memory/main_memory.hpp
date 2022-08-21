@@ -21,7 +21,7 @@ namespace lbs
 		//int getFreeSpacefromSD();
 		//bool isFitting(constr String& pack_name)
 		//bool flashEmpty()
-		
+		static void init();
 		static void eraseFlash();
 		static std::vector<String> getFilelistFromFlash();
 		static void transferSingleToFlash( const String& filepath );

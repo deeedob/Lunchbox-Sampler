@@ -1,51 +1,119 @@
 #include "audio.hpp"
 #include <define_t40.hpp>
-void enableSD()
+
+using namespace lbs;
+
+Audio* Audio::m_glue = nullptr;
+
+Audio::Audio( POLYPHONY poly )
+	: m_audioMidiRouting(128), m_rawPlayer( static_cast<uint8_t>(poly) ),
+	m_mixBank( get_amount_of_mixer(poly)), m_patchBank( get_amout_of_patches(poly))
 {
-	SPI.setMOSI(C_SDCARD_MOSI_PIN);
-	SPI.setSCK(C_SDCARD_SCK_PIN);
-	if( !( SD.begin( C_SDCARD_CS_PIN ))) {
-		while( 1 ) {
-			Serial.println( "Unable to access the SD card" );
-			delay( 500 );
+	m_glue = this;
+	
+	m_audioControlSgtl5000.enable();
+	m_audioControlSgtl5000.volume(0.2f);
+	/* TODO: watch this closely grow or shrink and update appropriate! */
+
+	AudioMemory( 40 );
+	initialize_connections( poly );
+	
+	/* setup the audio files and the midi routing*/
+	m_audioFiles = MainMemory::getFilelistFromFlash();
+	/* fill the routing with 0 ... 127 basically a 1-1 routing */
+	std::iota( std::begin( m_audioMidiRouting ), std::end( m_audioMidiRouting ), 0 );
+	sort_audio_files_ascending();
+}
+bool Audio::playNote( Note n )
+{
+	/* check if the note + routing is in bounds */
+	m_mutex.lock();
+	auto routing = m_glue->m_audioMidiRouting[n.note];
+	if( routing > m_glue->m_audioFiles.size() || routing < 0 ) {
+		m_mutex.unlock();
+		return false;
+	}
+	for(auto& item : m_glue->m_rawPlayer) {
+		if( !item.isPlaying() ) {
+			m_mutex.unlock();
+			return item.play(m_glue->m_audioFiles[routing].c_str());
 		}
 	}
-	delay(200);
+	m_mutex.unlock();
+	return false;
 }
 
-Audio::Audio()
+void Audio::initialize_connections( POLYPHONY p )
 {
-	m_audioControlSgtl5000.enable();
-	m_audioControlSgtl5000.volume(0.7f);
-	m_mixer01.gain(0, 0.2f);
-	m_mixer01.gain( 1, 0.2f );
-	m_mixer01.gain( 2, 0.5f );
-	m_mixer01.gain( 3, 0.5f );
-	
-	m_filterLadderLeft.frequency(10000);
-	m_filterLadderLeft.resonance(0.5f);
-	m_filterLadderRight.frequency( 10000 );
-	m_filterLadderRight.resonance( 0.5f );
-	
-	/* TODO: watch this closely grow or shrink and update appropriate! */
-	AudioMemory(20);
-	initializeConnections();
-	
-	enableSD();
-	m_rawFlash1.play("/18.wav");
-	//m_rawFlash0.play("/16.wav");
-	//m_rawFlash3.play("/10.wav");
-	//m_rawFlash2.play("/13.wav");
-	//m_rawFlash3.play("/18.wav");
+	//AudioConnection patchCord2( playSdWav1, 1, mixer1, 1 );
+	/* connecting all player to a mixer */
+	uint8_t mval = 0;
+	int i = 0;
+	std::unique_ptr<AudioPlaySerialflashRaw> rp;
+	std::unique_ptr<AudioMixer4> mx;
+	for( int j = 0; j < m_rawPlayer.size(); i+=4, mval++, j+=2 ) {
+		uint8_t destin = 0;
+		m_patchBank[i] = std::make_unique<AudioConnection>(m_rawPlayer[j], 0, m_mixBank[mval], destin++  );
+		m_patchBank[ i+1 ] = std::make_unique<AudioConnection>( m_rawPlayer[ j ], 1, m_mixBank[ mval ], destin++ );
+		m_patchBank[ i + 2 ] = std::make_unique<AudioConnection>( m_rawPlayer[ j + 1 ], 0, m_mixBank[ mval ], destin++ );
+		m_patchBank[ i + 3 ] = std::make_unique<AudioConnection>( m_rawPlayer[ j + 1 ], 1, m_mixBank[ mval ], destin++ );
+	}
+	/* connect final mix bank for small and medium polyphony */
+	if( p == POLYPHONY::SMALL || p == POLYPHONY::MEDIUM ) {
+		uint8_t destin = 0;
+		for( int j = 0; j < m_mixBank.size() -1 ; j++, i++) {
+			if( destin > 3 )
+				destin = 0;
+			m_patchBank[i] = std::make_unique<AudioConnection>(m_mixBank[j], 0, m_mixBank[m_mixBank.size()-1], destin++);
+		}
+	}
+	/*make final mono connection */
+	m_patchBank[i++] = std::make_unique<AudioConnection>(m_mixBank[m_mixBank.size()-1], 0, m_outputI2S, 0);
+	m_patchBank[ i ] = std::make_unique<AudioConnection>( m_mixBank[ m_mixBank.size() - 1 ], 0, m_outputI2S, 1 );
 }
 
-void Audio::initializeConnections()
+void Audio::sort_audio_files_ascending()
 {
-	p_f0LTm01 = std::make_unique<AudioConnection>( m_rawFlash0, 0, m_mixer01, 0 );
-	//p_f0RTm01 = std::make_unique<AudioConnection>( m_rawFlash0, 1, m_mixer01, 1 );
-	p_f1LTm01 = std::make_unique<AudioConnection>( m_rawFlash1, 0, m_mixer01, 2 );
-	//p_f1RTm01 = std::make_unique<AudioConnection>( m_rawFlash1, 1, m_mixer01, 3 );
-	
-	p_m01ToutL = std::make_unique<AudioConnection>(m_mixer01, 0, m_outputI2S, 0);
-	p_m01ToutR = std::make_unique<AudioConnection>( m_mixer01, 0, m_outputI2S, 1 );
+	struct less_than {
+		inline uint8_t first_of(char s, const String& str) {
+			for( int i = 1; i < str.length(); i++ ) {
+				if( str[i] == s )
+					return i;
+			}
+			return -1;
+		}
+		inline bool operator()(const String& a, const String& b) {
+			auto pos_a = first_of('.', a);
+			auto pos_b = first_of('.', b);
+			if( pos_a < 0 || pos_b < 0 )
+				return false;
+			
+			String first = a.substring(1, pos_a);
+			String second = b.substring(1, pos_b);
+			int a_int = first.toInt();
+			int b_int = second.toInt();
+			return a_int < b_int;
+		}
+	};
+	std::sort(m_audioFiles.begin(), m_audioFiles.end(), less_than());
+}
+
+uint8_t Audio::get_amount_of_mixer( POLYPHONY p )
+{
+	if( p == POLYPHONY::SMALL )
+		return 3;
+	else if( p == POLYPHONY::MEDIUM )
+		return 5;
+	else
+		return 11;
+}
+
+uint8_t Audio::get_amout_of_patches( Audio::POLYPHONY p )
+{
+	if( p == POLYPHONY::SMALL )
+		return 12;
+	else if( p == POLYPHONY::MEDIUM )
+		return 22;
+	else
+		return 44;
 }

@@ -32,6 +32,7 @@ private:
 	std::unique_ptr<DigitalInterrupts> m_digitalInterrupts;
 	std::unique_ptr<AnalogInterrupts> m_analogInterrupts;
 	std::unique_ptr<BaseStates> m_states;
-	std::unique_ptr< Audio > m_audio;
+	std::shared_ptr< Audio > m_audio;
+	std::unique_ptr<MidiListener> m_midiListener;
 	MainMemory m_memory;
 };
