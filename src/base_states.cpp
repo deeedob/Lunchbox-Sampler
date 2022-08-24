@@ -73,7 +73,6 @@ void BaseStates::draw_main_menu()
 		m_bottom.setTextColor( 0xff );
 		m_bottom.printlnHCentered( item.second->getModuleName().c_str());
 	}
-	
 	m_graphics->drawWindow( m_top );
 	m_graphics->drawWindow( m_bottom );
 	m_graphics->display();

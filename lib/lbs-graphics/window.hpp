@@ -2,7 +2,6 @@
 #include <Adafruit_GFX.h>
 #include <memory>
 #include "win_settings.hpp"
-
 namespace lbs
 {
 	

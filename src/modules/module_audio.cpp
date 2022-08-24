@@ -1,12 +1,13 @@
 #include "module_audio.hpp"
 
+
 using namespace lbs;
 
 struct MidiData {
-	u_int8_t type;
-	u_int8_t channel;
-	u_int8_t data1;
-	u_int8_t data2;
+	uint8_t type;
+	uint8_t channel;
+	uint8_t data1;
+	uint8_t data2;
 };
 
 ModuleAudio::ModuleAudio()
@@ -96,8 +97,9 @@ void ModuleAudio::drawMidiVisualisation(MidiData m_midi_data, Graphics* g)
 	m_information.drawWindowBorder({ 2, 2 }, 0, 0xbb, 1 );
 	m_information.setTextColor(0xff);
 	m_information.setTextSize(0.4);
-	m_information.printlnHCentered("Note: ");
-	m_information.printlnHCentered("Velocity: ");
+	//std::string s = std::to_string(m_midi_data.data1);
+	//m_information.printlnHCentered(std::to_string(m_midi_data.data1).cstr());
+	//m_information.printlnHCentered(std::to_string(m_midi_data.data2));
 	
 	temp_window.fillRect(4,80,120,44,0x44);
 	temp_window.drawRect(4,80,120,44,0xbb);

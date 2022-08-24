@@ -4,6 +4,7 @@
 
 #pragma once
 #include "abstract_module.hpp"
+#include <string>
 
 using namespace lbs;
 
@@ -11,10 +12,10 @@ class ModuleAudio : public AbstractModule
 {
 public:
 	struct MidiData{
-		u_int8_t type;
-		u_int8_t channel;
-		u_int8_t data1;
-		u_int8_t data2;
+		uint8_t type;
+		uint8_t channel;
+		uint8_t data1;
+		uint8_t data2;
 	};
 	ModuleAudio();
 	void enter( Graphics* g ) override;
