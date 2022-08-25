@@ -9,7 +9,10 @@ class ModuleLoad : public AbstractModule
 	enum class STATE
 	{
 		SAMPLE,
-		SAMPLEPACK
+		SAMPLEPACK,
+		SAMPLEPACKX,
+		SAMPLEX,
+		NOTE,
 	};
 public:
 	ModuleLoad();
@@ -22,9 +25,14 @@ private:
 	void increment_state();
 	void loadSamples(Graphics* g);
 	void loadSamplePacks(Graphics* g);
+	void chooseStartNote(Graphics* g);
 private:
-	std::vector<STATE> m_state;
+	std::vector<STATE> m_state1;
+	std::vector<STATE> m_state2;
+	std::vector<STATE> m_state3;
 	std::vector<STATE>::iterator m_current;
 	Window m_topNav;
 	Window m_bottom;
+	Window m_midiVisualisation;
+	int Key=1;
 };
