@@ -10,9 +10,9 @@ class ModuleLoad : public AbstractModule
 	{
 		SAMPLE,
 		SAMPLEPACK,
-		SAMPLEPACKX,
-		SAMPLEX,
-		NOTE,
+		CHOOSE_SAMPLEPACK,
+		CHOOSE_SAMPLE,
+		CHOOSE_NOTE,
 	};
 public:
 	ModuleLoad();
@@ -20,19 +20,18 @@ public:
 	void update( Graphics* g, Events::DIGITAL e ) override;
 	void exit() override;
 private:
-	void draw_load_menu1(Graphics* g);
+	void draw_load_module(Graphics* g);
 	void decrement_state();
 	void increment_state();
-	void loadSamples(Graphics* g);
-	void loadSamplePacks(Graphics* g);
-	void chooseStartNote(Graphics* g);
+	void draw_load_Samples(Graphics* g);
+	void draw_load_SamplePacks(Graphics* g);
+	void draw_choose_MidiNote(Graphics* g);
 private:
-	std::vector<STATE> m_state1;
-	std::vector<STATE> m_state2;
-	std::vector<STATE> m_state3;
+	std::vector<STATE> m_loadMenu;
+	std::vector<STATE> m_chooseFile;
+	std::vector<STATE> m_chooseNote;
 	std::vector<STATE>::iterator m_current;
 	Window m_topNav;
 	Window m_bottom;
-	Window m_midiVisualisation;
 	int Key=1;
 };
