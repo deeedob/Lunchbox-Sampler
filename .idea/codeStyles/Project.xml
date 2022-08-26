@@ -173,12 +173,6 @@
     <clangFormatSettings>
       <option name="ENABLED" value="true" />
     </clangFormatSettings>
-    <files>
-      <extensions>
-        <pair source="cpp" header="hpp" fileNamingConvention="SNAKE_CASE" />
-        <pair source="c" header="h" fileNamingConvention="SNAKE_CASE" />
-      </extensions>
-    </files>
     <codeStyleSettings language="CMake">
       <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
       <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />
