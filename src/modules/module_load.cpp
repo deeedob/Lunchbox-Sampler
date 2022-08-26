@@ -9,6 +9,7 @@ ModuleLoad::ModuleLoad() : AbstractModule( "Load Samples" ) {
 	m_mainStates.push_back( STATE::LOAD_MODULE_MAIN );
 	m_mainStates.push_back( STATE::LOAD_MODULE_SUB_1 );
 	m_mainStates.push_back( STATE::LOAD_MODULE_SUB_2 );
+	m_mainStates.push_back( STATE::LOAD_MODULE_SUB_2b );
 	m_mainStates.push_back( STATE::LOAD_MODULE_SUB_3 );
 	m_current_mainStates = m_mainStates.begin();
 
@@ -67,7 +68,7 @@ void ModuleLoad::update( Graphics* g, Events::DIGITAL e ) {
 		Serial.println( "LOAD SAMPLE" );
 		m_current_mainStates++;
 		m_current_subStates = m_AddOrRemove.begin();
-		m_Sample_or_Samplepack = m_chooseFile.begin();
+		m_isSample = true;
 		draw_load_module_sub1( g );
 		return;
 	}
@@ -76,7 +77,7 @@ void ModuleLoad::update( Graphics* g, Events::DIGITAL e ) {
 	    m_current_subStates == m_loadMenu.begin() + 1 ) {
 		m_current_mainStates++;
 		m_current_subStates = m_AddOrRemove.begin();
-		m_Sample_or_Samplepack = m_chooseFile.begin() + 1;
+		m_isSample = false;
 		Serial.println( "LOAD SAMPLEPACK" );
 		draw_load_module_sub1( g );
 		return;
@@ -92,78 +93,136 @@ void ModuleLoad::update( Graphics* g, Events::DIGITAL e ) {
 	}
 	//CHOSE ADD OR REMOVE SAMPLE WITH ROTARY
 	if( ( e == Events::DIGITAL::ROTARY_R || e == Events::DIGITAL::ROTARY_L ) &&
-	    m_current_mainStates == m_mainStates.begin() + 1 && m_Sample_or_Samplepack == m_chooseFile.begin() ) {
+	    m_current_mainStates == m_mainStates.begin() + 1 ) {
 		++m_current_subStates;
 		if( m_current_subStates == m_AddOrRemove.end() ) { m_current_subStates = m_AddOrRemove.begin(); }
 		draw_load_module_sub1( g );
 	}
 	if( e == Events::DIGITAL::BTN_ENTER && m_current_mainStates == m_mainStates.begin() + 1 &&
-	    m_Sample_or_Samplepack == m_chooseFile.begin() ) {
+	    m_current_subStates == m_AddOrRemove.begin() ) {
 		m_current_mainStates++;
-		Serial.println( "ADD SAMPLE/SAMPLEPACK" );
-		draw_load_module_sub2_ADD( g );
+		m_isAdd = true;
+		draw_load_module_sub2( g );
 		return;
 	}
-	//SUB 3   CHOOSE SAMPLE TO ADD/REMOVE WITH ROTARY
-	if( e == Events::DIGITAL::ROTARY_R &&m_current_mainStates == m_mainStates.begin() + 2 ) {
-		if(m_selected_sample<sizeof bsp_data_Flash/sizeof bsp_data_Flash[0]-1)
-		{
-			Serial.println(sizeof bsp_data_Flash/sizeof bsp_data_Flash[0]);
-			++m_selected_sample;
-			if(m_selected_sample==m_first_visible_sample+7)
-			{
-				m_first_visible_sample++;
-			}
-		}
-		else
-		{
-			m_first_visible_sample=0;
-			m_selected_sample=0;
-		}
-		draw_load_module_sub2_ADD( g );
+	if( e == Events::DIGITAL::BTN_ENTER && m_current_mainStates == m_mainStates.begin() + 1 &&
+	    m_current_subStates == m_AddOrRemove.begin() + 1 ) {
+		m_current_mainStates++;
+		m_isAdd = false;
+		m_first_visible_sample = 0;
+		m_selected_sample = 0;
+		draw_load_module_sub2( g );
+		return;
 	}
-	if( e == Events::DIGITAL::ROTARY_L &&m_current_mainStates == m_mainStates.begin() + 2 ) {
-		if(m_selected_sample==0)
-		{
-			m_selected_sample=sizeof bsp_data_Flash/sizeof bsp_data_Flash[0];
-			m_first_visible_sample=(sizeof bsp_data_Flash/sizeof bsp_data_Flash[0])-7;
+	//SUB 2   CHOOSE SAMPLE TO ADD/REMOVE WITH ROTARY
+	if( e == Events::DIGITAL::ROTARY_R && m_current_mainStates == m_mainStates.begin() + 2 ) {
+		if( m_selected_sample < sizeof bsp_data_Flash2 / sizeof bsp_data_Flash2[ 0 ] - 1 ) {
+			Serial.println( sizeof bsp_data_Flash2 / sizeof bsp_data_Flash2[ 0 ] );
+			++m_selected_sample;
+			if( m_selected_sample == m_first_visible_sample + 7 ) { m_first_visible_sample++; }
+		} else {
+			m_first_visible_sample = 0;
+			m_selected_sample = 0;
 		}
-		else{
-			if(m_selected_sample==m_first_visible_sample)
-			{
-				m_first_visible_sample--;
-			}
+		draw_load_module_sub2( g );
+	}
+	if( e == Events::DIGITAL::ROTARY_L && m_current_mainStates == m_mainStates.begin() + 2 ) {
+		if( m_selected_sample == 0 ) {
+			m_selected_sample = sizeof bsp_data_Flash2 / sizeof bsp_data_Flash2[ 0 ];
+			m_first_visible_sample = ( sizeof bsp_data_Flash2 / sizeof bsp_data_Flash2[ 0 ] ) - 4;
+		} else {
+			if( m_selected_sample == m_first_visible_sample ) { m_first_visible_sample--; }
 		}
 		m_selected_sample--;
-		draw_load_module_sub2_ADD( g );
+		draw_load_module_sub2( g );
 	}
 	if( e == Events::DIGITAL::BTN_RETURN && m_current_mainStates == m_mainStates.begin() + 2 ) {
 		m_current_mainStates--;
-		m_current_subStates = m_Sample_or_Samplepack;
+		if( m_isSample ) {
+			m_current_subStates = m_chooseFile.begin();
+		} else {
+			m_current_subStates = m_chooseFile.begin() + 1;
+		}
 		draw_load_module_sub1( g );
 		return;
 	}
-	if( e == Events::DIGITAL::BTN_ENTER && m_current_mainStates == m_mainStates.begin() + 2)
-	{
-		m_current_mainStates++;
-		Serial.println( "CHOOSE START CHOOSE_NOTE" );
-		draw_load_module_sub3( g );
+	if( e == Events::DIGITAL::BTN_ENTER && m_current_mainStates == m_mainStates.begin() + 2 ) {
+			if( m_isSample ) {
+				m_current_mainStates++;
+				m_selected_pack = m_selected_sample;
+				m_selected_sample = 1;
+				m_first_visible_sample = 1;
+				Serial.println( "CHOOSE SAMPLE OUT OF SAMPLEPACK" );
+				draw_load_module_sub2b( g );
+			} else {
+			    if(m_isAdd)
+			    {
+				    m_current_mainStates += 2;
+				    Serial.println( "CHOOSE START CHOOSE_NOTE" );
+				    draw_load_module_sub3( g );
+			    }
+			    else
+			    {
+				    m_selected_sample=0;
+				    m_selected_pack=0;
+				    m_first_visible_sample=0;
+				    m_current_mainStates = m_mainStates.begin();
+				    m_current_subStates = m_loadMenu.begin();
+				    draw_load_module( g );
+			    }
+			}
+		 
 		return;
 	}
 
-	//CHOSE START NOTE POSITION FOR SAMPLEPACK
-	if( e == Events::DIGITAL::BTN_ENTER && m_current_mainStates == m_mainStates.begin() + 3 &&
-	    m_Sample_or_Samplepack == m_chooseFile.begin() + 1 ) {
-		m_current_mainStates++;
-		Serial.println( "CHOOSE START CHOOSE_NOTE" );
-		draw_load_module_sub3( g );
+	//SUB 2B   CHOOSE SAMPLE TO ADD/REMOVE WITH ROTARY
+	if( e == Events::DIGITAL::ROTARY_R && m_current_mainStates == m_mainStates.begin() + 3 ) {
+		if( m_selected_sample <
+		    sizeof bsp_data_Flash2[ m_selected_pack ] / sizeof bsp_data_Flash2[ m_selected_pack ][ 0 ] - 1 ) {
+			++m_selected_sample;
+			if( sizeof bsp_data_Flash2[ m_selected_pack ] / sizeof bsp_data_Flash2[ m_selected_pack ][ 0 ] >= 7 ) {
+				if( m_selected_sample == m_first_visible_sample + 7 ) { m_first_visible_sample++; }
+			}
+		} else {
+			m_first_visible_sample = 1;
+			m_selected_sample = 1;
+		}
+		draw_load_module_sub2b( g );
+	}
+	if( e == Events::DIGITAL::ROTARY_L && m_current_mainStates == m_mainStates.begin() + 3 ) {
+		if( m_selected_sample == 1 ) {
+			m_selected_sample =
+			    sizeof bsp_data_Flash2[ m_selected_pack ] / sizeof bsp_data_Flash2[ m_selected_pack ][ 0 ];
+			m_first_visible_sample =
+			    ( sizeof bsp_data_Flash2[ m_selected_pack ] / sizeof bsp_data_Flash2[ m_selected_pack ][ 0 ] ) - 7;
+		} else {
+			if( m_selected_sample == m_first_visible_sample ) { m_first_visible_sample--; }
+		}
+		m_selected_sample--;
+		draw_load_module_sub2b( g );
+	}
+	if( e == Events::DIGITAL::BTN_RETURN && m_current_mainStates == m_mainStates.begin() + 3 ) {
+		m_current_mainStates--;
+		m_selected_sample = 0;
+		m_first_visible_sample = 0;
+		draw_load_module_sub2( g );
 		return;
 	}
-
+	if( e == Events::DIGITAL::BTN_ENTER && m_current_mainStates == m_mainStates.begin() + 3 ) {
+		if( m_isAdd) {
+			m_current_mainStates++;
+			Serial.println( "CHOOSE START CHOOSE_NOTE" );
+			draw_load_module_sub3( g );
+		} else {
+			m_current_subStates = m_loadMenu.begin();
+			m_current_mainStates = m_mainStates.begin();
+			draw_load_module( g );
+		}
+	}
 	//LOAD_MODULE_SUB_3:
 	//CHOSE NOTE POSITION FOR SAMPLE
 	//MOVE KEY WITH ROTARY
-	if( e == Events::DIGITAL::ROTARY_R && m_current_mainStates == m_mainStates.begin() + 3 ) {
+	if( e == Events::DIGITAL::ROTARY_R && m_current_mainStates == m_mainStates.begin() + 4 ) {
 		m_key--;
 		if( m_key == 0 ) {
 			m_key = 24;
@@ -172,19 +231,158 @@ void ModuleLoad::update( Graphics* g, Events::DIGITAL e ) {
 		draw_load_module_sub3( g );
 		return;
 	}
-	if( e == Events::DIGITAL::ROTARY_L && m_current_mainStates == m_mainStates.begin() + 3 ) {
+	if( e == Events::DIGITAL::ROTARY_L && m_current_mainStates == m_mainStates.begin() + 4 ) {
 		m_key++;
 		if( m_key == 24 ) { m_key = 0; }
 		draw_load_module_sub3( g );
 	}
-	if( e == Events::DIGITAL::BTN_ENTER && m_current_mainStates == m_mainStates.begin() + 3 ) {
-		m_current_mainStates--;
-		draw_load_module_sub1( g );
+	if( e == Events::DIGITAL::BTN_ENTER && m_current_mainStates == m_mainStates.begin() + 4 ) {
+		m_current_mainStates = m_mainStates.begin();
+		m_current_subStates = m_loadMenu.begin();
+		draw_load_module( g );
+		return;
+	}
+	if( e == Events::DIGITAL::BTN_RETURN && m_current_mainStates == m_mainStates.begin() + 4 ) {
+		if( !m_isSample ) {
+			m_current_mainStates -= 2;
+			m_selected_sample = 0;
+			m_first_visible_sample = 0;
+			draw_load_module_sub2( g );
+		} else {
+			m_current_mainStates--;
+			draw_load_module_sub2b( g );
+		}
 		return;
 	}
 	if( m_current_mainStates == m_mainStates.begin() ) draw_load_module( g );
 }
 void ModuleLoad::exit() { notify( *this ); }
+void ModuleLoad::draw_load_module_sub1( Graphics* g ) {
+	g->clearDisplay();
+	m_topNav.fillScreen( 0xff );
+	m_topNav.drawWindowBorder( { 2, 2 }, 0, 0x00, 1 );
+	if( m_isSample ) {
+		m_topNav.printlnCentered( "LOAD SAMPLE" );
+	} else {
+		m_topNav.printlnCentered( "LOAD SAMPLEPACK" );
+	}
+	auto split_screens2 = WindowSize::createSplitScreen( UTIL::HORIZONTAL, 0.5 );
+	Window m_Add = Window( split_screens2.first );
+	Window m_Remove = Window( split_screens2.second );
+
+	m_bottom.fillScreen( 0x44 );
+	//Mit Rotary eine der Boxen auswählen
+	if( m_current_subStates == m_AddOrRemove.begin() ) {
+		m_Add.fillScreen( 0XFF );
+		m_Add.drawWindowBorder( { 4, 4 }, 2, 0x00, 2 );
+		m_Add.setTextPadding( { 4, 4 } );
+		m_Add.setTextColor( 0x00 );
+		m_Add.printlnHCentered( "ADD TO FLASH" );
+	} else {
+		m_Add.fillScreen( 0X00 );
+		m_Add.drawWindowBorder( { 4, 4 }, 2, 0xFF, 2 );
+		m_Add.setTextPadding( { 4, 4 } );
+		m_Add.setTextColor( 0xFF );
+		m_Add.printlnHCentered( "ADD TO FLASH" );
+	}
+	if( m_current_subStates == m_AddOrRemove.begin() + 1 ) {
+		m_Remove.fillScreen( 0XFF );
+		m_Remove.drawWindowBorder( { 4, 4 }, 2, 0x00, 2 );
+		m_Remove.setTextPadding( { 8, 4 } );
+		m_Remove.setTextColor( 0x00 );
+		m_Remove.printlnHCentered( "REMOVE FROM FLASH" );
+	} else {
+		m_Remove.fillScreen( 0X00 );
+		m_Remove.drawWindowBorder( { 4, 4 }, 2, 0xFF, 2 );
+		m_Remove.setTextPadding( { 4, 4 } );
+		m_Remove.setTextColor( 0xFF );
+		m_Remove.printlnHCentered( "REMOVE FROM FLASH" );
+	}
+
+	g->drawWindow( m_topNav );
+	g->drawWindow( m_Add );
+	g->drawWindow( m_Remove );
+	g->display();
+}
+void ModuleLoad::draw_load_module_sub2( Graphics* g ) {
+	g->clearDisplay();
+
+	m_topNav.fillScreen( 0xff );
+	m_topNav.drawWindowBorder( { 2, 2 }, 0, 0x00, 1 );
+	if( m_isAdd ) {
+		m_topNav.printlnCentered( "ADD TO FLASH" );
+	} else {
+		m_topNav.printlnCentered( "REMOVE FROM FLASH" );
+	}
+	m_bottom.fillScreen( 0x44 );
+	m_bottom.drawWindowBorder( { 4, 4 }, 2, 0xbb, 2 );
+	m_bottom.setTextPadding( { 4, 4 } );
+	if( sizeof bsp_data_Flash2 / sizeof bsp_data_Flash2[ 0 ] >= 7 ) {
+		for( int i = m_first_visible_sample; i < m_first_visible_sample + 7; i++ ) {
+			if( i == m_selected_sample ) {
+				m_bottom.setTextColor( 0x00 );
+				m_bottom.printlnHoverCenter( bsp_data_Flash2[ i ][ 0 ].c_str(), 0xff );
+			} else {
+				m_bottom.setTextColor( 0xff );
+				m_bottom.printlnHCentered( bsp_data_Flash2[ i ][ 0 ].c_str() );
+			}
+		}
+	} else {
+		for( int i = 0; i < sizeof bsp_data_Flash2 / sizeof bsp_data_Flash2[ 0 ]; i++ ) {
+			if( i == m_selected_sample ) {
+				m_bottom.setTextColor( 0x00 );
+				m_bottom.printlnHoverCenter( bsp_data_Flash2[ i ][ 0 ].c_str(), 0xff );
+			} else {
+				m_bottom.setTextColor( 0xff );
+				m_bottom.printlnHCentered( bsp_data_Flash2[ i ][ 0 ].c_str() );
+			}
+		}
+	}
+
+	g->drawWindow( m_topNav );
+	g->drawWindow( m_bottom );
+	g->display();
+}
+void ModuleLoad::draw_load_module_sub2b( Graphics* g ) {
+	g->clearDisplay();
+
+	m_topNav.fillScreen( 0xff );
+	m_topNav.drawWindowBorder( { 2, 2 }, 0, 0x00, 1 );
+	if( m_isAdd ) {
+		m_topNav.printlnCentered( "ADD TO FLASH" );
+	} else {
+		m_topNav.printlnCentered( "REMOVE FROM FLASH" );
+	}
+	m_bottom.fillScreen( 0x44 );
+	m_bottom.drawWindowBorder( { 4, 4 }, 2, 0xbb, 2 );
+	m_bottom.setTextPadding( { 4, 4 } );
+
+	if( sizeof bsp_data_Flash2[ m_selected_pack ] / sizeof bsp_data_Flash2[ m_selected_pack ][ 0 ] >= 7 ) {
+		for( int i = m_first_visible_sample; i < m_first_visible_sample + 7; i++ ) {
+			if( i == m_selected_sample ) {
+				m_bottom.setTextColor( 0x00 );
+				m_bottom.printlnHoverCenter( bsp_data_Flash2[ m_selected_pack ][ i ].c_str(), 0xff );
+			} else {
+				m_bottom.setTextColor( 0xff );
+				m_bottom.printlnHCentered( bsp_data_Flash2[ m_selected_pack ][ i ].c_str() );
+			}
+		}
+	} else {
+		for( int i = 1; i < sizeof bsp_data_Flash2[ m_selected_pack ] / sizeof bsp_data_Flash2[ m_selected_pack ][ 0 ];
+		     i++ ) {
+			if( i == m_selected_sample ) {
+				m_bottom.setTextColor( 0x00 );
+				m_bottom.printlnHoverCenter( bsp_data_Flash2[ m_selected_pack ][ i ].c_str(), 0xff );
+			} else {
+				m_bottom.setTextColor( 0xff );
+				m_bottom.printlnHCentered( bsp_data_Flash2[ m_selected_pack ][ i ].c_str() );
+			}
+		}
+	}
+	g->drawWindow( m_topNav );
+	g->drawWindow( m_bottom );
+	g->display();
+}
 void ModuleLoad::draw_load_module_sub3( Graphics* g ) {
 	m_topNav.fillScreen( 0xff );
 	m_topNav.setTextColor( 0x44 );
@@ -219,74 +417,6 @@ void ModuleLoad::draw_load_module_sub3( Graphics* g ) {
 		}
 		count++;
 	}
-	g->drawWindow( m_topNav );
-	g->drawWindow( m_bottom );
-	g->display();
-}
-void ModuleLoad::draw_load_module_sub1( Graphics* g ) {
-	g->clearDisplay();
-	m_topNav.fillScreen( 0xff );
-	m_topNav.drawWindowBorder( { 2, 2 }, 0, 0x00, 1 );
-	m_topNav.printlnCentered( "LOAD SAMPLE" );
-
-	auto split_screens2 = WindowSize::createSplitScreen( UTIL::HORIZONTAL, 0.5 );
-	Window m_Add = Window( split_screens2.first );
-	Window m_Remove = Window( split_screens2.second );
-
-	m_bottom.fillScreen( 0x44 );
-	//Mit Rotary eine der Boxen auswählen
-	if( m_current_subStates == m_AddOrRemove.begin() ) {
-		m_Add.fillScreen( 0XFF );
-		m_Add.drawWindowBorder( { 4, 4 }, 2, 0x00, 2 );
-		m_Add.setTextPadding( { 4, 4 } );
-		m_Add.setTextColor( 0x00 );
-		m_Add.printlnHCentered( "ADD TO FLASH" );
-	} else {
-		m_Add.fillScreen( 0X00 );
-		m_Add.drawWindowBorder( { 4, 4 }, 2, 0xFF, 2 );
-		m_Add.setTextPadding( { 4, 4 } );
-		m_Add.setTextColor( 0xFF );
-		m_Add.printlnHCentered( "ADD TO FLASH" );
-	}
-	if( m_current_subStates == m_AddOrRemove.begin() + 1 ) {
-		m_Remove.fillScreen( 0XFF );
-		m_Remove.drawWindowBorder( { 4, 4 }, 2, 0x00, 2 );
-		m_Remove.setTextPadding( { 8, 4 } );
-		m_Remove.setTextColor( 0x00 );
-		m_Remove.printlnHCentered( "REMOVE FROM FLASH" );
-	} else {
-		m_Remove.fillScreen( 0X00 );
-		m_Remove.drawWindowBorder( { 4, 4 }, 2, 0xFF, 2 );
-		m_Remove.setTextPadding( { 4, 4 } );
-		m_Remove.setTextColor( 0xFF );
-		m_Remove.printlnHCentered( "REMOVE FROM FLASH");
-	}
-
-	g->drawWindow( m_topNav );
-	g->drawWindow( m_Add );
-	g->drawWindow( m_Remove );
-	g->display();
-}
-void ModuleLoad::draw_load_module_sub2_ADD( Graphics* g ) {
-	g->clearDisplay();
-
-	m_topNav.fillScreen( 0xff );
-	m_topNav.drawWindowBorder( { 2, 2 }, 0, 0x00, 1 );
-	m_topNav.printlnCentered( "ADD SAMPLE TO FLASH" );
-	m_bottom.fillScreen( 0x44 );
-	m_bottom.drawWindowBorder( { 4, 4 }, 2, 0xbb, 2 );
-	m_bottom.setTextPadding( { 4, 4 } );
-
-	for( int i = m_first_visible_sample; i < m_first_visible_sample + 7; i++ ) {
-		if( i == m_selected_sample ) {
-			m_bottom.setTextColor( 0x00 );
-			m_bottom.printlnHoverCenter( bsp_data_Flash[ i ].c_str(), 0xff );
-		} else {
-			m_bottom.setTextColor( 0xff );
-			m_bottom.printlnHCentered( bsp_data_Flash[ i ].c_str() );
-		}
-	}
-
 	g->drawWindow( m_topNav );
 	g->drawWindow( m_bottom );
 	g->display();
