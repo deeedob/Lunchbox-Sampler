@@ -89,7 +89,6 @@ void BaseStates::update_main_menu( Events::DIGITAL e )
 		m_inModule = true;
 		return;
 	}
-	
 	m_top.fillScreen( 0xff );
 	m_top.drawWindowBorder( { 2, 2 }, 0, 0x00, 1 );
 	m_top.printlnCentered( "MAIN MENU" );
@@ -106,7 +105,6 @@ void BaseStates::update_main_menu( Events::DIGITAL e )
 		m_bottom.setTextColor( 0xff );
 		m_bottom.printlnHCentered( item.second->getModuleName().c_str());
 	}
-	
 	m_graphics->drawWindow( m_top );
 	m_graphics->drawWindow( m_bottom );
 	m_graphics->display();
