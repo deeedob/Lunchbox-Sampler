@@ -154,7 +154,8 @@ void ModuleLoad::update( Graphics* g, Events::DIGITAL e ) {
 				m_first_visible_sample = 1;
 				Serial.println( "CHOOSE SAMPLE OUT OF SAMPLEPACK" );
 				draw_load_module_sub2b( g );
-			} else {
+			}
+		    else {
 			    if(m_isAdd)
 			    {
 				    m_current_mainStates += 2;
@@ -171,7 +172,6 @@ void ModuleLoad::update( Graphics* g, Events::DIGITAL e ) {
 				    draw_load_module( g );
 			    }
 			}
-		 
 		return;
 	}
 
@@ -188,6 +188,7 @@ void ModuleLoad::update( Graphics* g, Events::DIGITAL e ) {
 			m_selected_sample = 1;
 		}
 		draw_load_module_sub2b( g );
+		return;
 	}
 	if( e == Events::DIGITAL::ROTARY_L && m_current_mainStates == m_mainStates.begin() + 3 ) {
 		if( m_selected_sample == 1 ) {
@@ -200,6 +201,7 @@ void ModuleLoad::update( Graphics* g, Events::DIGITAL e ) {
 		}
 		m_selected_sample--;
 		draw_load_module_sub2b( g );
+		return;
 	}
 	if( e == Events::DIGITAL::BTN_RETURN && m_current_mainStates == m_mainStates.begin() + 3 ) {
 		m_current_mainStates--;
@@ -213,11 +215,13 @@ void ModuleLoad::update( Graphics* g, Events::DIGITAL e ) {
 			m_current_mainStates++;
 			Serial.println( "CHOOSE START CHOOSE_NOTE" );
 			draw_load_module_sub3( g );
-		} else {
+		}
+		else {
 			m_current_subStates = m_loadMenu.begin();
 			m_current_mainStates = m_mainStates.begin();
 			draw_load_module( g );
 		}
+		return;
 	}
 	//LOAD_MODULE_SUB_3:
 	//CHOSE NOTE POSITION FOR SAMPLE
@@ -235,8 +239,10 @@ void ModuleLoad::update( Graphics* g, Events::DIGITAL e ) {
 		m_key++;
 		if( m_key == 24 ) { m_key = 0; }
 		draw_load_module_sub3( g );
+		return;
 	}
 	if( e == Events::DIGITAL::BTN_ENTER && m_current_mainStates == m_mainStates.begin() + 4 ) {
+		Serial.println("IS ADDED");
 		m_current_mainStates = m_mainStates.begin();
 		m_current_subStates = m_loadMenu.begin();
 		draw_load_module( g );
