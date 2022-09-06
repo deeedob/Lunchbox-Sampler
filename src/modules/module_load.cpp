@@ -114,34 +114,36 @@ void ModuleLoad::update( Graphics* g, Events::DIGITAL e ) {
 		draw_load_module_sub2( g );
 		return;
 	}
-	//SUB 2   CHOOSE SAMPLE TO ADD/REMOVE WITH ROTARY
+	//SUB 2   CHOOSE SAMPLEPACK TO ADD/REMOVE WITH ROTARY
 	if( e == Events::DIGITAL::ROTARY_R && m_current_mainStates == m_mainStates.begin() + 2 ) {
-		if( m_selected_sample < sizeof bsp_data_Flash2 / sizeof bsp_data_Flash2[ 0 ] - 1 ) {
+		if( m_selected_pack < sizeof bsp_data_Flash2 / sizeof bsp_data_Flash2[ 0 ] - 1 ) {
 			Serial.println( sizeof bsp_data_Flash2 / sizeof bsp_data_Flash2[ 0 ] );
-			++m_selected_sample;
-			if( m_selected_sample == m_first_visible_sample + 7 ) { m_first_visible_sample++; }
+			++m_selected_pack;
+			if( m_selected_pack == m_first_visible_sample + 7 ) { m_first_visible_sample++; }
 		} else {
 			m_first_visible_sample = 0;
-			m_selected_sample = 0;
+			m_selected_pack = 0;
 		}
 		draw_load_module_sub2( g );
+		return;
 	}
 	if( e == Events::DIGITAL::ROTARY_L && m_current_mainStates == m_mainStates.begin() + 2 ) {
-		if( m_selected_sample == 0 ) {
-			m_selected_sample = sizeof bsp_data_Flash2 / sizeof bsp_data_Flash2[ 0 ];
+		if( m_selected_pack == 0 ) {
+			m_selected_pack = sizeof bsp_data_Flash2 / sizeof bsp_data_Flash2[ 0 ];
 			m_first_visible_sample = ( sizeof bsp_data_Flash2 / sizeof bsp_data_Flash2[ 0 ] ) - 4;
 		} else {
-			if( m_selected_sample == m_first_visible_sample ) { m_first_visible_sample--; }
+			if( m_selected_pack == m_first_visible_sample ) { m_first_visible_sample--; }
 		}
-		m_selected_sample--;
+		m_selected_pack--;
 		draw_load_module_sub2( g );
+		return;
 	}
 	if( e == Events::DIGITAL::BTN_RETURN && m_current_mainStates == m_mainStates.begin() + 2 ) {
 		m_current_mainStates--;
-		if( m_isSample ) {
-			m_current_subStates = m_chooseFile.begin();
+		if(m_isAdd) {
+			m_current_subStates = m_AddOrRemove.begin();
 		} else {
-			m_current_subStates = m_chooseFile.begin() + 1;
+			m_current_subStates = m_AddOrRemove.begin()+1;
 		}
 		draw_load_module_sub1( g );
 		return;
@@ -149,7 +151,6 @@ void ModuleLoad::update( Graphics* g, Events::DIGITAL e ) {
 	if( e == Events::DIGITAL::BTN_ENTER && m_current_mainStates == m_mainStates.begin() + 2 ) {
 			if( m_isSample ) {
 				m_current_mainStates++;
-				m_selected_pack = m_selected_sample;
 				m_selected_sample = 1;
 				m_first_visible_sample = 1;
 				Serial.println( "CHOOSE SAMPLE OUT OF SAMPLEPACK" );
@@ -162,7 +163,7 @@ void ModuleLoad::update( Graphics* g, Events::DIGITAL e ) {
 				    Serial.println( "CHOOSE START CHOOSE_NOTE" );
 				    draw_load_module_sub3( g );
 			    }
-			    else
+			    else //REMOVE
 			    {
 				    m_selected_sample=0;
 				    m_selected_pack=0;
@@ -325,7 +326,7 @@ void ModuleLoad::draw_load_module_sub2( Graphics* g ) {
 	m_bottom.setTextPadding( { 4, 4 } );
 	if( sizeof bsp_data_Flash2 / sizeof bsp_data_Flash2[ 0 ] >= 7 ) {
 		for( int i = m_first_visible_sample; i < m_first_visible_sample + 7; i++ ) {
-			if( i == m_selected_sample ) {
+			if( i == m_selected_pack ) {
 				m_bottom.setTextColor( 0x00 );
 				m_bottom.printlnHoverCenter( bsp_data_Flash2[ i ][ 0 ].c_str(), 0xff );
 			} else {
@@ -335,7 +336,7 @@ void ModuleLoad::draw_load_module_sub2( Graphics* g ) {
 		}
 	} else {
 		for( int i = 0; i < sizeof bsp_data_Flash2 / sizeof bsp_data_Flash2[ 0 ]; i++ ) {
-			if( i == m_selected_sample ) {
+			if( i == m_selected_pack ) {
 				m_bottom.setTextColor( 0x00 );
 				m_bottom.printlnHoverCenter( bsp_data_Flash2[ i ][ 0 ].c_str(), 0xff );
 			} else {
