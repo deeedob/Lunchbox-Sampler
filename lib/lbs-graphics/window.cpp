@@ -438,7 +438,49 @@ uint8_t Window::getRawPixel( int16_t x, int16_t y ) const
 	}
 	return 0;
 }
-
+void Window::drawRotary(int16_t x0, int16_t y0, int16_t r,uint16_t color1,uint16_t color2)
+{
+	double alpha=0;
+	for(int i=0; i<75; i++)
+	{
+		writePixel( x0 + cos( alpha-3*PI/4) * r, y0 - sin( alpha-3*PI/4) * r, color1 );
+		alpha -= ( 2 * PI ) / 100;
+	}
+	fillCircle(x0,y0,r-3,color2);
+}
+void Window::drawCircle(int16_t x0, int16_t y0, int16_t r,uint16_t color1,uint16_t color2, int8_t percentage) {
+	double alpha=0;
+	int scaled=75 * percentage / 100;
+	for(int i=0; i<100; i++)
+	{
+		if(i<scaled) {
+			writePixel( x0 + cos( alpha-3*PI/4) * r, y0 - sin( alpha-3*PI/4) * r, color1 );
+			alpha -= ( 2 * PI ) / 100;
+		}
+		if(i==scaled)
+		{
+			drawLine(x0,y0,x0 + cos( alpha-3*PI/4) * r,y0 - sin( alpha-3*PI/4) * r, color2);
+		}
+	}
+	if(percentage<10)
+	{
+		setCursor(x0-3,y0);
+		setTextColor(color2);
+		println( percentage);
+		setCursor(x0+5,y0);
+		setTextColor(color2);
+		println( '%');
+	}
+	else
+	{
+		setCursor(x0-7,y0);
+		setTextColor(color2);
+		println( percentage);
+		setCursor(x0+5,y0);
+		setTextColor(color2);
+		println( '%');
+	}
+}
 void Window::drawFastRawVLine( int16_t x, int16_t y, int16_t h, uint16_t color )
 {
 	// x & y already in raw (rotation 0) coordinates, no need to transform.

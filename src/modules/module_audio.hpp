@@ -17,14 +17,44 @@ public:
 		uint8_t data1;
 		uint8_t data2;
 	};
+	enum class STATE
+	{
+		//MainStates
+		AUDIO_MODULE_MAIN,
+		AUDIO_MODULE_SUB_1,
+		AUDIO_MODULE_SUB_2,
+		
+		//CHANNELS
+		CHANNEL_MASTER,
+		CHANNEL_1,
+		CHANNEL_2,
+		CHANNEL_3,
+		CHANNEL_4,
+		
+		//EFFECTS
+		EFFECT_VOLUME,
+		EFFECT_FILTER,
+		EFFECT_DELAY,
+		EFFECT_COMPRESSOR,
+	};
 	ModuleAudio();
 	void enter( Graphics* g ) override;
 	void update( Graphics* g, Events::DIGITAL e ) override;
-	void drawMidiVisualisation(MidiData midi_data, Graphics* g);
+	void draw_audio_module_main(Graphics* g);
+	void draw_audio_module_sub1(Graphics* g);
 	void exit() override;
 	~ModuleAudio() override;
 private:
-	Window m_topNav;
-	Window m_midiVisualisation;
-	Window m_information;
+	Window m_top;
+	Window m_bottom;
+	Window m_left;
+	Window m_right;
+	std::vector<STATE>::iterator m_currentMainState;
+	std::vector<STATE>::iterator m_currentChannel;
+	std::vector<STATE>::iterator m_currentEffect;
+	std::vector<STATE> m_mainStates;
+	std::vector<STATE> m_channels;
+	std::vector<STATE> m_effects;
+	float m_last_value_rot0;
+	float m_last_value_rot1;
 };

@@ -51,7 +51,8 @@ namespace lbs
 		// CUSTOMIZED API
 		void resize( u_int16_t w, uint16_t h );
 		void drawWindowBorder( Spacer padding, u_int8_t roundness, u_int16_t color, u_int8_t iterations );
-		
+		void drawCircle(int16_t x0, int16_t y0, int16_t r,uint16_t color1,uint16_t color2, int8_t percentage);
+		void drawRotary(int16_t x0, int16_t y0, int16_t r,uint16_t color1, uint16_t color2);
 		void setTextPadding( const Spacer& text_margin ) override;
 		void setWindowOffsets( uint16_t x0, uint16_t y0 );
 		uint8_t getPixel( int16_t x, int16_t y ) const;
