@@ -61,7 +61,7 @@ void ModuleAudio::draw_audio_module_sub1( Graphics* g )
 	}
 	m_last_value_rot0 = analogRead( 14 );
 	float p = m_last_value_rot0 / 1023 * 100;
-	Serial.println(p);
+	Serial.println(analogRead( 14 ));
 	
 	m_left.setTextColor( color1_rot0 );
 	m_left.setCursor(14,22);

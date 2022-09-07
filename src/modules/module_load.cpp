@@ -11,51 +11,178 @@ ModuleLoad::ModuleLoad() : AbstractModule( "Load Samples" ) {
 	m_mainStates.push_back( STATE::LOAD_MODULE_SUB_2 );
 	m_mainStates.push_back( STATE::LOAD_MODULE_SUB_2b );
 	m_mainStates.push_back( STATE::LOAD_MODULE_SUB_3 );
-	m_current_mainStates = m_mainStates.begin();
 
-	m_loadMenu.push_back( STATE::SAMPLE );
-	m_loadMenu.push_back( STATE::SAMPLEPACK );
-	m_current_subStates = m_loadMenu.begin();
+	m_addPack.push_back( STATE::YES );
+	m_addPack.push_back( STATE::NO );
 
-	m_AddOrRemove.push_back( STATE::ADD_SAMPLE_TO_FLASH );
-	m_AddOrRemove.push_back( STATE::REMOVE_SAMPLE_FROM_FLASH );
 }
+
 void ModuleLoad::enter( Graphics* g ) { draw_load_module( g ); }
 void ModuleLoad::draw_load_module( Graphics* g ) {
+	m_current_mainStates = m_mainStates.begin();
+	m_current_subStates = m_addPack.begin();
+	
 	m_topNav.fillScreen( 0xff );
 	m_topNav.drawWindowBorder( { 2, 2 }, 0, 0x00, 1 );
-	m_topNav.printlnCentered( "LOAD SAMPLES" );
+	m_topNav.printlnCentered( "LOAD SAMPLEPACK" );
 
 	m_bottom.fillScreen( 0x44 );
 	m_bottom.drawWindowBorder( { 4, 4 }, 2, 0xbb, 2 );
-	m_bottom.setTextPadding( { 4, 30 } );
-	if( m_loadMenu.begin() == m_current_subStates ) {
-		m_bottom.setTextColor( 0x00 );
-		m_bottom.printlnHoverCenter( "SAMPLE", 0xff );
+	m_bottom.setTextPadding( { 4, 4 } );
+
+	if( sizeof bsp_data_Flash2 / sizeof bsp_data_Flash2[ 0 ] >= 7 ) {
+		for( int i = m_first_visible_sample; i < m_first_visible_sample + 7; i++ ) {
+			if( i == m_selected_pack ) {
+				m_bottom.setTextColor( 0x00 );
+				m_bottom.printlnHoverCenter( bsp_data_Flash2[ i ][ 0 ].c_str(), 0xff );
+			} else {
+				m_bottom.setTextColor( 0xff );
+				m_bottom.printlnHCentered( bsp_data_Flash2[ i ][ 0 ].c_str() );
+			}
+		}
 	} else {
-		m_bottom.setTextColor( 0xff );
-		m_bottom.printlnHCentered( "SAMPLE" );
+		for( int i = 0; i < sizeof bsp_data_Flash2 / sizeof bsp_data_Flash2[ 0 ]; i++ ) {
+			if( i == m_selected_pack ) {
+				m_bottom.setTextColor( 0x00 );
+				m_bottom.printlnHoverCenter( bsp_data_Flash2[ i ][ 0 ].c_str(), 0xff );
+			} else {
+				m_bottom.setTextColor( 0xff );
+				m_bottom.printlnHCentered( bsp_data_Flash2[ i ][ 0 ].c_str() );
+			}
+		}
 	}
-	if( m_loadMenu.begin() + 1 == m_current_subStates ) {
-		m_bottom.setTextColor( 0x00 );
-		m_bottom.printlnHoverCenter( "SAMPLEPACK", 0xff );
-		;
-	} else {
-		m_bottom.setTextColor( 0xff );
-		m_bottom.printlnHCentered( "SAMPLEPACK" );
-	}
+
 	g->drawWindow( m_topNav );
 	g->drawWindow( m_bottom );
 	g->display();
 }
-void ModuleLoad::update( Graphics* g, Events::DIGITAL e ) {
-	//LOAD_MODULE_MAIN
-	//RETURN TO MAIN MENU
-	if( e == Events::DIGITAL::BTN_RETURN && m_current_mainStates == m_mainStates.begin() ) {
-		Serial.println( "MAIN MENU" );
-		exit();
-		return;
+void ModuleLoad::draw_load_module_sub0( Graphics* g ) {
+	std::string name = bsp_data_Flash2[ m_selected_pack ][ 0 ];
+	m_bottom.fillScreen( 0x00 );
+	m_bottom.fillRect( 0, 18, 128, 82, 0xff );
+	m_bottom.drawRect( 4, 22, 120, 74, 0x00 );
+	m_bottom.setTextColor( 0x00 );
+	m_bottom.setCursor( 6, 33 );
+	m_bottom.println( "Do You really " );
+	m_bottom.setCursor( 6, 43 );
+	m_bottom.println( "want to add " );
+	m_bottom.setCursor( 6, 53 );
+	m_bottom.println( name.c_str() );
+	m_bottom.setCursor( 6, 63 );
+	m_bottom.println( "to flash?" );
+
+	if( m_current_subStates == m_addPack.begin() ) {
+		m_bottom.fillRect( 15, 70, 40, 20, 0x22 );
+		m_bottom.setTextColor( 0xff );
+		m_bottom.setCursor( 25, 82 );
+		m_bottom.print( "yes" );
+
+		m_bottom.drawRect( 70, 70, 40, 20, 0x44 );
+		m_bottom.setTextColor( 0x00 );
+		m_bottom.setCursor( 82, 82 );
+		m_bottom.print( "no" );
+
+	} else {
+		m_bottom.drawRect( 15, 70, 40, 20, 0x44 );
+		m_bottom.setTextColor( 0x00 );
+		m_bottom.setCursor( 25, 82 );
+		m_bottom.print( "yes" );
+
+		m_bottom.fillRect( 70, 70, 40, 20, 0x22 );
+		m_bottom.setTextColor( 0xff );
+		m_bottom.setCursor( 82, 82 );
+		m_bottom.print( "no" );
 	}
+
+	//g->drawWindow( m_topNav );
+	g->drawWindow( m_bottom );
+	g->display();
+}
+void ModuleLoad::draw_load_module_loadbar(Graphics* g)
+{
+	m_bottom.fillScreen(0x00);
+	m_bottom.drawRect( 12, 50, 100, 8, 0xFF );
+	for(int i=0; i<20; i++)
+	{
+		m_bottom.fillRect( 12, 50, i*5, 8, 0xFF );
+		m_bottom.fillRect(20,60,100,20,0x00);
+		m_bottom.setTextColor(0xff);
+		m_bottom.setCursor(58,70);
+		m_bottom.print(i*5);
+		m_bottom.print("%");
+		g->drawWindow( m_bottom );
+		g->display();
+		delay(20);
+	}
+	
+	exit();
+}
+void ModuleLoad::update( Graphics* g, Events::DIGITAL e ) {
+	//CHOOSE SAMPLE
+	if( m_current_mainStates == m_mainStates.begin() ) {
+		if( e == Events::DIGITAL::BTN_RETURN ) {
+			exit();
+			return;
+		}
+		if( e == Events::DIGITAL::ROTARY_R ) {
+			if( m_selected_pack < sizeof bsp_data_Flash2 / sizeof bsp_data_Flash2[ 0 ] - 1 ) {
+				++m_selected_pack;
+				if( m_selected_pack == m_first_visible_sample + 7 ) { m_first_visible_sample++; }
+			} else {
+				m_first_visible_sample = 0;
+				m_selected_pack = 0;
+			}
+			draw_load_module( g );
+			return;
+		}
+		if( e == Events::DIGITAL::ROTARY_L ) {
+			if( m_selected_pack == 0 ) {
+				m_selected_pack = sizeof bsp_data_Flash2 / sizeof bsp_data_Flash2[ 0 ];
+				m_first_visible_sample = ( sizeof bsp_data_Flash2 / sizeof bsp_data_Flash2[ 0 ] ) - 4;
+			} else {
+				if( m_selected_pack == m_first_visible_sample ) { m_first_visible_sample--; }
+			}
+			m_selected_pack--;
+			draw_load_module( g );
+			return;
+		}
+		if( e == Events::DIGITAL::BTN_ENTER ) {
+			m_current_mainStates++;
+			draw_load_module_sub0( g );
+			return;
+		}
+	}
+	if( m_current_mainStates == m_mainStates.begin() + 1 ) {
+		if( e == Events::DIGITAL::ROTARY_R || e == Events::DIGITAL::ROTARY_L ) {
+			if( m_current_subStates == m_addPack.begin() ) {
+				m_current_subStates++;
+				draw_load_module_sub0( g );
+				return;
+			} else {
+				m_current_subStates--;
+				draw_load_module_sub0( g );
+				return;
+			}
+		}
+		if( e == Events::DIGITAL::BTN_RETURN ) {
+			m_current_mainStates--;
+			draw_load_module( g );
+			return;
+		}
+		if( e == Events::DIGITAL::BTN_ENTER ) {
+			if( m_current_subStates == m_addPack.begin() ) {
+				m_current_mainStates++;
+				draw_load_module_loadbar(g);
+				return;
+			} else {
+				m_current_mainStates--;
+				draw_load_module( g );
+				return;
+			}
+		}
+	}
+	/*
+	//LOAD_MODULE_MAIN
 	// CHOSE SAMPLE OR SAMPLEPACK WITH ROTARY
 	if( ( e == Events::DIGITAL::ROTARY_R || e == Events::DIGITAL::ROTARY_L ) &&
 	    m_current_mainStates == m_mainStates.begin() ) {
@@ -140,39 +267,36 @@ void ModuleLoad::update( Graphics* g, Events::DIGITAL e ) {
 	}
 	if( e == Events::DIGITAL::BTN_RETURN && m_current_mainStates == m_mainStates.begin() + 2 ) {
 		m_current_mainStates--;
-		if(m_isAdd) {
+		if( m_isAdd ) {
 			m_current_subStates = m_AddOrRemove.begin();
 		} else {
-			m_current_subStates = m_AddOrRemove.begin()+1;
+			m_current_subStates = m_AddOrRemove.begin() + 1;
 		}
 		draw_load_module_sub1( g );
 		return;
 	}
 	if( e == Events::DIGITAL::BTN_ENTER && m_current_mainStates == m_mainStates.begin() + 2 ) {
-			if( m_isSample ) {
-				m_current_mainStates++;
-				m_selected_sample = 1;
-				m_first_visible_sample = 1;
-				Serial.println( "CHOOSE SAMPLE OUT OF SAMPLEPACK" );
-				draw_load_module_sub2b( g );
+		if( m_isSample ) {
+			m_current_mainStates++;
+			m_selected_sample = 1;
+			m_first_visible_sample = 1;
+			Serial.println( "CHOOSE SAMPLE OUT OF SAMPLEPACK" );
+			draw_load_module_sub2b( g );
+		} else {
+			if( m_isAdd ) {
+				m_current_mainStates += 2;
+				Serial.println( "CHOOSE START CHOOSE_NOTE" );
+				draw_load_module_sub3( g );
+			} else//REMOVE
+			{
+				m_selected_sample = 0;
+				m_selected_pack = 0;
+				m_first_visible_sample = 0;
+				m_current_mainStates = m_mainStates.begin();
+				m_current_subStates = m_loadMenu.begin();
+				draw_load_module( g );
 			}
-		    else {
-			    if(m_isAdd)
-			    {
-				    m_current_mainStates += 2;
-				    Serial.println( "CHOOSE START CHOOSE_NOTE" );
-				    draw_load_module_sub3( g );
-			    }
-			    else //REMOVE
-			    {
-				    m_selected_sample=0;
-				    m_selected_pack=0;
-				    m_first_visible_sample=0;
-				    m_current_mainStates = m_mainStates.begin();
-				    m_current_subStates = m_loadMenu.begin();
-				    draw_load_module( g );
-			    }
-			}
+		}
 		return;
 	}
 
@@ -212,12 +336,11 @@ void ModuleLoad::update( Graphics* g, Events::DIGITAL e ) {
 		return;
 	}
 	if( e == Events::DIGITAL::BTN_ENTER && m_current_mainStates == m_mainStates.begin() + 3 ) {
-		if( m_isAdd) {
+		if( m_isAdd ) {
 			m_current_mainStates++;
 			Serial.println( "CHOOSE START CHOOSE_NOTE" );
 			draw_load_module_sub3( g );
-		}
-		else {
+		} else {
 			m_current_subStates = m_loadMenu.begin();
 			m_current_mainStates = m_mainStates.begin();
 			draw_load_module( g );
@@ -243,7 +366,7 @@ void ModuleLoad::update( Graphics* g, Events::DIGITAL e ) {
 		return;
 	}
 	if( e == Events::DIGITAL::BTN_ENTER && m_current_mainStates == m_mainStates.begin() + 4 ) {
-		Serial.println("IS ADDED");
+		Serial.println( "IS ADDED" );
 		m_current_mainStates = m_mainStates.begin();
 		m_current_subStates = m_loadMenu.begin();
 		draw_load_module( g );
@@ -262,6 +385,7 @@ void ModuleLoad::update( Graphics* g, Events::DIGITAL e ) {
 		return;
 	}
 	if( m_current_mainStates == m_mainStates.begin() ) draw_load_module( g );
+	 */
 }
 void ModuleLoad::exit() { notify( *this ); }
 void ModuleLoad::draw_load_module_sub1( Graphics* g ) {

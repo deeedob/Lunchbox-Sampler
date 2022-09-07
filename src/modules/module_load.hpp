@@ -18,10 +18,8 @@ class ModuleLoad : public AbstractModule
 		LOAD_MODULE_SUB_3,     //CHOOSE NOTE FOR SAMPLE/ STARTNOTE FOR SAMPLEPACK
 		
 		//SUBMENU STATES
-		SAMPLE,
-		SAMPLEPACK,
-		ADD_SAMPLE_TO_FLASH,
-		REMOVE_SAMPLE_FROM_FLASH,
+		YES,
+		NO,
 	};
 public:
 	ModuleLoad();
@@ -30,12 +28,15 @@ public:
 	void exit() override;
 private:
 	void draw_load_module(Graphics* g);
+	void draw_load_module_sub0(Graphics* g);
+	void draw_load_module_loadbar(Graphics* g);
 	void draw_load_module_sub1(Graphics* g);
 	void draw_load_module_sub2(Graphics* g);
 	void draw_load_module_sub2b(Graphics* g);
 	void draw_load_module_sub3(Graphics* g);
 private:
 	std::vector <STATE> m_mainStates;
+	std::vector <STATE> m_addPack;
 	std::vector<STATE> m_loadMenu;
 	std::vector<STATE> m_chooseFile;
 	std::vector<STATE> m_AddOrRemove;
