@@ -45,7 +45,7 @@
         "silk_text_upright": false,
         "zones": {
           "45_degree_only": false,
-          "min_clearance": 2.0
+          "min_clearance": 1.5
         }
       },
       "diff_pair_dimensions": [],
@@ -331,7 +331,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "MHS_Mobile_Hardware_Sampler_FSR_PCB.kicad_pro",
+    "filename": "Lunchbox_Sampler_FSR_PCB.kicad_pro",
     "version": 1
   },
   "net_settings": {
