@@ -1,6 +1,5 @@
 #include "lunchbox_sampler.hpp"
 
-
 LunchboxSampler::LunchboxSampler()
 	: m_system( std::make_shared<EventSystem>()), m_memory()
 {
@@ -12,12 +11,12 @@ LunchboxSampler::LunchboxSampler()
 	setupDigitalEvents();
 	setupAnalogEvents();
 	setupFSREvents();
-	m_analogInterrupts->disableAll();
-	//m_digitalInterrupts->disableAll();
+	//m_analogInterrupts->disableAll();
+	m_analogInterrupts->getFSR()->disableISR();
+	
 	m_states = std::make_unique<BaseStates>();
-	m_audio = std::make_shared< Audio >();
-	m_midiListener = std::make_unique<MidiListener>(m_audio);
-
+	m_audio = std::make_shared<Audio>( Audio::POLYPHONY::MEDIUM );
+	m_midiListener = std::make_unique<MidiListener>( m_audio );
 }
 
 LunchboxSampler::~LunchboxSampler() = default;
@@ -36,11 +35,11 @@ LunchboxSampler& LunchboxSampler::getInstance()
 	rF->setDelta( 20 );
 	while ( true ) {
 		yield();
-		//rP->update();
-		//rF->update();
-		//delay( 40 );
-		//rP->next();
-		//rF->next();
+		rP->update();
+		rF->update();
+		delay( 20 );
+		rP->next();
+		rF->next();
 		//delay( 500 );
 		//Serial.print( "u" );
 	}

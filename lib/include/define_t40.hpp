@@ -35,8 +35,8 @@
 /* FSR Pins */
 #define C_FSR_POLL A8    //both
 #define C_FSR_SEL_0 28
-#define C_FSR_SEL_1 30
-#define C_FSR_SEL_2 32
+#define C_FSR_SEL_1 29
+#define C_FSR_SEL_2 30
 
 /* MPX Positions */
 #define C_FSR_MPX_0 0

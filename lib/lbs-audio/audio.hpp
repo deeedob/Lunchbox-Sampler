@@ -12,36 +12,63 @@ namespace lbs
 {
 	class Audio
 	{
+		struct RoutingInfo
+		{
+			uint8_t oldNote { 0 };
+			uint8_t mixer_pos { 0 };
+			uint8_t channel_pos { 0 };
+		};
 		using Patch = std::unique_ptr<AudioConnection>;
 		using AudioFiles = std::vector<String>;
 		using AudioMidiRouting = std::vector<uint8_t>;
-		using RawFilePlayer = std::vector<AudioPlaySerialflashRaw>;
+		using RawFilePlayer = std::vector<std::pair<AudioPlaySerialflashRaw, RoutingInfo>>;
 		using PatchBank = std::vector<Patch>;
 		using MixerBank = std::vector<AudioMixer4>;
 	public:
-		enum class POLYPHONY {
+		enum class POLYPHONY
+		{
 			SMALL = 4,
 			MEDIUM = 8,
 			BIG = 16,
 		};
 		explicit Audio( POLYPHONY poly = POLYPHONY::SMALL );
-		bool playNote( Note n );
+		Audio();
+		static bool playNote( const Note& n );
+		static void stopNote( const Note& n );
 	private:
 		void initialize_connections( POLYPHONY p );
 		void sort_audio_files_ascending();
 		uint8_t get_amount_of_mixer( POLYPHONY p );
-		uint8_t get_amout_of_patches( POLYPHONY p);
+		uint8_t get_amount_of_patches( POLYPHONY p );
 	private:
 		std::mutex m_mutex;
 		AudioControlSGTL5000 m_audioControlSgtl5000;
-		AudioFiles  m_audioFiles;
+		AudioOutputI2S m_outputI2S;
+		
+		AudioFiles m_audioFiles;
 		AudioMidiRouting m_audioMidiRouting;
 		
 		RawFilePlayer m_rawPlayer;
 		PatchBank m_patchBank;
 		MixerBank m_mixBank;
-		AudioOutputI2S m_outputI2S;
 		
+		//test
+		AudioPlaySerialflashRaw raw0;
+		AudioPlaySerialflashRaw raw1;
+		AudioPlaySerialflashRaw raw2;
+		AudioPlaySerialflashRaw raw3;
+		AudioMixer4 mix00;
+		AudioMixer4 mix01;
+		AudioMixer4 master;
+		
+		//AudioConnection p_00;
+		//AudioConnection p_01;
+		//AudioConnection p_10;
+		//AudioConnection p_11;
+		//AudioConnection p_20;
+		//AudioConnection p_21;
+		//AudioConnection p_30;
+		//AudioConnection p_31;
 		
 		/* what is right or wrong i dont know anymore ...
 		 * This somehow works because we call the audio instance from
