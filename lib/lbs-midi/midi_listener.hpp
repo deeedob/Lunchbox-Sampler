@@ -44,7 +44,8 @@ namespace lbs
 		static void processNoteOn( u_int8_t channel, u_int8_t note, uint8_t velocity )
 		{
 			noInterrupts();
-			Note n { usbMIDI.getType(), channel, note, velocity, 0 };
+			auto vel = static_cast<float>(velocity) / 127.0f;
+			Note n { usbMIDI.getType(), channel, note, vel, 0 };
 			m_glue->m_audio->playNote( n );
 			//n.printMidiData();
 			interrupts();

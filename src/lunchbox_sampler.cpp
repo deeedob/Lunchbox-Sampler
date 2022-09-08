@@ -12,8 +12,8 @@ LunchboxSampler::LunchboxSampler()
 	setupAnalogEvents();
 	setupFSREvents();
 	//m_analogInterrupts->disableAll();
-	m_analogInterrupts->getFSR()->disableISR();
-	
+	//m_analogInterrupts->getPots()->disableISR();
+	//m_analogInterrupts->getFSR()->disableISR();
 	m_states = std::make_unique<BaseStates>();
 	m_audio = std::make_shared<Audio>( Audio::POLYPHONY::MEDIUM );
 	m_midiListener = std::make_unique<MidiListener>( m_audio );
@@ -32,12 +32,11 @@ LunchboxSampler& LunchboxSampler::getInstance()
 	const auto& rP = m_analogInterrupts->getPots();
 	const auto& rF = m_analogInterrupts->getFSR();
 	rP->setDelta( 50 );
-	rF->setDelta( 20 );
+	rF->setDelta( 25 );
 	while ( true ) {
-		yield();
 		rP->update();
 		rF->update();
-		delay( 20 );
+		delay( 4 ); // this time is needed to let the adc read some time
 		rP->next();
 		rF->next();
 		//delay( 500 );
@@ -104,6 +103,7 @@ void LunchboxSampler::setupAnalogEvents()
 		Serial.println( d.m_data );
 	} );
 	m_system->attachAnalog( Events::Analog::POTS::POT_2, []( AnalogData d ) {
+		
 		Serial.print( "Analog Pos: " );
 		Serial.print( d.m_pos );
 		Serial.print( " , Data: " );
@@ -123,25 +123,32 @@ void LunchboxSampler::setupFSREvents()
 	m_analogInterrupts->getFSR()->enableISR();
 	
 	m_system->attachAnalog( Events::Analog::FSR::FSR_0, []( AnalogData d ) {
-		Serial.print( "FSR Pos: " );
+		Serial.print( "FSR Pos 0, Note: " );
 		Serial.print( d.m_pos );
 		Serial.print( " , Data: " );
 		Serial.println( d.m_data );
 	} );
 	m_system->attachAnalog( Events::Analog::FSR::FSR_1, []( AnalogData d ) {
-		Serial.print( "FSR Pos: " );
+		Serial.print( "FSR Pos 1, Note: " );
 		Serial.print( d.m_pos );
 		Serial.print( " , Data: " );
 		Serial.println( d.m_data );
 	} );
-	m_system->attachAnalog( Events::Analog::FSR::FSR_2, []( AnalogData d ) {
-		Serial.print( "FSR Pos: " );
-		Serial.print( d.m_pos );
-		Serial.print( " , Data: " );
-		Serial.println( d.m_data );
+	m_system->attachAnalog( Events::Analog::FSR::FSR_2, [ & ]( AnalogData d ) {
+		auto velocity = static_cast<float>(d.m_data - 870) / 154.0f;
+		if( d.m_pos )
+			m_audio->playNote( Note( 0, 0, 16, velocity ));
+		else
+			m_audio->stopNote( Note( 0, 0, 16, 1.0f ));
+		//Serial.print( "FSR Pos 2, Note: " );
+		//Serial.print( d.m_pos );
+		//Serial.print( " , Data: " );
+		//Serial.println( d.m_data );
 	} );
-	m_system->attachAnalog( Events::Analog::FSR::FSR_3, []( AnalogData d ) {
-		Serial.print( "FSR Pos: " );
+	m_system->attachAnalog( Events::Analog::FSR::FSR_3, [ & ]( AnalogData d ) {
+		//auto velo = static_cast<float>(d.m_data) / 1000.0f;
+		//m_audio->playNote( Note( 0, 0, 0, velo ));
+		Serial.print( "FSR Pos 3, Note: " );
 		Serial.print( d.m_pos );
 		Serial.print( " , Data: " );
 		Serial.println( d.m_data );

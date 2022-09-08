@@ -2,6 +2,7 @@
 /* Arduino ... why u do this shit?! */
 #undef main
 using namespace lbs;
+
 int main()
 {
 #ifdef VERBOSE

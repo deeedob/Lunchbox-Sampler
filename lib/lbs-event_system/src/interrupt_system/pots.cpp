@@ -45,10 +45,12 @@ void Pots::disableISR()
 
 void Pots::update()
 {
+	noInterrupts();
 	stopScan();
 	u_int16_t oldVal = m_values[ m_position ];
 	m_parent->getAdc()->adc0->enableCompareRange( oldVal - m_delta, oldVal + m_delta, false, true );
 	m_parent->getAdc()->adc0->startContinuous( m_pots[ m_position ] );
+	interrupts();
 }
 
 void Pots::stopScan()
@@ -59,14 +61,15 @@ void Pots::stopScan()
 
 u_int8_t Pots::next()
 {
+	noInterrupts();
 	if( ++m_position >= 4 )
 		m_position = 0;
+	interrupts();
 	return m_position;
 }
 
 u_int16_t Pots::recalibrateDelta( u_int16_t padding, u_int16_t samples )
 {
-	
 	noInterrupts();
 	stopScan();
 	m_parent->getAdc()->adc0->setConversionSpeed( ADC_CONVERSION_SPEED::VERY_HIGH_SPEED );

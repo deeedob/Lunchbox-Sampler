@@ -53,8 +53,7 @@ bool Audio::playNote( const Note& n )
 	}
 	for( auto& item : m_glue->m_rawPlayer ) {
 		if( !item.first.isPlaying()) {
-			float velocity = static_cast<float>(n.velocity) / 127.0f;
-			m_glue->m_mixBank[ item.second.mixer_pos ].gain( item.second.channel_pos, velocity );
+			m_glue->m_mixBank[ item.second.mixer_pos ].gain( item.second.channel_pos, n.velocity );
 			item.second.oldNote = n.note;
 			return item.first.play( m_glue->m_audioFiles[ routing ].c_str());
 		}

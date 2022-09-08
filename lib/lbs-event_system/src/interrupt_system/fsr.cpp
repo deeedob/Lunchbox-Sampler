@@ -1,6 +1,5 @@
 #include "fsr.hpp"
 #include "analog_interrupts.hpp"
-//#include "event_sytem.hpp"
 
 using namespace lbs;
 
@@ -10,10 +9,14 @@ FSR::FSR( AnalogInterrupts* const parent, u_int8_t mpxPin0, u_int8_t mpxPin1, u_
 	: m_parent( parent ), m_values( { 0, 0, 0, 0 } ), m_delta( delta )
 {
 	m_position = 0;
-	m_pads[ 0 ] = Multiplex( mpxPin0 );
-	m_pads[ 1 ] = Multiplex( mpxPin1 );
-	m_pads[ 2 ] = Multiplex( mpxPin2 );
-	m_pads[ 3 ] = Multiplex( mpxPin3 );
+	m_pads[ 0 ].first = Multiplex( mpxPin0 );
+	m_pads[ 0 ].second = false;
+	m_pads[ 1 ].first = Multiplex( mpxPin1 );
+	m_pads[ 1 ].second = false;
+	m_pads[ 2 ].first = Multiplex( mpxPin2 );
+	m_pads[ 2 ].second = false;
+	m_pads[ 3 ].first = Multiplex( mpxPin3 );
+	m_pads[ 3 ].second = false;
 	rescanAll();
 	m_isrInstance = this;
 }
@@ -25,15 +28,30 @@ FSR::~FSR()
 
 void FSR::isr()
 {
-	auto i = FSR::m_isrInstance;
-	auto val = ( u_int16_t ) i->m_parent->getAdc()->adc1->analogReadContinuous();
-	// TODO: remove updateRange from ISR?
-	i->updateRange();
-	i->m_values[ i->m_position ] = val;
-	/* TODO: construct MIDI event and enqueue? */
-	i->m_parent->getEventSystem()
-	 ->enqueueAnalog( static_cast<Events::Analog::FSR>(i->m_position), { i->m_position, val } );
+	static unsigned long last_interrupt_time = 0;
+	unsigned long interrupt_time = millis();
+	auto& i = FSR::m_isrInstance;
+	auto val = (u_int16_t) i->m_parent->getAdc()->adc1->analogReadContinuous();
+	//i->m_values[ i->m_position ] = val;
 	
+	if( last_interrupt_time - interrupt_time > 5 ) {
+		/* TODO: construct MIDI event and enqueue? */
+		auto& note = i->m_pads[ i->m_position ].second;
+		if( !note ) {
+			//Serial.println( "1" );
+			note = true; // Trigger is ON
+		} else {
+			//Serial.println( "0" );
+			note = false; // Trigger is OFF
+		}
+		i->m_parent->getEventSystem()
+		 ->enqueueAnalog( static_cast<Events::Analog::FSR>(i->m_position), { note, val } );
+		i->update();
+		//Serial.print( "u" );
+		//Serial.println( note );
+	}
+	
+	last_interrupt_time = interrupt_time;
 }
 
 void FSR::enableISR( u_int8_t prio )
@@ -48,11 +66,19 @@ void FSR::disableISR()
 
 void FSR::update()
 {
+	noInterrupts();
 	stopScan();
-	m_pads[ m_position ].setActive();      // select different mpx out
-	int oldVal = m_values[ m_position ];
-	m_parent->getAdc()->adc1->enableCompareRange( oldVal - m_delta, oldVal + m_delta, false, true );
+	m_pads[ m_position ].first.setActive();      // set the mpx pin to read active
+	//int oldVal = m_values[ m_position ];
+	//m_parent->getAdc()->adc1->enableCompareRange( oldVal - m_delta, oldVal + m_delta, false, true );
+	if( !m_pads[ m_position ].second ) { // if the pad is Note Off then wait for a trigger
+		m_parent->getAdc()->adc1->enableCompareRange( 870, 1024, true, true );
+	} else { //else wait till the value is back to normal state
+		m_parent->getAdc()->adc1->enableCompareRange( 750, 1024, false, true );
+	}
+	
 	m_parent->getAdc()->adc1->startContinuous( C_FSR_POLL );
+	interrupts();
 }
 
 void FSR::updateRange()
@@ -71,8 +97,11 @@ void FSR::stopScan()
 
 u_int8_t FSR::next()
 {
+	noInterrupts();
 	if( ++m_position >= 4 )
 		m_position = 0;
+	
+	interrupts();
 	return m_position;
 }
 
@@ -84,10 +113,10 @@ u_int16_t FSR::recalibrateDelta( u_int16_t padding, u_int16_t samples )
 	m_parent->getAdc()->adc1->setSamplingSpeed( ADC_SAMPLING_SPEED::VERY_HIGH_SPEED );
 	u_int16_t lowest;
 	u_int16_t highest;
-	std::array< u_int16_t, 4 > deltas { 0, 0, 0, 0 };
+	std::array<u_int16_t, 4> deltas { 0, 0, 0, 0 };
 	
 	for( int i = 0; i < 4; i++ ) {       //cycle through the 4 pots
-		m_pads[ i ].setActive();      // select different mpx out
+		m_pads[ i ].first.setActive();      // select different mpx out
 		lowest = m_parent->getAdc()->adc1->analogRead( C_FSR_POLL );
 		highest = m_parent->getAdc()->adc1->analogRead( C_FSR_POLL );
 		for( int j = 0; j < samples; j++ ) {   //average out of 20
@@ -129,7 +158,7 @@ void FSR::rescanAll()
 {
 	stopScan();
 	for( int i = 0; i < m_pads.size(); i++ ) {
-		m_pads[ i ].setActive();
+		m_pads[ i ].first.setActive();
 		m_values[ i ] = m_parent->getAdc()->analogRead( C_FSR_POLL );
 #ifdef VERBOSE
 		Serial.print( "FSR: " );

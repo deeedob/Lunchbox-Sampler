@@ -13,11 +13,11 @@ namespace lbs
 	class Multiplex
 	{
 	public:
-		using MpxLookup = std::map< u_int8_t, std::array< bool, 3>>;
+		using MpxLookup = std::map<u_int8_t, std::array<bool, 3>>;
 		
 		/*! @param mpxPin the multiplexer analog Pin.
 		 * */
-		explicit Multiplex( u_int8_t mpxPin);
+		explicit Multiplex( u_int8_t mpxPin );
 		Multiplex() = default;
 		/*! activate the analog pin on the multiplexer for polling!
 		 * */
@@ -29,6 +29,7 @@ namespace lbs
 		static const MpxLookup& getTable();
 	
 	private:
-		std::function< void() > m_fnPinSelect;
+		std::function<void()> m_fnPinSelect;
+		bool m_active;
 	};
 }

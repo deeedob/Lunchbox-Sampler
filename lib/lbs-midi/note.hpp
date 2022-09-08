@@ -4,11 +4,12 @@
 
 struct Note
 {
-	Note(uint8_t type_, uint8_t channel_, uint8_t note_, uint8_t velocity_, int time_ = 0)
-		: type(type), channel(channel_), note(note_), velocity(velocity_), time(time_)
+	Note( uint8_t type_, uint8_t channel_, uint8_t note_, float velocity_, int time_ = 0 )
+		: type( type ), channel( channel_ ), note( note_ ), velocity( velocity_ ), time( time_ )
 	{ }
 	
-	void printMidiData() const {
+	void printMidiData() const
+	{
 		Serial.println( "______" );
 		Serial.print( "type: " );
 		Serial.println( type );
@@ -25,6 +26,6 @@ struct Note
 	uint8_t type;
 	uint8_t channel;
 	uint8_t note;
-	uint8_t velocity;
+	float velocity;
 	int time;
 };
