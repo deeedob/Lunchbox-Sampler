@@ -1,9 +1,9 @@
 #pragma once
+#include "note.hpp"
+#include <MIDI.h>
 #include <active_object/runnable.hpp>
 #include <atomic>
-#include <MIDI.h>
 #include <audio.hpp>
-#include "note.hpp"
 
 namespace lbs
 {
@@ -18,16 +18,19 @@ namespace lbs
 		explicit MidiListener( const std::shared_ptr<Audio>& audio )
 			: m_done( false )
 		{
-			m_glue = this;
-			MIDI_CREATE_DEFAULT_INSTANCE();
-			MIDI.begin( MIDI_CHANNEL_OMNI );
-			MIDI.setHandleNoteOn( processNoteOn );
+			MIDI_CREATE_INSTANCE( HardwareSerial, Serial2, M_MIDI );
+			//m_midi = &M_MIDI;
+			//m_midi->begin( MIDI_CHANNEL_OMNI );
+			//m_midi->setHandleNoteOn( processNoteOn );
+			//m_midi->setHandleNoteOff( processNoteOff );
 			
 			usbMIDI.setHandleNoteOn( processNoteOn );
 			usbMIDI.setHandleNoteOff( processNoteOff );
 			
 			m_runnable = std::make_unique<std::thread>( &Runnable::runThread, this );
+			
 			m_audio = audio;
+			m_glue = this;
 		}
 		
 		~MidiListener() override
@@ -44,7 +47,7 @@ namespace lbs
 		static void processNoteOn( u_int8_t channel, u_int8_t note, uint8_t velocity )
 		{
 			noInterrupts();
-			auto vel = static_cast<float>(velocity) / 127.0f;
+			auto vel = static_cast< float >( velocity ) / 127.0f;
 			Note n { usbMIDI.getType(), channel, note, vel, 0 };
 			m_glue->m_audio->playNote( n );
 			//n.printMidiData();
@@ -63,6 +66,7 @@ namespace lbs
 		{
 			while ( !m_done ) {
 				usbMIDI.read();
+				//  m_midi->read();
 			}
 		}
 	
@@ -70,6 +74,7 @@ namespace lbs
 		std::atomic<bool> m_done;
 		std::unique_ptr<std::thread> m_runnable;
 		std::shared_ptr<Audio> m_audio;
+		midi::MidiInterface<midi::SerialMIDI<HardwareSerial> >* m_midi;
 		static MidiListener* m_glue;
 	};
-}
+}// namespace lbs

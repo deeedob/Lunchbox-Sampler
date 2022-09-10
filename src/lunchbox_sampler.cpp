@@ -36,7 +36,7 @@ LunchboxSampler& LunchboxSampler::getInstance()
 	while ( true ) {
 		rP->update();
 		rF->update();
-		delay( 4 ); // this time is needed to let the adc read some time
+		delay( 4 );// this time is needed to let the adc read some time
 		rP->next();
 		rF->next();
 		//delay( 500 );
@@ -60,29 +60,17 @@ void LunchboxSampler::setup()
 }
 
 void LunchboxSampler::setupEventSystem()
-{
-}
+{ }
 
 void LunchboxSampler::setupDigitalEvents()
 {
 	m_digitalInterrupts->enableAll();
 	
-	m_system->attachDigital( Events::DIGITAL::ROTARY_L, [ & ]( Events::DIGITAL e ) {
-		m_states->baseUpdate( e );
-	} );
-	m_system->attachDigital( Events::DIGITAL::ROTARY_R, [ & ]( Events::DIGITAL e ) {
-		m_states->baseUpdate( e );
-	} );
-	m_system->attachDigital( Events::DIGITAL::BTN_ENTER, [ & ]( Events::DIGITAL e ) {
-		m_states->baseUpdate( e );
-	} );
-	m_system->attachDigital( Events::DIGITAL::BTN_RETURN, [ & ]( Events::DIGITAL e ) {
-		m_states->baseUpdate( e );
-	} );
-	m_system->attachDigital( Events::DIGITAL::BTN_TOGGLE, []() {
-		Serial.println( "Button Toggle" );
-	} );
-	
+	m_system->attachDigital( Events::DIGITAL::ROTARY_L, [ & ]( Events::DIGITAL e ) { m_states->baseUpdate( e ); } );
+	m_system->attachDigital( Events::DIGITAL::ROTARY_R, [ & ]( Events::DIGITAL e ) { m_states->baseUpdate( e ); } );
+	m_system->attachDigital( Events::DIGITAL::BTN_ENTER, [ & ]( Events::DIGITAL e ) { m_states->baseUpdate( e ); } );
+	m_system->attachDigital( Events::DIGITAL::BTN_RETURN, [ & ]( Events::DIGITAL e ) { m_states->baseUpdate( e ); } );
+	m_system->attachDigital( Events::DIGITAL::BTN_TOGGLE, []() { Serial.println( "Button Toggle" ); } );
 }
 
 void LunchboxSampler::setupAnalogEvents()
@@ -103,7 +91,6 @@ void LunchboxSampler::setupAnalogEvents()
 		Serial.println( d.m_data );
 	} );
 	m_system->attachAnalog( Events::Analog::POTS::POT_2, []( AnalogData d ) {
-		
 		Serial.print( "Analog Pos: " );
 		Serial.print( d.m_pos );
 		Serial.print( " , Data: " );
@@ -122,32 +109,41 @@ void LunchboxSampler::setupFSREvents()
 	
 	m_analogInterrupts->getFSR()->enableISR();
 	
-	m_system->attachAnalog( Events::Analog::FSR::FSR_0, []( AnalogData d ) {
+	m_system->attachAnalog( Events::Analog::FSR::FSR_0, [ & ]( AnalogData d ) {
+		auto velocity = static_cast< float >( d.m_data - 870 ) / 154.0f;
+		if( d.m_pos ) m_audio->playNote( Note( 0, 0, 1, velocity ));
+		else
+			m_audio->stopNote( Note( 0, 0, 16, 1.0f ));
 		Serial.print( "FSR Pos 0, Note: " );
 		Serial.print( d.m_pos );
 		Serial.print( " , Data: " );
 		Serial.println( d.m_data );
 	} );
-	m_system->attachAnalog( Events::Analog::FSR::FSR_1, []( AnalogData d ) {
+	m_system->attachAnalog( Events::Analog::FSR::FSR_1, [ & ]( AnalogData d ) {
+		auto velocity = static_cast< float >( d.m_data - 870 ) / 154.0f;
+		if( d.m_pos ) m_audio->playNote( Note( 0, 0, 6, velocity ));
+		else
+			m_audio->stopNote( Note( 0, 0, 16, 1.0f ));
 		Serial.print( "FSR Pos 1, Note: " );
 		Serial.print( d.m_pos );
 		Serial.print( " , Data: " );
 		Serial.println( d.m_data );
 	} );
 	m_system->attachAnalog( Events::Analog::FSR::FSR_2, [ & ]( AnalogData d ) {
-		auto velocity = static_cast<float>(d.m_data - 870) / 154.0f;
-		if( d.m_pos )
-			m_audio->playNote( Note( 0, 0, 16, velocity ));
+		auto velocity = static_cast< float >( d.m_data - 870 ) / 154.0f;
+		if( d.m_pos ) m_audio->playNote( Note( 0, 0, 16, velocity ));
 		else
 			m_audio->stopNote( Note( 0, 0, 16, 1.0f ));
-		//Serial.print( "FSR Pos 2, Note: " );
-		//Serial.print( d.m_pos );
-		//Serial.print( " , Data: " );
-		//Serial.println( d.m_data );
+		Serial.print( "FSR Pos 2, Note: " );
+		Serial.print( d.m_pos );
+		Serial.print( " , Data: " );
+		Serial.println( d.m_data );
 	} );
 	m_system->attachAnalog( Events::Analog::FSR::FSR_3, [ & ]( AnalogData d ) {
-		//auto velo = static_cast<float>(d.m_data) / 1000.0f;
-		//m_audio->playNote( Note( 0, 0, 0, velo ));
+		auto velocity = static_cast< float >( d.m_data - 870 ) / 154.0f;
+		if( d.m_pos ) m_audio->playNote( Note( 0, 0, 16, velocity ));
+		else
+			m_audio->stopNote( Note( 0, 0, 16, 1.0f ));
 		Serial.print( "FSR Pos 3, Note: " );
 		Serial.print( d.m_pos );
 		Serial.print( " , Data: " );
