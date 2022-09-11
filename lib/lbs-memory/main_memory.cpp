@@ -70,7 +70,8 @@ void MainMemory::transferSingleToFlash( const String& filepath )
 	};
 	auto pos = last_of( '/', filepath );
 	String basename;
-	if( pos < 0 ) basename = filepath;
+	if( pos < 0 )
+		basename = filepath;
 	else
 		basename = filepath.substring( pos );
 	
@@ -140,7 +141,9 @@ std::vector<String> MainMemory::getSampleNamesFromPack( const String& pack_name 
 	File entry;
 	while (( entry = sample_dir.openNextFile())) {
 		String name = entry.name();
-		if( !entry.isDirectory() && !name.endsWith( ".csv" )) { filelist.push_back( name ); }
+		if( !entry.isDirectory() && !name.endsWith( ".csv" )) {
+			filelist.push_back( name );
+		}
 	}
 	
 	entry.close();
@@ -158,6 +161,7 @@ std::vector<String> MainMemory::getSamplePacksFromSD()
 	if( !sample_dir || !sample_dir.isDirectory()) {
 		list.emplace_back( "Error occurred!" );
 		list.emplace_back( "Check the SD Card." );
+		interrupts();
 		return list;
 	}
 	while ( auto item = sample_dir.openNextFile()) {

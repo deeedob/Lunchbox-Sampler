@@ -31,6 +31,7 @@ class BaseStates : public Observer<AbstractModule>
 public:
 	BaseStates();
 	void baseUpdate( Events::DIGITAL e );
+	void baseUpdate( Events::Analog::POTS e, const AnalogData& d );
 
 private:
 	/*!

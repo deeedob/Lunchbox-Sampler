@@ -39,6 +39,14 @@ void BaseStates::baseUpdate( Events::DIGITAL e )
 	update_main_menu( e );
 }
 
+void BaseStates::baseUpdate( Events::Analog::POTS e, const AnalogData& d )
+{
+	if( m_inModule ) {
+		m_transitionList[ m_current ].second->update( m_graphics.get(), e, d );
+		return;
+	}
+}
+
 void BaseStates::increment_state()
 {
 	++m_current;

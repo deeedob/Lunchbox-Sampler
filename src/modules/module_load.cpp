@@ -3,6 +3,7 @@
 
 using namespace lbs;
 
+//TODO: add decision to pure purge and find out if already purged
 ModuleLoad::ModuleLoad()
 	: AbstractModule( "Sample Manager" ), m_transitionTable()
 {
@@ -16,11 +17,11 @@ ModuleLoad::ModuleLoad()
 	m_transitionTable.setFunction( STATE::MAIN, [ = ]() {
 		this->draw_main();
 	} );
-	m_transitionTable.setFunction( STATE::PURGE, [ = ]() {
-		this->draw_purge();
-	} );
 	m_transitionTable.setFunction( STATE::LOAD, [ = ]() {
 		this->draw_load();
+	} );
+	m_transitionTable.setFunction( STATE::PURGE, [ = ]() {
+		this->draw_purge();
 	} );
 	m_transitionTable.setFunction( STATE::DECIDE, [ = ]() {
 		this->draw_decision();
@@ -34,11 +35,17 @@ ModuleLoad::ModuleLoad()
 		MainMemory::loadSamplepack( m_samplePacks[ m_samplePackSelection ] );
 		m_inLoading = false;
 		m_return = true;
-		exit();
 	} );
 	m_transitionTable.setFunction( STATE::NO, [ = ]() {
 		m_transitionTable.transition( Events::DIGITAL::BTN_RETURN, false );
 		m_transitionTable.triggerCurrentFunction();
+	} );
+	
+	m_transitionTable.setFunction( STATE::PURGE, [ = ]() {
+		m_inPurge = true;
+		MainMemory::eraseFlash();
+		m_inPurge = false;
+		m_return = true;
 	} );
 	
 	m_transitionTable.get()[ STATE::MAIN ] = {
@@ -123,11 +130,12 @@ void ModuleLoad::update( Graphics* g, Events::DIGITAL e )
 			m_transitionTable.triggerCurrentFunction();
 			if( m_return ) {
 				m_return = false;
+				exit();
 				return;
 			}
 			break;
 	}
-	
+	g->clearDisplay();
 	g->drawWindow( m_top );
 	g->drawWindow( m_bottom );
 	g->display();
@@ -257,16 +265,17 @@ void ModuleLoad::draw_load_progress( std::pair<uint32_t, uint32_t> progress )
 	
 	m_bottom.fillRect( 12, 50, static_cast<int16_t>(percentage * 100.0f), 8, 0xFF );
 	m_bottom.setTextColor( 0xff );
-	m_bottom.setCursor( 30, 70 );
-	m_bottom.print( progress.first );
-	m_bottom.print( " / " );
-	m_bottom.print( progress.second );
+	String msg = progress.first + " / " + progress.second;
+	m_bottom.printlnHCentered( msg.c_str());
 	m_bottom.setCursor( 0, 90 );
 	m_bottom.printlnHCentered( m_samples[ progress.first ].c_str());
 }
 
 void ModuleLoad::exit()
-{ notify( *this ); }
+{
+	free( m_graphics );
+	notify( *this );
+}
 
 void ModuleLoad::emit( const std::pair<uint32_t, uint32_t>& src )
 {

@@ -78,29 +78,17 @@ void LunchboxSampler::setupAnalogEvents()
 	
 	m_analogInterrupts->getPots()->enableISR();
 	
-	m_system->attachAnalog( Events::Analog::POTS::POT_0, []( AnalogData d ) {
-		Serial.print( "Analog Pos: " );
-		Serial.print( d.m_pos );
-		Serial.print( " , Data: " );
-		Serial.println( d.m_data );
+	m_system->attachAnalog( Events::Analog::POTS::POT_0, [ & ]( AnalogData d ) {
+		m_states->baseUpdate( Events::Analog::POTS::POT_0, d );
 	} );
-	m_system->attachAnalog( Events::Analog::POTS::POT_1, []( AnalogData d ) {
-		Serial.print( "Analog Pos: " );
-		Serial.print( d.m_pos );
-		Serial.print( " , Data: " );
-		Serial.println( d.m_data );
+	m_system->attachAnalog( Events::Analog::POTS::POT_1, [ & ]( AnalogData d ) {
+		m_states->baseUpdate( Events::Analog::POTS::POT_1, d );
 	} );
-	m_system->attachAnalog( Events::Analog::POTS::POT_2, []( AnalogData d ) {
-		Serial.print( "Analog Pos: " );
-		Serial.print( d.m_pos );
-		Serial.print( " , Data: " );
-		Serial.println( d.m_data );
+	m_system->attachAnalog( Events::Analog::POTS::POT_2, [ & ]( AnalogData d ) {
+		m_states->baseUpdate( Events::Analog::POTS::POT_2, d );
 	} );
-	m_system->attachAnalog( Events::Analog::POTS::POT_3, []( AnalogData d ) {
-		Serial.print( "Analog Pos: " );
-		Serial.print( d.m_pos );
-		Serial.print( " , Data: " );
-		Serial.println( d.m_data );
+	m_system->attachAnalog( Events::Analog::POTS::POT_3, [ & ]( AnalogData d ) {
+		m_states->baseUpdate( Events::Analog::POTS::POT_3, d );
 	} );
 }
 

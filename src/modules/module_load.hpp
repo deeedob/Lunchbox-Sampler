@@ -36,7 +36,7 @@ private:
 	TransitionTable<STATE, Events::DIGITAL, void()> m_transitionTable;
 	std::vector<String> m_samplePacks;
 	std::vector<String> m_samples;
-	Graphics* m_graphics;   //TODO: too lazy rn
+	Graphics* m_graphics;
 	unsigned int m_samplePackSelection { 0 };
 	bool m_inPurge { false };
 	bool m_inLoading { false };

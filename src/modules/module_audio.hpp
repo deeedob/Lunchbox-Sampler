@@ -1,7 +1,3 @@
-/**************************************************************************************************
- * Copyright (c) 2022. Dennis Oberst                                                              *
- **************************************************************************************************/
-
 #pragma once
 #include "abstract_module.hpp"
 #include <string>
@@ -11,7 +7,8 @@ using namespace lbs;
 class ModuleAudio : public AbstractModule
 {
 public:
-	struct MidiData{
+	struct MidiData
+	{
 		uint8_t type;
 		uint8_t channel;
 		uint8_t data1;
@@ -20,6 +17,13 @@ public:
 	enum class STATE
 	{
 		//MainStates
+		MAIN,
+		MASTER,
+		CHANNEL_1,
+		CHANNEL_2,
+		CHANNEL_3,
+		CHANNEL_4,
+		
 		AUDIO_MODULE_MAIN,
 		AUDIO_MODULE_SUB_1,
 		AUDIO_MODULE_SUB_2,
@@ -27,10 +31,6 @@ public:
 		
 		//CHANNELS
 		CHANNEL_MASTER,
-		CHANNEL_1,
-		CHANNEL_2,
-		CHANNEL_3,
-		CHANNEL_4,
 		
 		//EFFECTS
 		EFFECT_VOLUME,
@@ -54,12 +54,23 @@ public:
 	ModuleAudio();
 	void enter( Graphics* g ) override;
 	void update( Graphics* g, Events::DIGITAL e ) override;
-	void draw_audio_module_main(Graphics* g);
-	void draw_audio_module_sub1(Graphics* g);
-	void draw_audio_module_sub2(Graphics* g);
+	void draw_audio_module_main( Graphics* g );
+	void draw_audio_module_sub1( Graphics* g );
+	void draw_audio_module_sub2( Graphics* g );
 	void exit() override;
 	~ModuleAudio() override;
+	void update( Graphics* g, Events::Analog::POTS pots, const AnalogData& data ) override;
 private:
+	void draw_main();
+	void draw_master( Events::Analog::POTS e, const AnalogData& data );
+	void draw_channel1();
+	void draw_channel2();
+	void draw_channel3();
+	void draw_channel4();
+private:
+	TransitionTable<STATE, Events::DIGITAL, void()> m_transitionTable;
+	bool m_return { false };
+	int8_t m_oldPot0, m_oldPot1, m_oldPot2, m_oldPot3 = 0;
 	Window m_top;
 	Window m_bottom;
 	Window m_left;

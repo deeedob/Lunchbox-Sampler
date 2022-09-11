@@ -48,7 +48,7 @@ bool Audio::playNote( const Note& n )
 	std::lock_guard<std::mutex> guard( m_glue->m_mutex );
 	auto routing = m_glue->m_audioMidiRouting[ n.note ];
 	/* check if the note + routing is in bounds */
-	if( routing > m_glue->m_audioFiles.size() || routing < 0 ) {
+	if( routing > m_glue->m_audioFiles.size() - 1 || routing < 0 ) {
 		return false;
 	}
 	for( auto& item : m_glue->m_rawPlayer ) {
@@ -68,6 +68,17 @@ void Audio::stopNote( const Note& n )
 		if( item.first.isPlaying() && item.second.oldNote == n.note )
 			item.first.stop();
 	}
+}
+
+bool Audio::playSingleRaw( const String& file, float gain )
+{
+	std::lock_guard<std::mutex> guard( m_glue->m_mutex );
+	auto& player = m_glue->m_rawPlayer[ 0 ];
+	if( player.first.isPlaying())
+		player.first.stop();
+	
+	m_glue->m_mixBank[ player.second.mixer_pos ].gain( player.second.channel_pos, gain );
+	return player.first.play( file.c_str());
 }
 
 // TODO: implement BIG polyphony

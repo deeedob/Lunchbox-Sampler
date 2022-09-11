@@ -59,7 +59,7 @@ Window::Window( const Window& other )
 }
 
 Window::Window( Window&& other ) noexcept
-	: Adafruit_GFX(other.WIDTH, other.HEIGHT)
+	: Adafruit_GFX( other.WIDTH, other.HEIGHT )
 {
 	/* thanks Adafruit_GFX for not implementing a proper move constructor... */
 	WIDTH = std::move( other.WIDTH );
@@ -442,49 +442,47 @@ uint8_t Window::getRawPixel( int16_t x, int16_t y ) const
 	}
 	return 0;
 }
-void Window::drawRotary(int16_t x0, int16_t y0, int16_t r,uint16_t color1,uint16_t color2)
+
+void Window::drawRotary( int16_t x0, int16_t y0, int16_t r, uint16_t color1, uint16_t color2 )
 {
-	double alpha=0;
-	for(int i=0; i<75; i++)
-	{
-		writePixel( x0 + cos( alpha-3*PI/4) * r, y0 - sin( alpha-3*PI/4) * r, color1 );
+	double alpha = 0;
+	for( int i = 0; i < 75; i++ ) {
+		writePixel( x0 + cos( alpha - 3 * PI / 4 ) * r, y0 - sin( alpha - 3 * PI / 4 ) * r, color1 );
 		alpha -= ( 2 * PI ) / 100;
 	}
-	fillCircle(x0,y0,r-3,color2);
+	fillCircle( x0, y0, r - 3, color2 );
 }
-void Window::drawCircle(int16_t x0, int16_t y0, int16_t r,uint16_t color1,uint16_t color2, int8_t percentage) {
-	double alpha=0;
-	int scaled=75 * percentage / 100;
-	for(int i=0; i<100; i++)
-	{
-		if(i<scaled) {
-			writePixel( x0 + cos( alpha-3*PI/4) * r, y0 - sin( alpha-3*PI/4) * r, color1 );
+
+void Window::drawCircle( int16_t x0, int16_t y0, int16_t r, uint16_t color1, uint16_t color2, int8_t percentage )
+{
+	double alpha = 0;
+	int scaled = 75 * percentage / 100;
+	for( int i = 0; i < 100; i++ ) {
+		if( i < scaled ) {
+			writePixel( x0 + cos( alpha - 3 * PI / 4 ) * r, y0 - sin( alpha - 3 * PI / 4 ) * r, color1 );
 			alpha -= ( 2 * PI ) / 100;
 		}
-		if(i==scaled)
-		{
-			drawLine(x0,y0,x0 + cos( alpha-3*PI/4) * r,y0 - sin( alpha-3*PI/4) * r, color2);
+		if( i == scaled ) {
+			drawLine( x0, y0, x0 + cos( alpha - 3 * PI / 4 ) * r, y0 - sin( alpha - 3 * PI / 4 ) * r, color2 );
 		}
 	}
-	if(percentage<10)
-	{
-		setCursor(x0-3,y0);
-		setTextColor(color2);
-		println( percentage);
-		setCursor(x0+5,y0);
-		setTextColor(color2);
-		println( '%');
-	}
-	else
-	{
-		setCursor(x0-7,y0);
-		setTextColor(color2);
-		println( percentage);
-		setCursor(x0+5,y0);
-		setTextColor(color2);
-		println( '%');
+	if( percentage < 10 ) {
+		setCursor( x0 - 3, y0 );
+		setTextColor( color2 );
+		println( percentage );
+		setCursor( x0 + 5, y0 );
+		setTextColor( color2 );
+		println( '%' );
+	} else {
+		setCursor( x0 - 7, y0 );
+		setTextColor( color2 );
+		println( percentage );
+		setCursor( x0 + 5, y0 );
+		setTextColor( color2 );
+		println( '%' );
 	}
 }
+
 void Window::drawFastRawVLine( int16_t x, int16_t y, int16_t h, uint16_t color )
 {
 	// x & y already in raw (rotation 0) coordinates, no need to transform.

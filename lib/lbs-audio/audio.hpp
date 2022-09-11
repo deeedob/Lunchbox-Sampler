@@ -35,6 +35,7 @@ namespace lbs
 		Audio();
 		static bool playNote( const Note& n );
 		static void stopNote( const Note& n );
+		static bool playSingleRaw( const String& file, float gain = 1.0f );
 	private:
 		void initialize_connections( POLYPHONY p );
 		void sort_audio_files_ascending();
@@ -51,24 +52,6 @@ namespace lbs
 		RawFilePlayer m_rawPlayer;
 		PatchBank m_patchBank;
 		MixerBank m_mixBank;
-		
-		//test
-		AudioPlaySerialflashRaw raw0;
-		AudioPlaySerialflashRaw raw1;
-		AudioPlaySerialflashRaw raw2;
-		AudioPlaySerialflashRaw raw3;
-		AudioMixer4 mix00;
-		AudioMixer4 mix01;
-		AudioMixer4 master;
-		
-		//AudioConnection p_00;
-		//AudioConnection p_01;
-		//AudioConnection p_10;
-		//AudioConnection p_11;
-		//AudioConnection p_20;
-		//AudioConnection p_21;
-		//AudioConnection p_30;
-		//AudioConnection p_31;
 		
 		/* what is right or wrong i dont know anymore ...
 		 * This somehow works because we call the audio instance from
