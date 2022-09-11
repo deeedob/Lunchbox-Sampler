@@ -110,7 +110,7 @@ void BaseStates::update_main_menu( Events::DIGITAL e )
 	m_graphics->display();
 }
 
-void BaseStates::emit( AbstractModule& src )
+void BaseStates::emit( const AbstractModule& src )
 {
 	m_inModule = false;
 	m_graphics->clearDisplay();

@@ -19,7 +19,7 @@ struct Observer
 	 * @brief gets called from an observable when notifying!
 	 * @param src The Observable object.
 	 */
-	virtual void emit( T& src ) = 0;
+	virtual void emit( const T& src ) = 0;
 };
 
 /*!
@@ -34,7 +34,7 @@ public:
 	 * @brief When implemented trigger this function to notify the Observer.
 	 * @param src Usually the *this pointer or the class that gets Observed.
 	 */
-	void notify( T& src )
+	void notify( const T& src )
 	{
 		m_mutex.lock();
 		for( const auto& i : m_observers ) {

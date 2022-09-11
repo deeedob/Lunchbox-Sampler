@@ -6,13 +6,14 @@
 #include <algorithm>
 #include <string>
 #include <vector>
+#include <observer.hpp>
 
 namespace lbs
 {
-
-	class MainMemory
+	
+	class MainMemory : public Observable<std::pair<uint32_t, uint32_t>>
 	{
-
+	
 	public:
 		MainMemory();
 		//TODO: implement these functions
@@ -22,11 +23,15 @@ namespace lbs
 		//bool isFitting(constr String& pack_name)
 		//bool flashEmpty()
 		static void init();
+		static MainMemory* instance();
 		static void eraseFlash();
-		static std::vector<String> getFilelistFromFlash();
 		static void transferSingleToFlash( const String& filepath );
 		static void loadSamplepack( const String& pack_name );
+		
+		static std::vector<String> getFilelistFromFlash();
 		static std::vector<String> getSampleNamesFromPack( const String& pack_name );
+		static std::vector<String> getSamplePacksFromSD();
+		
 		static void printAllFilesFromSD();
 		//static void transferFolderToFlash( const std::string& filepath );
 		//std::vector< String > getAllSamplepacks();
@@ -35,5 +40,6 @@ namespace lbs
 		//void initializeSamplepack( const String& samplepack );
 	private:
 		const static String m_packRootDir;
+		static MainMemory* m_glue;
 	};
-}
+}// namespace lbs

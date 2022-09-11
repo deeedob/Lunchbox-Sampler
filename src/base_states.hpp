@@ -1,14 +1,14 @@
 #pragma once
 #include <graphics.hpp>
-#include <memory>
 #include <list>
+#include <memory>
 #include <observer.hpp>
 
-#include "modules/module_load.hpp"
 #include "modules/module_audio.hpp"
+#include "modules/module_load.hpp"
+#include "modules/module_main_settings.hpp"
 #include "modules/module_recorder.hpp"
 #include "modules/module_sound_manager.hpp"
-#include "modules/module_main_settings.hpp"
 
 using namespace lbs;
 
@@ -17,7 +17,7 @@ class BaseStates : public Observer<AbstractModule>
 	
 	enum class STATE
 	{
-		MAIN_MENU,      // this class
+		MAIN_MENU,// this class
 		LOAD,
 		MANAGESOUND,
 		AUDIO,
@@ -25,21 +25,24 @@ class BaseStates : public Observer<AbstractModule>
 		MAINSETTINGS
 	};
 	
-	using Transition = std::pair<STATE, std::unique_ptr<AbstractModule>>;
+	using Transition = std::pair<STATE, std::unique_ptr<AbstractModule> >;
 	using TransitionList = std::vector<Transition>;
+
 public:
 	BaseStates();
 	void baseUpdate( Events::DIGITAL e );
+
 private:
 	/*!
 	 * @brief Gets emitted when a derived module exits!
 	 * @param src The derived module
 	 */
-	void emit( AbstractModule& src ) override;
+	void emit( const AbstractModule& src ) override;
 	void increment_state();
 	void decrement_state();
 	void draw_main_menu();
 	void update_main_menu( Events::DIGITAL e );
+
 private:
 	std::unique_ptr<Graphics> m_graphics;
 	TransitionList m_transitionList;
