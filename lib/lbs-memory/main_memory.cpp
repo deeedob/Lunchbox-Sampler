@@ -354,7 +354,6 @@ void MainMemory::printAllFilesFromSD() {
     Serial.println("_____________END  PRINTDIR_______________");
 }
 
-
 void MainMemory::loadSettings(const String &packName) {
     const String pack = mPackRootDir + packName + "/";
     const String path = pack + C_SETTINGS_FILE;
@@ -366,6 +365,7 @@ void MainMemory::loadSettings(const String &packName) {
         Serial.print(path.c_str());
         Serial.println(" does not exist!");
 #endif
+        return;
         //TODO: Error handling
     }
 
@@ -375,6 +375,7 @@ void MainMemory::loadSettings(const String &packName) {
 #ifdef VERBOSE
         Serial.println("ERROR in loadSettings: could not read file!");
 #endif
+        return;
         //TODO: Error handling
     }
 
@@ -390,7 +391,6 @@ void MainMemory::loadSettings(const String &packName) {
 
     while (settings.available()) {
         line = settings.readStringUntil('\n');
-        Serial.println(line);
         pos = line.indexOf(',');
         pos2 = line.indexOf(',', pos + 1);
 
@@ -481,5 +481,10 @@ void MainMemory::printMapping() {
 
 uint MainMemory::getFreeSpacefromFlash() {
     return freeSpaceFlash;
+}
+
+String MainMemory::getSampleFromNote(uint8_t note) {
+    String res = sampleMapping[note];
+    return res;
 }
 

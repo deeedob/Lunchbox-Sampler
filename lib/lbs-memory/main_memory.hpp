@@ -42,14 +42,12 @@ namespace lbs {
 
         void eraseFlash();
 
+        String getSampleFromNote(uint8_t note);
+
         static std::vector<String> getFilelistFromFlash();
-
         static uint transferSampleToFlash(const String &filepath, size_t sampleSize);
-
         void loadSamplepack(const String &packName);
-
         static std::vector<String> getSampleNamesFromPack(const String &packName);
-
         static void printAllFilesFromSD();
 
         static void printMapping();
