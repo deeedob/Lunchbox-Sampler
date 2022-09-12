@@ -6,40 +6,68 @@
 #include <algorithm>
 #include <string>
 #include <vector>
+#include <map>
 
-namespace lbs
-{
-	enum AUDIOTYPE
-	{
-		INVALID = 0,
-		WAV = 1,
-		RAW = 2
-	};
+namespace lbs {
+    enum AUDIOTYPE {
+        INVALID = 0,
+        WAV = 1,
+        RAW = 2
+    };
 
-	class MainMemory
-	{
+    enum playbackMode {
+        ONESHOT = 0,
+        LOOP = 1,
+    };
 
-	public:
-		MainMemory();
-		//TODO: implement these functions
-		//TODO: handle if samplepack is too big for flash!
-		//int getFreeSpacefromFlash();
-		//int getFreeSpacefromSD();
-		//bool isFitting(constr String& pack_name)
-		//bool flashEmpty()
-		
-		static void eraseFlash();
-		static std::vector< String > getFilelistFromFlash();
-		static void transferSampleToFlash( const String& filepath );
-		static void loadSamplepack( const String& pack_name );
-		static std::vector<String> getSampleNamesFromPack( const String& pack_name );
-		static void printAllFilesFromSD();
-		//static void transferFolderToFlash( const std::string& filepath );
-		//std::vector< String > getAllSamplepacks();
-		//std::vector<String> getAllFiles();
-		//std::vector<String> getAllSamples( const String& samplepack );
-		//void initializeSamplepack( const String& samplepack );
-	private:
-		const static String m_packRootDir;
-	};
+    struct PitchVal {
+        int8_t value = -1;
+    };
+
+    struct mapping {
+        String sample;
+        playbackMode mode;
+    };
+
+    class MainMemory {
+
+    public:
+        MainMemory();
+
+        //TODO: implement these functions
+        uint getFreeSpacefromFlash();
+        //int getFreeSpacefromSD();
+        //bool isFitting(constr String& pack_name)
+        //bool flashEmpty()
+
+        void eraseFlash();
+
+        static std::vector<String> getFilelistFromFlash();
+
+        static uint transferSampleToFlash(const String &filepath, size_t sampleSize);
+
+        void loadSamplepack(const String &packName);
+
+        static std::vector<String> getSampleNamesFromPack(const String &packName);
+
+        static void printAllFilesFromSD();
+
+        static void printMapping();
+
+        static void loadSettings(const String &packName);
+        //static void transferFolderToFlash( const std::string& filepath );
+        //std::vector< String > getAllSamplepacks();
+        //std::vector<String> getAllFiles();
+        //std::vector<String> getAllSamples( const String& samplepack );
+        //void initializeSamplepack( const String& samplepack );
+
+    private:
+        uint freeSpaceFlash = 0;
+
+        const static String mPackRootDir;
+        static const std::map<String, PitchVal> pitches;
+        static String sampleMapping[128];
+        static playbackMode modeMapping[128];
+
+    };
 }
