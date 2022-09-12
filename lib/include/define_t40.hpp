@@ -47,4 +47,4 @@
 #define C_FLASH_PIN 6
 #define C_FLASHSIZE 16
 
-#define C_SETTINGS_FILE "/mapping.csv"
+#define C_SETTINGS_FILE "mapping.csv"
