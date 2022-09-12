@@ -202,7 +202,7 @@ void MainMemory::eraseFlash() {
 #ifdef VERBOSE
     Serial.println( "ready" );
 #endif
-    this->freeSpaceFlash = C_FLASHSIZE * 1000000;
+    this->freeSpaceFlash = C_FLASHSIZE;
 }
 
 void MainMemory::loadSamplepack(const String &packName) {
@@ -486,5 +486,16 @@ uint MainMemory::getFreeSpacefromFlash() {
 String MainMemory::getSampleFromNote(uint8_t note) {
     String res = sampleMapping[note];
     return res;
+}
+
+uint64_t MainMemory::getFreeSpacefromSD() {
+    return SD.totalSize() - SD.usedSize();
+}
+
+bool MainMemory::flashEmpty() {
+    if (this->getFreeSpacefromFlash() == C_FLASHSIZE) {
+        return true;
+    }
+    return false;
 }
 
