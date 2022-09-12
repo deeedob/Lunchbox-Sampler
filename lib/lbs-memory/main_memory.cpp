@@ -499,3 +499,15 @@ bool MainMemory::flashEmpty() {
     return false;
 }
 
+std::vector<String> MainMemory::getAllSamplepacks() {
+    auto res = std::vector<String>();
+    File packdir = SD.open(mPackRootDir.c_str());
+
+    File entry;
+    while ((entry = packdir.openNextFile())) {
+        res.push_back(entry.name());
+    }
+
+    return res;
+}
+

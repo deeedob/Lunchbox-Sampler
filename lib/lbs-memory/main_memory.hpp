@@ -38,26 +38,27 @@ namespace lbs {
 
         uint getFreeSpacefromFlash();
 
-        uint64_t getFreeSpacefromSD();
-
-        bool flashEmpty()
+        bool flashEmpty();
 
         static std::vector<String> getFilelistFromFlash();
 
-        static void printMapping();
+        uint64_t getFreeSpacefromSD();
 
         static void printAllFilesFromSD();
 
+
+        static void printMapping();
+
+
         String getSampleFromNote(uint8_t note);
-
         void loadSamplepack(const String &packName);
-
         static void loadSettings(const String &packName);
-
         static uint transferSampleToFlash(const String &filepath, size_t sampleSize);
 
+
         static std::vector<String> getSampleNamesFromPack(const String &packName);
-        //std::vector< String > getAllSamplepacks();
+
+        static std::vector<String> getAllSamplepacks();
         //std::vector<String> getAllFiles();
         //std::vector<String> getAllSamples( const String& samplepack );
         //void initializeSamplepack( const String& samplepack );
