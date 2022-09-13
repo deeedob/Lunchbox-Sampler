@@ -24,7 +24,6 @@ int main() {
     //Reserve memory for audio connections (taken from SamplePlayer example in audiolibrary)
     AudioMemory(10);
 
-    auto mf = lbs::MainMemory();
     //mf.eraseFlash();
     //auto samplelist = mf.getSampleNamesFromPack( "SamplePack03" );
     //Serial.println( "Files from Samplepack03:" );
@@ -42,11 +41,16 @@ int main() {
     //for( auto& i : flashlist ) { Serial.println( i.c_str() ); }
 
     //mf.loadSamplepack("SamplePack01");
-    auto packs = mf.getAllSamplepacks();
+    //auto packs = mf.getAvailableSamplepacks();
+    lbs::MainMemory::initMemory();
+    lbs::MainMemory::deleteMappingFile("SamplePack02");
+    lbs::MainMemory::createAllStdMappingFiles();
 
+/*
     for (auto &pack: packs) {
         Serial.println(pack);
     }
+*/
 /*
     Serial.println("Play Samples");
 	g_audioShield.enable();
@@ -65,7 +69,7 @@ int main() {
 	//Serial.println( "Playing sample finished" );
     Serial.println( "Printing Settings");
 */
-//auto res = mf.loadSettings("SamplePack02");
+//auto res = mf.loadMappingFile("SamplePack02");
     //mf.eraseFlash();
     //mf.printMapping();
 

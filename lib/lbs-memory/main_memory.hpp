@@ -32,43 +32,59 @@ namespace lbs {
     class MainMemory {
 
     public:
-        MainMemory();
-
-        void eraseFlash();
-
-        uint getFreeSpacefromFlash();
-
-        bool flashEmpty();
-
-        static std::vector<String> getFilelistFromFlash();
-
-        uint64_t getFreeSpacefromSD();
+        //general functions
+        static bool initMemory();
 
         static void printAllFilesFromSD();
 
+        static uint64_t getFreeSpacefromSD();
 
-        static void printMapping();
+        // flash chip specific functions
+        static std::vector<String> getFilelistFromFlash();
 
+        static bool flashEmpty();
 
-        String getSampleFromNote(uint8_t note);
-        void loadSamplepack(const String &packName);
-        static void loadSettings(const String &packName);
-        static uint transferSampleToFlash(const String &filepath, size_t sampleSize);
+        static void eraseFlash();
 
+        static uint getFreeSpacefromFlash();
+
+        // return midiNote Name as String
+        static String getNoteName(uint8_t midiNote);
+
+        // sample pack functions
+        static std::vector<String> getAvailableSamplepacks();
 
         static std::vector<String> getSampleNamesFromPack(const String &packName);
 
-        static std::vector<String> getAllSamplepacks();
-        //std::vector<String> getAllFiles();
-        //std::vector<String> getAllSamples( const String& samplepack );
-        //void initializeSamplepack( const String& samplepack );
+        static void loadSamplepack(const String &packName);
+
+        static String getLoadedPackName();
+
+        static String getSampleFromNote(uint8_t note);
+
+        static bool setSampleForNote(const String &sampleName, uint8_t midiNote);
+
+        // mapping file functions
+        static bool createStdMappingFile(const String &packName);
+
+        static bool deleteMappingFile(const String &packName);
+
+        static void createAllStdMappingFiles();
+
+        static bool saveCurrentMappingToFile();
+
+        static void printMapping();
 
     private:
-        uint freeSpaceFlash = 0;
-
+        static uint freeSpaceFlash;
         const static String mPackRootDir;
         static const std::map<String, PitchVal> pitches;
         static String sampleMapping[128];
         static playbackMode modeMapping[128];
+        static String currentPack;
+
+        static void loadMappingFile(const String &packName);
+
+        static uint transferSampleToFlash(const String &filepath, size_t sampleSize);
     };
 }
