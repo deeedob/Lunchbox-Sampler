@@ -253,17 +253,10 @@ uint64_t MainMemory::getFreeSpacefromSD() {
     return SD.totalSize() - SD.usedSize();
 }
 
-**
-* @
-brief returns
-free space
-on flash
-* @return
-unsigned int of
-free space
-on flash
+/**
+ * @brief returnsfree space on flash
+ * @return unsigned int of free space on flash
 */
-
 uint MainMemory::getFreeSpacefromFlash() {
     return freeSpaceFlash;
 }
@@ -273,8 +266,65 @@ uint MainMemory::getFreeSpacefromFlash() {
  * @return boolean if flash is empty
  */
 bool MainMemory::flashEmpty() {
-    if (getFreeSpacefromFlash() == C_FLASHSIZE) {
-        return true;
-    }
-    return false;
+	noInterrupts();
+	if (getFreeSpacefromFlash() == C_FLASHSIZE) {
+		interrupts();
+		return true;
+	}
+	interrupts();
+	return false;
+}
+
+/**
+ * @brief converts midiNote integer [0, 127] to Note name (scientific pitch notation)
+ * @param midiNote: unsigned byte [0, 127]
+ * @return string with according note name (scientific pitch notation)
+ */
+String MainMemory::getNoteName(uint8_t midiNote) {
+	noInterrupts();
+	uint8_t octave = (midiNote / 12) - 1;
+	uint8_t noteVal = midiNote % 12;
+	String noteValTxt;
+
+	switch (noteVal) {
+		case 0:
+			interrupts();
+			return "C" + String(octave);
+		case 1:
+			interrupts();
+			return "C#" + String(octave);
+		case 2:
+			interrupts();
+			return "D" + String(octave);
+		case 3:
+			interrupts();
+			return "D#" + String(octave);
+		case 4:
+			interrupts();
+			return "E" + String(octave);
+		case 5:
+			interrupts();
+			return "F" + String(octave);
+		case 6:
+			interrupts();
+			return "F#" + String(octave);
+		case 7:
+			interrupts();
+			return "G" + String(octave);
+		case 8:
+			interrupts();
+			return "G#" + String(octave);
+		case 9:
+			interrupts();
+			return "A" + String(octave);
+		case 10:
+			interrupts();
+			return "A#" + String(octave);
+		case 11:
+			interrupts();
+			return "B" + String(octave);
+		default:
+			interrupts();
+			return "C" + String(octave);
+	}
 }

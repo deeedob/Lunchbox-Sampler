@@ -55,7 +55,8 @@ namespace lbs {
 
         static uint getFreeSpacefromFlash();
 
-        //static String getNoteName(uint8_t midiNote);
+        static String getNoteName(uint8_t midiNote);
+
         static std::vector<String> getSamplePacksFromSD();
 
         static std::vector<String> getSampleNamesFromPack(const String &pack_name);
