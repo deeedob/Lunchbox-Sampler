@@ -31,7 +31,10 @@ void MainMemory::init()
 	delay( 200 );
 	interrupts();
 }
-
+/**
+ * @brief  returns a filelist of files on flash
+ * @return a vector of strings containing all files on flash
+ */
 std::vector<String> MainMemory::getFilelistFromFlash()
 {
 	noInterrupts();
