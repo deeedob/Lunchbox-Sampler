@@ -25,9 +25,9 @@ String MainMemory::sampleMapping[] = {""};
 playbackMode MainMemory::modeMapping[] = {ONESHOT};
 
 /**
- * @brief
- * @param
- * @return
+ * @brief skips the header of a wave file reference provided
+ * @param File &f: reference to a wave file
+ * @return the first position of the payload after the header
  */
 size_t findPayload(File &f) {
 
@@ -55,9 +55,9 @@ size_t findPayload(File &f) {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief calculated the size of a wave file without the header
+ * @param fullpath: the path to a wave file
+ * @return the size of the wave payload/audio data
  */
 size_t getRawAudioSize(const String &fullpath) {
     File f = SD.open(fullpath.c_str());
@@ -69,9 +69,9 @@ size_t getRawAudioSize(const String &fullpath) {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief converts the input string into a viable playback mode
+ * @param string: string describing playbackmode
+ * @return enum of playbackMode
  */
 playbackMode parsePlaybackMode(const String &string) {
     if (string == "LOOP") {
@@ -81,9 +81,9 @@ playbackMode parsePlaybackMode(const String &string) {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief converts a playbackMode (enum) to string
+ * @param mode: playbackMode to convert
+ * @return string describing playback mode
  */
 String parseStringFromPlaybackMode(playbackMode mode) {
     return (const String[]) {
@@ -93,9 +93,9 @@ String parseStringFromPlaybackMode(playbackMode mode) {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief determines filetype of an audio file by extension
+ * @param sampleName: name of sample/audio file
+ * @return audiotype (RAW, WAVE or INVALID)
  */
 AUDIOTYPE getAudioType(const String &sampleName) {
     String ext = sampleName.substring(sampleName.lastIndexOf(".")).toLowerCase();
@@ -164,9 +164,8 @@ void printDirectory(File dir, int num_spaces) {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief initializes the flash chip and the SD card
+ * @return success initializing or failure
  */
 bool MainMemory::initMemory() {
     SPI.setMOSI(C_SDCARD_MOSI_PIN);
@@ -188,9 +187,7 @@ bool MainMemory::initMemory() {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief prints all files on SD card on serial terminal
  */
 void MainMemory::printAllFilesFromSD() {
     Serial.println("_____________START PRINTDIR_______________");
@@ -200,18 +197,16 @@ void MainMemory::printAllFilesFromSD() {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief returns free space on SD card
+ * @return free space on SD card
  */
 uint64_t MainMemory::getFreeSpacefromSD() {
     return SD.totalSize() - SD.usedSize();
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief  returns a filelist of files on flash
+ * @return a vector of strings containing all files on flash
  */
 std::vector<String> MainMemory::getFilelistFromFlash() {
     unsigned int count = 0;
@@ -246,9 +241,8 @@ std::vector<String> MainMemory::getFilelistFromFlash() {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief function to check if flash is empty
+ * @return boolean if flash is empty
  */
 bool MainMemory::flashEmpty() {
     if (getFreeSpacefromFlash() == C_FLASHSIZE) {
@@ -258,9 +252,7 @@ bool MainMemory::flashEmpty() {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief erases all files from the flash chip
  */
 void MainMemory::eraseFlash() {
 #ifdef VERBOSE
@@ -277,18 +269,17 @@ void MainMemory::eraseFlash() {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief returns free space on flash
+ * @return unsigned int of free space on flash
  */
 uint MainMemory::getFreeSpacefromFlash() {
     return freeSpaceFlash;
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief converts midiNote integer [0, 127] to Note name (scientific pitch notation)
+ * @param midiNote: unsigned byte [0, 127]
+ * @return string with according note name (scientific pitch notation)
  */
 String MainMemory::getNoteName(uint8_t midiNote) {
     uint8_t octave = (midiNote / 12) - 1;
@@ -326,9 +317,8 @@ String MainMemory::getNoteName(uint8_t midiNote) {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief provides a list of all Samplepacks on SD card
+ * @return vector of strings with all Samplepacks
  */
 std::vector<String> MainMemory::getAvailableSamplepacks() {
     auto res = std::vector<String>();
@@ -343,9 +333,9 @@ std::vector<String> MainMemory::getAvailableSamplepacks() {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief provides all Samples in a samplepack
+ * @param packName: name of the samplepack (path relative to packfolder / only name)
+ * @return vector of strings with all samples in a sample pack
  */
 std::vector<String> MainMemory::getSampleNamesFromPack(const String &packName) {
     std::vector<String> filelist;
@@ -382,6 +372,10 @@ std::vector<String> MainMemory::getSampleNamesFromPack(const String &packName) {
     return filelist;
 }
 
+/**
+ * @brief loads the given samplepack onto flash and loads its mapping file if present
+ * @param packName: name of the samplepack (only name / relative to packfolder)
+ */
 void MainMemory::loadSamplepack(const String &packName) {
     MainMemory::eraseFlash();
     MainMemory::createStdMappingFile(packName);
@@ -435,18 +429,16 @@ void MainMemory::loadSamplepack(const String &packName) {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @return name of loaded samplepack on flash
  */
 String MainMemory::getLoadedPackName() {
     return currentPack;
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief returns the sample mapped to the given note (from loaded mapping)
+ * @param note: note as unsigned byte [0, 127]
+ * @return sample name as string
  */
 String MainMemory::getSampleFromNote(uint8_t note) {
     String res = sampleMapping[note];
@@ -454,9 +446,10 @@ String MainMemory::getSampleFromNote(uint8_t note) {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief changes sample for note in current mapping
+ * @param sampleName: name of the sample to be set
+ * @param midiNote: midi note for which the sample is to be set
+ * @return success or failure
  */
 bool MainMemory::setSampleForNote(const String &sampleName, uint8_t midiNote) {
 
@@ -481,9 +474,9 @@ bool MainMemory::setSampleForNote(const String &sampleName, uint8_t midiNote) {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief creates a standard mapping file for samplepack (starting at C4 or C0 if many samples)
+ * @param packName: name of sample pack to be processed
+ * @return success or failure
  */
 bool MainMemory::createStdMappingFile(const String &packName) {
     String settingsPath = mPackRootDir + "/" + packName + "/" + C_SETTINGS_FILE;
@@ -526,9 +519,9 @@ bool MainMemory::createStdMappingFile(const String &packName) {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief deletes mapping file for given samplepack if exists
+ * @param packName: samplepack name (relative to pack folder)
+ * @return success or failure
  */
 bool MainMemory::deleteMappingFile(const String &packName) {
     String settingspath = mPackRootDir + "/" + packName + "/" + C_SETTINGS_FILE;
@@ -545,9 +538,7 @@ bool MainMemory::deleteMappingFile(const String &packName) {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief creates standard mapping files for all samplepacks if none existing
  */
 void MainMemory::createAllStdMappingFiles() {
     auto packs = getAvailableSamplepacks();
@@ -557,9 +548,8 @@ void MainMemory::createAllStdMappingFiles() {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief saves current mapping of loaded samplepack to mapping file of loaded samplepack
+ * @return success or failure
  */
 bool MainMemory::saveCurrentMappingToFile() {
     uint8_t index = 0;
@@ -586,9 +576,7 @@ bool MainMemory::saveCurrentMappingToFile() {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief prints loaded mapping
  */
 void MainMemory::printMapping() {
     for (int i = 0; i < 128; i++) {
@@ -602,9 +590,8 @@ void MainMemory::printMapping() {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief loads a mapping file into RAM for triggering samples
+ * @param packName: samplepack to be loaded
  */
 void MainMemory::loadMappingFile(const String &packName) {
     const String pack = mPackRootDir + packName + "/";
@@ -712,9 +699,10 @@ void MainMemory::loadMappingFile(const String &packName) {
 }
 
 /**
- * @brief
- * @param
- * @return
+ * @brief transfers a given sample to flash
+ * @param filepath: absolute path to audio sample
+ * @param sampleSize: custom sample size in case of low free space on flash
+ * @return unsigned int of bytes transferred to flash chip
  */
 uint MainMemory::transferSampleToFlash(const String &filepath, const size_t sampleSize = 0) {
 
@@ -762,7 +750,7 @@ uint MainMemory::transferSampleToFlash(const String &filepath, const size_t samp
 
     if (!SerialFlashChip::createErasable(basename.c_str(), filelength)) {
 #ifdef VERBOSE
-        Serial.print("transferToFlash: error creating file \"");
+        Serial.print("transferToFlash(): error creating file \"");
         Serial.print(basename.c_str());
         Serial.println("\" on Flash");
 #endif
