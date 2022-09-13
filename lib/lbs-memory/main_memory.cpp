@@ -373,7 +373,8 @@ std::vector<String> MainMemory::getSampleNamesFromPack(const String &packName) {
 }
 
 /**
- * @brief loads the given samplepack onto flash and loads its mapping file if present
+ * @brief loads the given samplepack onto flash and loads its mapping file if present and
+ * strips sample size by percentage if size in sum is too big for flash chip
  * @param packName: name of the samplepack (only name / relative to packfolder)
  */
 void MainMemory::loadSamplepack(const String &packName) {
