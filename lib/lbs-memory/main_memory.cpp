@@ -230,13 +230,20 @@ void printDirectory( File dir, int numSpaces )
 
 void MainMemory::printAllFilesFromSD()
 {
-	Serial.println( "_____________START PRINTDIR_______________" );
-	File root = SD.open( "/" );
-	printDirectory( root, 0 );
-	Serial.println( "_____________END  PRINTDIR_______________" );
+    Serial.println("_____________START PRINTDIR_______________");
+    File root = SD.open("/");
+    printDirectory(root, 0);
+    Serial.println("_____________END  PRINTDIR_______________");
 }
 
-MainMemory* MainMemory::instance()
-{
-	return m_glue;
+MainMemory *MainMemory::instance() {
+    return m_glue;
+}
+
+/**
+ * @brief returns free space on SD card
+ * @return free space on SD card
+ */
+uint64_t MainMemory::getFreeSpacefromSD() {
+    return SD.totalSize() - SD.usedSize();
 }

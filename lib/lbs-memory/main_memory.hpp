@@ -45,13 +45,14 @@ namespace lbs {
 
         static void printAllFilesFromSD();
 
-        //static uint64_t getFreeSpacefromSD();
+        static uint64_t getFreeSpacefromSD();
+
         static std::vector<String> getFilelistFromFlash();
 
         //static bool flashEmpty();
         static void eraseFlash();
 
-        static uint getFreeSpacefromFlash();
+        //static uint getFreeSpacefromFlash();
 
         //static String getNoteName(uint8_t midiNote);
         static std::vector<String> getSamplePacksFromSD();
