@@ -26,7 +26,7 @@ class BaseStates : public Observer<AbstractModule>
 	};
 	
 	using Transition = std::pair<STATE, std::unique_ptr<AbstractModule>>;
-	using TransitionList = std::list<Transition>;
+	using TransitionList = std::vector<Transition>;
 public:
 	BaseStates();
 	void baseUpdate( Events::DIGITAL e );
@@ -43,7 +43,7 @@ private:
 private:
 	std::unique_ptr<Graphics> m_graphics;
 	TransitionList m_transitionList;
-	std::list<Transition>::iterator m_current;
+	uint8_t m_current;
 	Window m_top;
 	Window m_bottom;
 	bool m_inModule;

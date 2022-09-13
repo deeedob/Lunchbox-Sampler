@@ -1,45 +1,80 @@
 #pragma once
 #include <Audio.h>
 #include <Wire.h>
-#include <SPI.h>
-#include <SD.h>
-#include <SerialFlash.h>
 #include <memory>
+#include <note.hpp>
+#include <vector>
+#include <numeric>
+#include <main_memory.hpp>
+#include <TeensyThreads.h>
 
-class Audio
+namespace lbs
 {
-	using Patch = std::unique_ptr<AudioConnection>;
-public:
-	Audio();
-	void initializeBase();
-private:
-	// AudioPlayQueue m_queue; this queue maybe better ?
-	AudioControlSGTL5000 m_audioControlSgtl5000;
-	AudioPlaySdWav m_rawFlash1;
-	AudioPlaySerialflashRaw m_rawFlash2;
-	AudioPlaySerialflashRaw m_rawFlash3;
-	AudioPlaySerialflashRaw m_rawFlash4;
-	
-	AudioMixer4 m_mixer0Left;
-	AudioMixer4 m_mixer0Right;
-	
-	AudioFilterLadder m_filterLadderLeft;
-	AudioFilterLadder m_filterLadderRight;
-	
-	AudioOutputI2S m_outputI2S;
-	
-	Patch p_rawToMixer1L;
-	Patch p_rawToMixer2L;
-	Patch p_rawToMixer3L;
-	Patch p_rawToMixer4L;
-	Patch p_rawToMixer1R;
-	Patch p_rawToMixer2R;
-	Patch p_rawToMixer3R;
-	Patch p_rawToMixer4R;
-	
-	Patch p_mixer0L;
-	Patch p_mixer0R;
-	
-	Patch p_ladderL;
-	Patch p_ladderR;
-};
+	class Audio
+	{
+		struct RoutingInfo
+		{
+			uint8_t oldNote { 0 };
+			uint8_t mixer_pos { 0 };
+			uint8_t channel_pos { 0 };
+		};
+		using Patch = std::unique_ptr<AudioConnection>;
+		using AudioFiles = std::vector<String>;
+		using AudioMidiRouting = std::vector<uint8_t>;
+		using RawFilePlayer = std::vector<std::pair<AudioPlaySerialflashRaw, RoutingInfo>>;
+		using PatchBank = std::vector<Patch>;
+		using MixerBank = std::vector<AudioMixer4>;
+	public:
+		enum class POLYPHONY
+		{
+			SMALL = 4,
+			MEDIUM = 8,
+			BIG = 16,
+		};
+		explicit Audio( POLYPHONY poly = POLYPHONY::SMALL );
+		Audio();
+		static bool playNote( const Note& n );
+		static void stopNote( const Note& n );
+	private:
+		void initialize_connections( POLYPHONY p );
+		void sort_audio_files_ascending();
+		uint8_t get_amount_of_mixer( POLYPHONY p );
+		uint8_t get_amount_of_patches( POLYPHONY p );
+	private:
+		std::mutex m_mutex;
+		AudioControlSGTL5000 m_audioControlSgtl5000;
+		AudioOutputI2S m_outputI2S;
+		
+		AudioFiles m_audioFiles;
+		AudioMidiRouting m_audioMidiRouting;
+		
+		RawFilePlayer m_rawPlayer;
+		PatchBank m_patchBank;
+		MixerBank m_mixBank;
+		
+		//test
+		AudioPlaySerialflashRaw raw0;
+		AudioPlaySerialflashRaw raw1;
+		AudioPlaySerialflashRaw raw2;
+		AudioPlaySerialflashRaw raw3;
+		AudioMixer4 mix00;
+		AudioMixer4 mix01;
+		AudioMixer4 master;
+		
+		//AudioConnection p_00;
+		//AudioConnection p_01;
+		//AudioConnection p_10;
+		//AudioConnection p_11;
+		//AudioConnection p_20;
+		//AudioConnection p_21;
+		//AudioConnection p_30;
+		//AudioConnection p_31;
+		
+		/* what is right or wrong i dont know anymore ...
+		 * This somehow works because we call the audio instance from
+		 * a static function in the MidiListener wrapped inside a member function called from a seperate thread -- pure madness ---
+		 * Maybe there is a more optimal way but for now this will again be used... good ol glue routine again :]
+		 * */
+		static Audio* m_glue;
+	};
+}

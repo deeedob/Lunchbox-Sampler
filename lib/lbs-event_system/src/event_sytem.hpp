@@ -32,6 +32,7 @@ namespace lbs
 		void attachAnalog( Events::Analog::FSR e, std::function<void( AnalogData )> f );
 		void detachAnalog( Events::Analog::FSR e );
 		
+		
 		/* TODO: pimpl or so?*/
 		void enqueueDigital( Events::DIGITAL e );
 		void enqueueAnalog( Events::Analog::POTS e, AnalogData value );

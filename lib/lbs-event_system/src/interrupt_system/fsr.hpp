@@ -33,9 +33,10 @@ namespace lbs
 		void updateRange();
 	private:
 		AnalogInterrupts* const m_parent;   //backlink to parent
-		std::array< volatile u_int16_t, 4 > m_values;
+		std::array<volatile u_int16_t, 4> m_values;
 		volatile u_int8_t m_position;
-		std::array< Multiplex, 4 > m_pads;
+		/** <Multiplex Control, Triggered On| Off > relates to Note On/Off */
+		std::array<std::pair<Multiplex, bool>, 4> m_pads;
 		u_int16_t m_delta;
 		static FSR* m_isrInstance;
 	};

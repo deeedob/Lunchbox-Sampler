@@ -2,10 +2,11 @@
 
 using namespace lbs;
 
-Multiplex::Multiplex( u_int8_t mpxPin)
+Multiplex::Multiplex( u_int8_t mpxPin )
+	: m_active( true )
 {
-	std::array< bool, 3 > pos = getTable().find( mpxPin )->second;
-	m_fnPinSelect = [pos]() {
+	std::array<bool, 3> pos = getTable().find( mpxPin )->second;
+	m_fnPinSelect = [ pos ]() {
 		if( pos[ 0 ] )
 			digitalWriteFast( C_FSR_SEL_2, HIGH );
 		else
@@ -26,16 +27,17 @@ void Multiplex::setActive()
 	m_fnPinSelect();
 }
 
-const Multiplex::MpxLookup & Multiplex::getTable() {
-    static const auto* table = new MpxLookup ({
-        {0, {false, false, false}},
-        {1, {false, false, true }},
-        {2, {false, true, false }},
-        {3, {false, true, true  }},
-        {4, {true, false, false }},
-        {5, {true, false, true  }},
-        {6, {true, true, false  }},
-        {7, {true, true, true   }},
-    });
-    return *table;
+const Multiplex::MpxLookup& Multiplex::getTable()
+{
+	static const auto* table = new MpxLookup( {
+		                                          { 0, { false, false, false }},
+		                                          { 1, { false, false, true }},
+		                                          { 2, { false, true, false }},
+		                                          { 3, { false, true, true }},
+		                                          { 4, { true, false, false }},
+		                                          { 5, { true, false, true }},
+		                                          { 6, { true, true, false }},
+		                                          { 7, { true, true, true }},
+	                                          } );
+	return *table;
 }

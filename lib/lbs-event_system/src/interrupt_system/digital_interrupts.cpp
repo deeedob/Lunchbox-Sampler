@@ -4,7 +4,7 @@ using namespace lbs;
 
 DigitalInterrupts* DigitalInterrupts::m_instance = nullptr;
 
-DigitalInterrupts::DigitalInterrupts( const std::shared_ptr< EventSystem >& eventSystem, u_int8_t bounceTime )
+DigitalInterrupts::DigitalInterrupts( const std::shared_ptr<EventSystem>& eventSystem, u_int8_t bounceTime )
 	: m_btnEnter( C_BTN_ENTER, bounceTime ), m_btnReturn( C_BTN_RETURN, bounceTime ),
 	  m_btnToggle( C_BTN_TOGGLE, bounceTime )
 {
@@ -21,33 +21,33 @@ DigitalInterrupts::~DigitalInterrupts()
 void DigitalInterrupts::enableAll()
 {
 	for( auto& i : getTable()) {
-		attachInterrupt( std::get< 0 >( i.second ), std::get< 1 >( i.second ), std::get< 2 >( i.second ));
+		attachInterrupt( std::get<0>( i.second ), std::get<1>( i.second ), std::get<2>( i.second ));
 	}
 }
 
 void DigitalInterrupts::enablePin( Events::DIGITAL e )
 {
 	auto tmp = getTable().find( e )->second;
-	attachInterrupt( std::get< 0 >( tmp ), std::get< 1 >( tmp ), std::get< 2 >( tmp ));
+	attachInterrupt( std::get<0>( tmp ), std::get<1>( tmp ), std::get<2>( tmp ));
 }
 
 void DigitalInterrupts::enableCustomizedPin( Events::DIGITAL e, void (* function)(), int mode )
 {
 	auto tmp = getTable().find( e )->second;
-	attachInterrupt( std::get< 0 >( tmp ), function, mode );
+	attachInterrupt( std::get<0>( tmp ), function, mode );
 }
 
 void DigitalInterrupts::disablePin( Events::DIGITAL e )
 {
 	auto tmp = getTable().find( e )->second;
-	detachInterrupt( std::get< 0 >( tmp ));
+	detachInterrupt( std::get<0>( tmp ));
 }
 
 /* Events :: {Pin :: ISR :: Mode } */
 const DigitalInterrupts::DigLookup& DigitalInterrupts::getTable()
 {
-	static const auto* table = new DigLookup( {{ Events::DIGITAL::ROTARY,     std::make_tuple( C_ROTARY_A, isrRotaryA, LOW ) },
-	                                           { Events::DIGITAL::BTN_ENTER,  std::make_tuple( C_BTN_ENTER, isrBtnEnter, CHANGE ) },
+	static const auto* table = new DigLookup( {{ Events::DIGITAL::ROTARY, std::make_tuple( C_ROTARY_A, isrRotaryA, LOW ) },
+	                                           { Events::DIGITAL::BTN_ENTER, std::make_tuple( C_BTN_ENTER, isrBtnEnter, CHANGE ) },
 	                                           { Events::DIGITAL::BTN_RETURN, std::make_tuple( C_BTN_RETURN, isrBtnReturn, CHANGE ) },
 	                                           { Events::DIGITAL::BTN_TOGGLE, std::make_tuple( C_BTN_TOGGLE, isrBtnToggle, CHANGE ) }} );
 	return *table;
@@ -56,33 +56,33 @@ const DigitalInterrupts::DigLookup& DigitalInterrupts::getTable()
 void DigitalInterrupts::disableAll()
 {
 	for( auto& i : getTable()) {
-		detachInterrupt( std::get< 0 >( i.second ));
+		detachInterrupt( std::get<0>( i.second ));
 	}
 }
 
 void DigitalInterrupts::isrRotaryA()
 {
-	static unsigned long lastInterruptTime = 0;
-	unsigned long interruptTime = millis();
+	static unsigned long last_interrupt_time = 0;
+	unsigned long interrupt_time = millis();
 	/* if the interrupt comes faster then 5ms assume it's a bounce */
-	if( interruptTime - lastInterruptTime > 5 ) {
+	if( interrupt_time - last_interrupt_time > 5 ) {
 		if( digitalRead( C_ROTARY_B ) == HIGH ) {
 			DigitalInterrupts::m_instance->m_eventSystem->enqueueDigital( Events::DIGITAL::ROTARY_L );
 		} else {
 			DigitalInterrupts::m_instance->m_eventSystem->enqueueDigital( Events::DIGITAL::ROTARY_R );
 		}
 	}
-	lastInterruptTime = interruptTime;
+	last_interrupt_time = interrupt_time;
 }
 
 void DigitalInterrupts::isrRotaryB()
 {
-	static unsigned long lastInterruptTime = 0;
-	unsigned long interruptTime = millis();
+	static unsigned long last_interrupt_time = 0;
+	unsigned long interrupt_time = millis();
 	/* if the interrupt comes faster then 5ms assume it's a bounce */
-	if( interruptTime - lastInterruptTime > 5 ) {
+	if( interrupt_time - last_interrupt_time > 5 ) {
 	}
-	lastInterruptTime = interruptTime;
+	last_interrupt_time = interrupt_time;
 }
 
 void DigitalInterrupts::isrBtnEnter()

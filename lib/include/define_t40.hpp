@@ -1,6 +1,5 @@
 #pragma once
 
-
 /* General Pins */
 #define C_DISPLAY_CLK 16
 #define C_DISPLAY_SDA 17
@@ -36,11 +35,16 @@
 /* FSR Pins */
 #define C_FSR_POLL A8    //both
 #define C_FSR_SEL_0 28
-#define C_FSR_SEL_1 30
-#define C_FSR_SEL_2 32
+#define C_FSR_SEL_1 29
+#define C_FSR_SEL_2 30
 
 /* MPX Positions */
 #define C_FSR_MPX_0 0
 #define C_FSR_MPX_1 1
 #define C_FSR_MPX_2 2
 #define C_FSR_MPX_3 3
+
+#define C_FLASH_PIN 6
+#define C_FLASHSIZE 16
+
+#define C_SETTINGS_FILE "/mapping.csv"

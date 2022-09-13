@@ -62,11 +62,11 @@
       35,
       36
     ],
-    "visible_layers": "fdfffff_fffffffe",
+    "visible_layers": "fdfffff_7fffffff",
     "zone_display_mode": 0
   },
   "meta": {
-    "filename": "MHS_Mobile_Hardware_Sampler_FSR_PCB.kicad_prl",
+    "filename": "Lunchbox_Sampler_FSR_PCB.kicad_prl",
     "version": 3
   },
   "project": {
