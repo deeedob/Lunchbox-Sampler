@@ -9,11 +9,11 @@
 #include <observer.hpp>
 
 namespace lbs {
-    /*enum AUDIOTYPE {
+    enum AUDIOTYPE {
         INVALID = 0,
         WAV = 1,
         RAW = 2
-    };*/
+    };
 
 /*
     enum playbackMode {

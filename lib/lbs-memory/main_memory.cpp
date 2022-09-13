@@ -7,15 +7,33 @@ MainMemory *MainMemory::m_glue = nullptr;
 
 uint MainMemory::freeSpaceFlash = 0;
 
+/**
+ * @brief determines filetype of an audio file by extension
+ * @param sampleName: name of sample/audio file
+ * @return audiotype (RAW, WAVE or INVALID)
+ */
+AUDIOTYPE getAudioType(const String &sampleName) {
+	noInterrupts();
+	String ext = sampleName.substring(sampleName.lastIndexOf(".")).toLowerCase();
+	if (ext.compareTo(".wav") == 0) {
+		return AUDIOTYPE::WAV;
+	} else if (ext.compareTo(".raw") == 0) {
+		return AUDIOTYPE::RAW;
+	}
+
+	return AUDIOTYPE::INVALID;
+	interrupts();
+}
+
 MainMemory::MainMemory() {
-    init();
-    m_glue = this;
+	init();
+	m_glue = this;
 }
 
 void MainMemory::init() {
-    noInterrupts();
-	SPI.setMOSI( C_SDCARD_MOSI_PIN );
-	SPI.setSCK( C_SDCARD_SCK_PIN );
+	noInterrupts();
+	SPI.setMOSI(C_SDCARD_MOSI_PIN);
+	SPI.setSCK(C_SDCARD_SCK_PIN);
 	
 	if( !SD.begin( C_SDCARD_CS_PIN )) {
 		#ifdef VERBOSE
@@ -146,8 +164,8 @@ std::vector<String> MainMemory::getSampleNamesFromPack( const String& pack_name 
 	File entry;
 	while (( entry = sample_dir.openNextFile())) {
 		String name = entry.name();
-		if( !entry.isDirectory() && !name.endsWith( ".csv" )) {
-			filelist.push_back( name );
+		if (!entry.isDirectory() && getAudioType(name) != AUDIOTYPE::INVALID) {
+			filelist.push_back(name);
 		}
 	}
 	
