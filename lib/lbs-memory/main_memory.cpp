@@ -25,6 +25,55 @@ AUDIOTYPE getAudioType(const String &sampleName) {
 	interrupts();
 }
 
+/**
+ * @brief skips the header of a wave file reference provided
+ * @param File &f: reference to a wave file
+ * @return the first position of the payload after the header
+ */
+size_t findPayload(File &f) {
+	noInterrupts();
+	size_t pos = f.position();
+	f.seek(0);
+
+	if (!f) {
+		interrupts();
+		return 0;
+	}
+
+	char byte[4];
+	while (f.available()) {
+		f.read(&byte, 1);
+		if (byte[0] == 'd' && f.available() > 3 && f.peek() == 'a') {
+			f.read(&byte, 3);
+			byte[3] = '\0';
+			if (strcmp(byte, "ata") == 0) {
+				size_t res = f.position();
+				f.seek(pos);
+				interrupts();
+				return res;
+			}
+		}
+	}
+	interrupts();
+	return 0;
+}
+
+/**
+ * @brief calculated the size of a wave file without the header
+ * @param fullpath: the path to a wave file
+ * @return the size of the wave payload/audio data
+ */
+size_t getRawAudioSize(const String &fullpath) {
+	noInterrupts();
+	File f = SD.open(fullpath.c_str());
+	size_t audioPos = findPayload(f);
+	if (audioPos > 0) {
+		audioPos--;
+	}
+	interrupts();
+	return f.size() - audioPos;
+}
+
 MainMemory::MainMemory() {
 	init();
 	m_glue = this;
@@ -71,41 +120,65 @@ std::vector<String> MainMemory::getFilelistFromFlash()
 	return filelist;
 }
 
-void MainMemory::transferSingleToFlash( const String& filepath )
-{
+/**
+ * @brief transfers a given sample to flash
+ * @param filepath: absolute path to audio sample
+ * @param sampleSize: custom sample size in case of low free space on flash
+ * @return unsigned int of bytes transferred to flash chip
+ */
+uint32_t MainMemory::transferSingleToFlash(const String &filepath, const size_t sampleSize) {
 	noInterrupts();
-	File f = SD.open( filepath.c_str());
-	
-	if( !f ) {
+	File f = SD.open(filepath.c_str());
+
+	if (!f) {
 #ifdef VERBOSE
-		Serial.print( "transferToFlash: error reading file " );
-		Serial.print( filepath.c_str());
-		Serial.println( " from SD" );
+		Serial.print("transferToFlash: error reading file ");
+		Serial.print(filepath.c_str());
+		Serial.println(" from SD");
+#endif
+		interrupts();
+		return 0;
+	}
+	String basename = filepath.substring(filepath.lastIndexOf('/') + 1);
+
+	if (getAudioType(basename) == AUDIOTYPE::WAV) {
+		size_t payloadPos = findPayload(f);
+		f.seek(payloadPos);
+
+#ifdef VERBOSE
+		if (f.available() < 1) {
+			Serial.println("WARNING: WAV file will be loaded with header!");
+			f.seek(0);
+		}
 #endif
 	}
-	auto last_of = []( char s, const String& str ) {
-		for( int i = str.length() - 1; i >= 0; i-- ) {
-			if( str[ i ] == s ) return i;
-		}
-		return -1;
-	};
-	auto pos = last_of( '/', filepath );
-	String basename;
-	if( pos < 0 )
-		basename = filepath;
-	else
-		basename = filepath.substring( pos );
-	
-	if( !SerialFlashChip::createErasable( basename.c_str(), f.size())) {
+
+	basename = basename.substring(0, basename.lastIndexOf('.'));
+	size_t filelength = f.available();
+
+	if (sampleSize) {
+		filelength = sampleSize;
 #ifdef VERBOSE
-		Serial.print( "transferToFlash: error creating file" );
-		Serial.print( basename.c_str());
-		Serial.println( " on Flash" );
+		Serial.print("Stripping filelength from ");
+		Serial.print(f.available());
+		Serial.print(" to ");
+		Serial.print(filelength);
+		Serial.println(" bytes");
 #endif
+	}
+
+	if (!SerialFlashChip::createErasable(basename.c_str(), f.size())) {
+#ifdef VERBOSE
+		Serial.print("transferToFlash: error creating file");
+		Serial.print(basename.c_str());
+		Serial.println(" on Flash");
+#endif
+		interrupts();
+		return 0;
 	}
 	
 	SerialFlashFile ff = SerialFlashChip::open( basename.c_str());
-	
+
 	char byte;
 	for( int i = 0; i < ff.size(); i++ ) {
 		f.read( &byte, 1 );
@@ -113,8 +186,10 @@ void MainMemory::transferSingleToFlash( const String& filepath )
 	}
 	
 	f.close();
+	size_t size = ff.size();
 	ff.close();
 	interrupts();
+	return size;
 }
 
 void MainMemory::eraseFlash()
@@ -137,18 +212,35 @@ void MainMemory::eraseFlash()
     interrupts();
 }
 
-void MainMemory::loadSamplepack( const String& pack_name )
-{
+void MainMemory::loadSamplepack( const String& pack_name ) {
 	noInterrupts();
+	eraseFlash();
+	createStdMappingFile(pack_name);
 	String fullpath;
-	auto list = getSampleNamesFromPack( pack_name );
+	auto list = getSampleNamesFromPack(pack_name);
+
+	uint sum = 0;
+	for (const auto &sample: list) {
+		sum += getRawAudioSize(fullpath + sample);
+	}
+
+	double stripFactor = 0;
+	if (sum > getFreeSpacefromFlash()) {
+		stripFactor = (float_t) getFreeSpacefromFlash() / (float_t) sum;
+#ifdef VERBOSE
+		Serial.print("Stripfactor for samples is ");
+		Serial.println(stripFactor, 4);
+#endif
+	}
+
+	size_t sampleSize = 0;
 	uint32_t size = list.size();
 	uint32_t current = 0;
-	for( auto& i : list ) {
+	for (auto &i: list) {
 		fullpath = m_packRootDir + pack_name;
 		fullpath += "/" + i;
-		transferSingleToFlash( fullpath );
-		m_glue->notify( std::pair<uint32_t, uint32_t>( current, size ));
+		transferSingleToFlash(fullpath);
+		m_glue->notify(std::pair<uint32_t, uint32_t>(current, size));
 		current++;
 	}
 	interrupts();
@@ -345,4 +437,51 @@ String MainMemory::getNoteName(uint8_t midiNote) {
 			interrupts();
 			return "C" + String(octave);
 	}
+}
+
+/**
+ * @brief creates a standard mapping file for samplepack (starting at C4 or C0 if many samples)
+ * @param packName: name of sample pack to be processed
+ * @return success or failure
+ */
+bool MainMemory::createStdMappingFile(const String &packName) {
+	noInterrupts();
+	String settingsPath = m_packRootDir + "/" + packName + "/" + C_SETTINGS_FILE;
+
+	if (!SD.exists(settingsPath.c_str())) {
+#ifdef VERBOSE
+		Serial.println("createStdMappingFile(): No mapping found, creating new standard mapping");
+#endif
+		File settings = SD.open(settingsPath.c_str(), FILE_WRITE_BEGIN);
+		auto samples = getSampleNamesFromPack(packName);
+		//starting at C4
+		uint8_t currentNote = 60;
+		if (samples.size() > 67) {
+#ifdef VERBOSE
+			Serial.println("createStdMappingFile(): Many samples in folder, starting at octave 0");
+#endif
+			currentNote = 12;
+		}
+		String line;
+		for (auto &sample: samples) {
+			//stop at highest midi note
+			if (currentNote > 127) {
+				break;
+			}
+			line = (getNoteName(currentNote) + "," + sample + ",ONESHOT\n");
+			settings.write(line.c_str());
+			currentNote++;
+		}
+		settings.close();
+		interrupts();
+		return true;
+#ifdef VERBOSE
+	} else {
+		Serial.print("createStdMappingFile(): Mapping ");
+		Serial.print(settingsPath.c_str());
+		Serial.println(" exists and will not be overwritten, either change manually or delete");
+#endif
+	}
+	interrupts();
+	return false;
 }

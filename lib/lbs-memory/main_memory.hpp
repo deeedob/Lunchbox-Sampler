@@ -61,17 +61,18 @@ namespace lbs {
 
         static std::vector<String> getSampleNamesFromPack(const String &pack_name);
 
-        /**/static void loadSamplepack(const String &pack_name);
+        static void loadSamplepack(const String &pack_name);
         //static String getLoadedPackName();
         //static String getSampleFromNote(uint8_t note);
         //static bool setSampleForNote(const String &sampleName, uint8_t midiNote);
 
-        //static bool createStdMappingFile(const String &packName);
+        static bool createStdMappingFile(const String &packName);
+
         //static bool deleteMappingFile(const String &packName);
         //static void createAllStdMappingFiles();
         //static bool saveCurrentMappingToFile();
         //static void printMapping();
-        /**/static void transferSingleToFlash(const String &filepath);
+        static uint32_t transferSingleToFlash(const String &filepath, size_t sampleSize = 0);
 
 
     private:
