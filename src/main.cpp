@@ -42,7 +42,7 @@ int main() {
 
     //mf.loadSamplepack("SamplePack01");
     //auto packs = mf.getAvailableSamplepacks();
-    lbs::MainMemory::initMemory();
+    lbs::MainMemory::init();
     lbs::MainMemory::deleteMappingFile("SamplePack01");
     lbs::MainMemory::createAllStdMappingFiles();
     lbs::MainMemory::loadSamplepack("SamplePack01");

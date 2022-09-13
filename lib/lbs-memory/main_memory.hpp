@@ -33,7 +33,8 @@ namespace lbs {
 
     public:
         //general functions
-        static bool initMemory();
+        static bool init();
+
         static void printAllFilesFromSD();
         static uint64_t getFreeSpacefromSD();
 

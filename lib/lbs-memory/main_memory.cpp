@@ -167,7 +167,7 @@ void printDirectory(File dir, int num_spaces) {
  * @brief initializes the flash chip and the SD card
  * @return success initializing or failure
  */
-bool MainMemory::initMemory() {
+bool MainMemory::init() {
     SPI.setMOSI(C_SDCARD_MOSI_PIN);
     SPI.setSCK(C_SDCARD_SCK_PIN);
 
