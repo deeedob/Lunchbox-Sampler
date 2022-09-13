@@ -34,18 +34,13 @@ namespace lbs {
     public:
         //general functions
         static bool initMemory();
-
         static void printAllFilesFromSD();
-
         static uint64_t getFreeSpacefromSD();
 
         // flash chip specific functions
         static std::vector<String> getFilelistFromFlash();
-
         static bool flashEmpty();
-
         static void eraseFlash();
-
         static uint getFreeSpacefromFlash();
 
         // return midiNote Name as String
@@ -53,26 +48,17 @@ namespace lbs {
 
         // sample pack functions
         static std::vector<String> getAvailableSamplepacks();
-
         static std::vector<String> getSampleNamesFromPack(const String &packName);
-
         static void loadSamplepack(const String &packName);
-
         static String getLoadedPackName();
-
         static String getSampleFromNote(uint8_t note);
-
         static bool setSampleForNote(const String &sampleName, uint8_t midiNote);
 
         // mapping file functions
         static bool createStdMappingFile(const String &packName);
-
         static bool deleteMappingFile(const String &packName);
-
         static void createAllStdMappingFiles();
-
         static bool saveCurrentMappingToFile();
-
         static void printMapping();
 
     private:

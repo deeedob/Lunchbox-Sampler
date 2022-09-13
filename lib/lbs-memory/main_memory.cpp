@@ -461,7 +461,7 @@ bool MainMemory::setSampleForNote(const String &sampleName, uint8_t midiNote) {
         return false;
     }
 
-    if (!SerialFlash.exists(sampleName.substring(0, sampleName.lastIndexOf('.')).c_str())) {
+    if (!SerialFlashChip::exists(sampleName.substring(0, sampleName.lastIndexOf('.')).c_str())) {
 #ifdef VERBOSE
         Serial.print("setSampleForNote(): sample");
         Serial.print(sampleName);
