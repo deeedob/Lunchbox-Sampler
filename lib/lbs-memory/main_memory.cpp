@@ -19,6 +19,7 @@ const std::map<String, PitchVal> MainMemory::pitches = {{"c",  PitchVal{0}},
                                                         {"b",  PitchVal{11}}};
 
 uint MainMemory::freeSpaceFlash = 0;
+String MainMemory::currentPack = "";
 
 String MainMemory::sampleMapping[] = {""};
 playbackMode MainMemory::modeMapping[] = {ONESHOT};
@@ -44,11 +45,6 @@ size_t findPayload(File &f) {
             f.read(&byte, 3);
             byte[3] = '\0';
             if (strcmp(byte, "ata") == 0) {
-#ifdef VERBOSE
-                Serial.print("findPayload(): Header: ");
-                Serial.print(f.position() - 1);
-                Serial.println(" byte");
-#endif
                 size_t res = f.position();
                 f.seek(pos);
                 return res;
@@ -355,7 +351,7 @@ std::vector<String> MainMemory::getSampleNamesFromPack(const String &packName) {
     std::vector<String> filelist;
     String path = mPackRootDir + packName;
 #ifdef VERBOSE
-    Serial.print("Listing Samples from ");
+    Serial.print("getSampleNamesFromPack(): Listing Samples from ");
     Serial.println(path);
 #endif
 
@@ -365,14 +361,14 @@ std::vector<String> MainMemory::getSampleNamesFromPack(const String &packName) {
         String name = entry.name();
         if (!entry.isDirectory() && getAudioType(name) != AUDIOTYPE::INVALID) {
 #ifdef VERBOSE
-            Serial.print("Audio file ");
+            Serial.print("getSampleNamesFromPack(): Audio file ");
             Serial.print(entry.name());
             Serial.println(" found");
 #endif
             filelist.push_back(name);
         } else {
 #ifdef VERBOSE
-            Serial.print("Skipping ");
+            Serial.print("getSampleNamesFromPack(): Skipping ");
             Serial.print(entry.name());
             Serial.println(", no audio file");
 #endif
@@ -416,7 +412,6 @@ void MainMemory::loadSamplepack(const String &packName) {
                                                     round(getRawAudioSize(fullpath + i) * stripFactor)))) {
                 count++;
                 freeSpaceFlash -= sampleSize;
-                Serial.println(freeSpaceFlash);
             }
         }
     }
@@ -465,6 +460,13 @@ String MainMemory::getSampleFromNote(uint8_t note) {
  */
 bool MainMemory::setSampleForNote(const String &sampleName, uint8_t midiNote) {
 
+    if (currentPack == "") {
+#ifdef VERBOSE
+        Serial.println("setSampleForNote(): No samplepack loaded, load a samplepack");
+#endif
+        return false;
+    }
+
     if (!SerialFlash.exists(sampleName.substring(0, sampleName.lastIndexOf('.')).c_str())) {
 #ifdef VERBOSE
         Serial.print("setSampleForNote(): sample");
@@ -488,7 +490,7 @@ bool MainMemory::createStdMappingFile(const String &packName) {
 
     if (!SD.exists(settingsPath.c_str())) {
 #ifdef VERBOSE
-        Serial.println("No mapping found, creating new standard mapping");
+        Serial.println("createStdMappingFile(): No mapping found, creating new standard mapping");
 #endif
         File settings = SD.open(settingsPath.c_str(), FILE_WRITE_BEGIN);
         auto samples = getSampleNamesFromPack(packName);
@@ -496,7 +498,7 @@ bool MainMemory::createStdMappingFile(const String &packName) {
         uint8_t currentNote = 60;
         if (samples.size() > 67) {
 #ifdef VERBOSE
-            Serial.println("Many samples in folder, starting at octave 0");
+            Serial.println("createStdMappingFile(): Many samples in folder, starting at octave 0");
 #endif
             currentNote = 12;
         }
@@ -507,17 +509,18 @@ bool MainMemory::createStdMappingFile(const String &packName) {
                 break;
             }
             line = (getNoteName(currentNote) + "," + sample + ",ONESHOT\n");
-            Serial.println(line);
             settings.write(line.c_str());
             currentNote++;
         }
         settings.close();
         return true;
-    }
-
 #ifdef VERBOSE
-    Serial.println("Mapping exists and will not be overwritten, either change manually or delete");
+    } else {
+        Serial.print("createStdMappingFile(): Mapping ");
+        Serial.print(settingsPath.c_str());
+        Serial.println(" exists and will not be overwritten, either change manually or delete");
 #endif
+    }
 
     return false;
 }
@@ -560,6 +563,14 @@ void MainMemory::createAllStdMappingFiles() {
  */
 bool MainMemory::saveCurrentMappingToFile() {
     uint8_t index = 0;
+
+    if (currentPack == "") {
+#ifdef VERBOSE
+        Serial.println("saveCurrentMappingToFile(): No samplepack loaded, load samplepack");
+#endif
+        return false;
+    }
+
     deleteMappingFile(currentPack);
     File mapping = SD.open((mPackRootDir + "/" + currentPack + "/" + C_SETTINGS_FILE).c_str(), FILE_WRITE_BEGIN);
     for (auto &i: sampleMapping) {
@@ -583,9 +594,9 @@ void MainMemory::printMapping() {
     for (int i = 0; i < 128; i++) {
         Serial.print("Midi Note ");
         Serial.print(i);
-        Serial.print(" ,");
+        Serial.print(": ");
         Serial.print(sampleMapping[i]);
-        Serial.print(" ");
+        Serial.print(", ");
         Serial.println(modeMapping[i]);
     }
 }
@@ -678,7 +689,7 @@ void MainMemory::loadMappingFile(const String &packName) {
         }
 
 #ifdef VERBOSE
-        Serial.print("PARSED: ");
+        Serial.print("loadMappingFile(): PARSED: ");
         Serial.print(note);
         Serial.print(octave);
         Serial.print(" ");
@@ -707,7 +718,7 @@ void MainMemory::loadMappingFile(const String &packName) {
  */
 uint MainMemory::transferSampleToFlash(const String &filepath, const size_t sampleSize = 0) {
 
-    Serial.print("Transfer to Flash function begin upload of ");
+    Serial.print("transferSampleToFlash(): begin upload of ");
     Serial.println(filepath.c_str());
 
     File f = SD.open(filepath.c_str());

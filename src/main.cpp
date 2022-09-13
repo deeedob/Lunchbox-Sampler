@@ -43,32 +43,39 @@ int main() {
     //mf.loadSamplepack("SamplePack01");
     //auto packs = mf.getAvailableSamplepacks();
     lbs::MainMemory::initMemory();
-    lbs::MainMemory::deleteMappingFile("SamplePack02");
+    lbs::MainMemory::deleteMappingFile("SamplePack01");
     lbs::MainMemory::createAllStdMappingFiles();
+    lbs::MainMemory::loadSamplepack("SamplePack01");
+    Serial.println(lbs::MainMemory::getLoadedPackName());
+    lbs::MainMemory::setSampleForNote("0.wav", 12);
+    lbs::MainMemory::setSampleForNote("0.wav", 13);
+    lbs::MainMemory::setSampleForNote("0.wav", 14);
+    lbs::MainMemory::setSampleForNote("0.wav", 15);
+    lbs::MainMemory::setSampleForNote("0.wav", 16);
+    lbs::MainMemory::setSampleForNote("0.wav", 60);
+    lbs::MainMemory::setSampleForNote("0.wav", 61);
+    lbs::MainMemory::printMapping();
+    lbs::MainMemory::saveCurrentMappingToFile();
 
 /*
     for (auto &pack: packs) {
         Serial.println(pack);
     }
 */
-/*
     Serial.println("Play Samples");
-	g_audioShield.enable();
-	g_audioShield.volume( 0.5 );
-	g_playFlashRaw1.play( mf.getSampleFromNote(24).c_str() );
-	while( g_playFlashRaw1.isPlaying() ) {}
-    g_playFlashRaw1.play( mf.getSampleFromNote(25).c_str() );
-    while( g_playFlashRaw1.isPlaying() ) {}
-    g_playFlashRaw1.play( mf.getSampleFromNote(26).c_str() );
-    while( g_playFlashRaw1.isPlaying() ) {}
-    g_playFlashRaw1.play( mf.getSampleFromNote(27).c_str() );
-    while( g_playFlashRaw1.isPlaying() ) {}
-    g_playFlashRaw1.play( mf.getSampleFromNote(28).c_str() );
-    while( g_playFlashRaw1.isPlaying() ) {}
-    g_playFlashRaw1.play( mf.getSampleFromNote(29).c_str() );
-	//Serial.println( "Playing sample finished" );
-    Serial.println( "Printing Settings");
-*/
+    g_audioShield.enable();
+    g_audioShield.volume(0.5);
+    g_playFlashRaw1.play(lbs::MainMemory::getSampleFromNote(12).c_str());
+    while (g_playFlashRaw1.isPlaying()) {}
+    g_playFlashRaw1.play(lbs::MainMemory::getSampleFromNote(13).c_str());
+    while (g_playFlashRaw1.isPlaying()) {}
+    g_playFlashRaw1.play(lbs::MainMemory::getSampleFromNote(60).c_str());
+    while (g_playFlashRaw1.isPlaying()) {}
+    g_playFlashRaw1.play(lbs::MainMemory::getSampleFromNote(61).c_str());
+    while (g_playFlashRaw1.isPlaying()) {}
+    g_playFlashRaw1.play(lbs::MainMemory::getSampleFromNote(62).c_str());
+    while (g_playFlashRaw1.isPlaying()) {}
+    //Serial.println( "Playing sample finished" );
 //auto res = mf.loadMappingFile("SamplePack02");
     //mf.eraseFlash();
     //mf.printMapping();

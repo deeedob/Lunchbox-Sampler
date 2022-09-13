@@ -76,12 +76,12 @@ namespace lbs {
         static void printMapping();
 
     private:
+        static String currentPack;
         static uint freeSpaceFlash;
         const static String mPackRootDir;
         static const std::map<String, PitchVal> pitches;
         static String sampleMapping[128];
         static playbackMode modeMapping[128];
-        static String currentPack;
 
         static void loadMappingFile(const String &packName);
 
