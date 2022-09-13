@@ -3,17 +3,17 @@
 using namespace lbs;
 
 const String MainMemory::m_packRootDir = "/samplepacks/";
-MainMemory* MainMemory::m_glue = nullptr;
+MainMemory *MainMemory::m_glue = nullptr;
 
-MainMemory::MainMemory()
-{
-	init();
-	m_glue = this;
+uint MainMemory::freeSpaceFlash = 0;
+
+MainMemory::MainMemory() {
+    init();
+    m_glue = this;
 }
 
-void MainMemory::init()
-{
-	noInterrupts();
+void MainMemory::init() {
+    noInterrupts();
 	SPI.setMOSI( C_SDCARD_MOSI_PIN );
 	SPI.setSCK( C_SDCARD_SCK_PIN );
 	
@@ -104,17 +104,19 @@ void MainMemory::eraseFlash()
 	noInterrupts();
 	uint32_t i, blocksize, capacity;
 	blocksize = SerialFlashChip::blockSize();
-	
-	uint8_t id[5];
-	SerialFlashChip::readID( id );
-	capacity = SerialFlashChip::capacity( id );
-	for( i = 0; i < capacity; i += blocksize ) {
-		SerialFlashChip::eraseBlock( i );
-		m_glue->notify( std::pair<uint32_t, uint32_t>( i, capacity ));
-	}
-	m_glue->notify( std::pair<uint32_t, uint32_t>( capacity, capacity ));
-	while ( !SerialFlashChip::ready()) { }
-	interrupts();
+
+    uint8_t id[5];
+    SerialFlashChip::readID(id);
+    capacity = SerialFlashChip::capacity(id);
+    for (i = 0; i < capacity; i += blocksize) {
+        SerialFlashChip::eraseBlock(i);
+        m_glue->notify(std::pair<uint32_t, uint32_t>(i, capacity));
+    }
+    m_glue->notify(std::pair<uint32_t, uint32_t>(capacity, capacity));
+    while (!SerialFlashChip::ready()) {}
+    freeSpaceFlash = C_FLASHSIZE;
+    currentPack = "";
+    interrupts();
 }
 
 void MainMemory::loadSamplepack( const String& pack_name )
@@ -249,4 +251,30 @@ MainMemory *MainMemory::instance() {
  */
 uint64_t MainMemory::getFreeSpacefromSD() {
     return SD.totalSize() - SD.usedSize();
+}
+
+**
+* @
+brief returns
+free space
+on flash
+* @return
+unsigned int of
+free space
+on flash
+*/
+
+uint MainMemory::getFreeSpacefromFlash() {
+    return freeSpaceFlash;
+}
+
+/**
+ * @brief function to check if flash is empty
+ * @return boolean if flash is empty
+ */
+bool MainMemory::flashEmpty() {
+    if (getFreeSpacefromFlash() == C_FLASHSIZE) {
+        return true;
+    }
+    return false;
 }

@@ -45,6 +45,6 @@
 #define C_FSR_MPX_3 3
 
 #define C_FLASH_PIN 6
-#define C_FLASHSIZE 16
+#define C_FLASHSIZE 16000000
 
 #define C_SETTINGS_FILE "/mapping.csv"

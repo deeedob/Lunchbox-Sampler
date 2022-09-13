@@ -49,10 +49,11 @@ namespace lbs {
 
         static std::vector<String> getFilelistFromFlash();
 
-        //static bool flashEmpty();
+        static bool flashEmpty();
+
         static void eraseFlash();
 
-        //static uint getFreeSpacefromFlash();
+        static uint getFreeSpacefromFlash();
 
         //static String getNoteName(uint8_t midiNote);
         static std::vector<String> getSamplePacksFromSD();
@@ -75,8 +76,8 @@ namespace lbs {
     private:
         const static String m_packRootDir;
         static MainMemory *m_glue;
-        //static String currentPack;
-        //static uint freeSpaceFlash;
+        static String currentPack;
+        static uint freeSpaceFlash;
         //static String sampleMapping[128];
         //static playbackMode modeMapping[128];
 
