@@ -66,7 +66,8 @@ namespace lbs {
 
         static void createAllStdMappingFiles();
 
-        //static bool saveCurrentMappingToFile();
+        static bool saveCurrentMappingToFile();
+
         //static void printMapping();
         static uint32_t transferSingleToFlash(const String &filepath, size_t sampleSize = 0);
 

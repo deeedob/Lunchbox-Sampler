@@ -97,31 +97,46 @@ size_t getRawAudioSize(const String &fullpath) {
  * @return enum of playbackMode
  */
 playbackMode parsePlaybackMode(const String &string) {
+    noInterrupts();
     if (string == "LOOP") {
+        interrupts();
         return lbs::LOOP;
     }
+    interrupts();
     return lbs::ONESHOT;
 }
 
+/**
+ * @brief converts a playbackMode (enum) to string
+ * @param mode: playbackMode to convert
+ * @return string describing playback mode
+ */
+String parseStringFromPlaybackMode(playbackMode mode) {
+    return (const String[]) {
+            "ONESHOT",
+            "LOOP"
+    }[mode];
+}
+
 MainMemory::MainMemory() {
-	init();
-	m_glue = this;
+    init();
+    m_glue = this;
 }
 
 void MainMemory::init() {
-	noInterrupts();
-	SPI.setMOSI(C_SDCARD_MOSI_PIN);
-	SPI.setSCK(C_SDCARD_SCK_PIN);
-	
-	if( !SD.begin( C_SDCARD_CS_PIN )) {
-		#ifdef VERBOSE
-		Serial.println( "SD Card: initialization failed!" );
-		#endif
-	}
-	delay( 200 );
-	if( !SerialFlash.begin( C_FLASH_PIN )) {
-		#ifdef VERBOSE
-		Serial.println( "Error initializing Flash Chip!" );
+    noInterrupts();
+    SPI.setMOSI(C_SDCARD_MOSI_PIN);
+    SPI.setSCK(C_SDCARD_SCK_PIN);
+
+    if (!SD.begin(C_SDCARD_CS_PIN)) {
+#ifdef VERBOSE
+        Serial.println("SD Card: initialization failed!");
+#endif
+    }
+    delay(200);
+    if (!SerialFlash.begin(C_FLASH_PIN)) {
+#ifdef VERBOSE
+        Serial.println("Error initializing Flash Chip!");
 		#endif
 	}
 	delay( 200 );
@@ -734,4 +749,35 @@ void MainMemory::createAllStdMappingFiles() {
         createStdMappingFile(pack);
     }
     interrupts();
+}
+
+/**
+ * @brief saves current mapping of loaded samplepack to mapping file of loaded samplepack
+ * @return success or failure
+ */
+bool MainMemory::saveCurrentMappingToFile() {
+    noInterrupts();
+    uint8_t index = 0;
+
+    if (currentPack == "") {
+#ifdef VERBOSE
+        Serial.println("saveCurrentMappingToFile(): No samplepack loaded, load samplepack");
+#endif
+        interrupts();
+        return false;
+    }
+
+    deleteMappingFile(currentPack);
+    File mapping = SD.open((m_packRootDir + "/" + currentPack + "/" + C_SETTINGS_FILE).c_str(), FILE_WRITE_BEGIN);
+    for (auto &i: sampleMapping) {
+        if (i != "") {
+            mapping.write(
+                    (getNoteName(index) + "," + String(i) + "," + parseStringFromPlaybackMode(modeMapping[index]) +
+                     "\n").c_str());
+        }
+        index++;
+    }
+    mapping.close();
+    interrupts();
+    return false;
 }
