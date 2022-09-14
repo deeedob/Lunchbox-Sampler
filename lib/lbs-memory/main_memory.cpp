@@ -123,6 +123,10 @@ MainMemory::MainMemory() {
     m_glue = this;
 }
 
+/**
+ * @brief initializes the flash chip and the SD card
+ * @return success initializing or failure
+ */
 void MainMemory::init() {
     noInterrupts();
     SPI.setMOSI(C_SDCARD_MOSI_PIN);
@@ -137,10 +141,10 @@ void MainMemory::init() {
     if (!SerialFlash.begin(C_FLASH_PIN)) {
 #ifdef VERBOSE
         Serial.println("Error initializing Flash Chip!");
-		#endif
-	}
-	delay( 200 );
-	interrupts();
+#endif
+    }
+    delay( 200 );
+    interrupts();
 }
 
 /**
@@ -237,11 +241,14 @@ uint32_t MainMemory::transferSingleToFlash(const String &filepath, const size_t 
 	return size;
 }
 
+/**
+ * @brief erases all files from the flash chip
+ */
 void MainMemory::eraseFlash()
 {
-	noInterrupts();
-	uint32_t i, blocksize, capacity;
-	blocksize = SerialFlashChip::blockSize();
+    noInterrupts();
+    uint32_t i, blocksize, capacity;
+    blocksize = SerialFlashChip::blockSize();
 
     uint8_t id[5];
     SerialFlashChip::readID(id);
@@ -370,32 +377,37 @@ void MainMemory::loadMappingFile(const String &packName) {
     interrupts();
 }
 
+/**
+ * @brief loads the given samplepack onto flash and loads its mapping file if present and
+ * strips sample size by percentage if size in sum is too big for flash chip
+ * @param packName: name of the samplepack (only name / relative to packfolder)
+ */
 void MainMemory::loadSamplepack( const String& pack_name ) {
-	noInterrupts();
-	eraseFlash();
-	createStdMappingFile(pack_name);
-	String fullpath;
+    noInterrupts();
+    eraseFlash();
+    createStdMappingFile(pack_name);
+    String fullpath;
     loadMappingFile(pack_name);
-	auto list = getSampleNamesFromPack(pack_name);
+    auto list = getSampleNamesFromPack(pack_name);
 
-	uint sum = 0;
-	for (const auto &sample: list) {
-		sum += getRawAudioSize(fullpath + sample);
-	}
+    uint sum = 0;
+    for (const auto &sample: list) {
+        sum += getRawAudioSize(fullpath + sample);
+    }
 
-	double stripFactor = 0;
-	if (sum > getFreeSpacefromFlash()) {
-		stripFactor = (float_t) getFreeSpacefromFlash() / (float_t) sum;
+    double stripFactor = 0;
+    if (sum > getFreeSpacefromFlash()) {
+        stripFactor = (float_t) getFreeSpacefromFlash() / (float_t) sum;
 #ifdef VERBOSE
-		Serial.print("Stripfactor for samples is ");
-		Serial.println(stripFactor, 4);
+        Serial.print("Stripfactor for samples is ");
+        Serial.println(stripFactor, 4);
 #endif
-	}
+    }
 
-	size_t sampleSize = 0;
-	uint32_t size = list.size();
-	uint32_t current = 0;
-	for (auto &i: list) {
+    size_t sampleSize = 0;
+    uint32_t size = list.size();
+    uint32_t current = 0;
+    for (auto &i: list) {
         fullpath = m_packRootDir + pack_name;
         //i must not be empty string
         if (i.length() > 0) {
@@ -428,46 +440,62 @@ void MainMemory::loadSamplepack( const String& pack_name ) {
     interrupts();
 }
 
+/**
+ * @brief provides all Samples in a samplepack
+ * @param packName: name of the samplepack (path relative to packfolder / only name)
+ * @return vector of strings with all samples in a sample pack
+ */
 std::vector<String> MainMemory::getSampleNamesFromPack( const String& pack_name )
 {
-	noInterrupts();
-	std::vector<String> filelist;
-	String path = m_packRootDir + pack_name;
-	
-	File sample_dir = SD.open( path.c_str());
-	File entry;
-	while (( entry = sample_dir.openNextFile())) {
-		String name = entry.name();
-		if (!entry.isDirectory() && getAudioType(name) != AUDIOTYPE::INVALID) {
-			filelist.push_back(name);
-		}
-	}
-	
-	entry.close();
-	sample_dir.close();
-	
-	interrupts();
-	return filelist;
+    noInterrupts();
+    std::vector<String> filelist;
+    String path = m_packRootDir + pack_name;
+
+    File sample_dir = SD.open(path.c_str());
+    File entry;
+    while ((entry = sample_dir.openNextFile())) {
+        String name = entry.name();
+        if (!entry.isDirectory() && getAudioType(name) != AUDIOTYPE::INVALID) {
+            filelist.push_back(name);
+#ifdef VERBOSE
+        } else {
+            Serial.print("getSampleNamesFromPack(): Skipping ");
+            Serial.print(entry.name());
+            Serial.println(", no audio file");
+#endif
+        }
+    }
+
+    entry.close();
+    sample_dir.close();
+    std::sort(filelist.begin(), filelist.end());
+
+    interrupts();
+    return filelist;
 }
 
+/**
+ * @brief provides a list of all Samplepacks on SD card
+ * @return vector of strings with all Samplepacks
+ */
 std::vector<String> MainMemory::getSamplePacksFromSD()
 {
-	noInterrupts();
-	std::vector<String> list;
-	auto sample_dir = SD.open( m_packRootDir.c_str());
-	if( !sample_dir || !sample_dir.isDirectory()) {
-		list.emplace_back( "Error occurred!" );
-		list.emplace_back( "Check the SD Card." );
-		interrupts();
-		return list;
-	}
-	while ( auto item = sample_dir.openNextFile()) {
-		if( !item.isDirectory()) continue;
-		list.emplace_back( item.name());
-	}
-	sample_dir.close();
-	interrupts();
-	return list;
+    noInterrupts();
+    std::vector<String> list;
+    auto sample_dir = SD.open( m_packRootDir.c_str());
+    if( !sample_dir || !sample_dir.isDirectory()) {
+        list.emplace_back( "Error occurred!" );
+        list.emplace_back( "Check the SD Card." );
+        interrupts();
+        return list;
+    }
+    while ( auto item = sample_dir.openNextFile()) {
+        if( !item.isDirectory()) continue;
+        list.emplace_back( item.name());
+    }
+    sample_dir.close();
+    interrupts();
+    return list;
 }
 
 /* helper functions to print list all files recursively */
