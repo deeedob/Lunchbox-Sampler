@@ -723,3 +723,15 @@ bool MainMemory::deleteMappingFile(const String &packName) {
     interrupts();
     return false;
 }
+
+/**
+ * @brief creates standard mapping files for all samplepacks if none existing
+ */
+void MainMemory::createAllStdMappingFiles() {
+    noInterrupts();
+    auto packs = getSamplePacksFromSD();
+    for (auto &pack: packs) {
+        createStdMappingFile(pack);
+    }
+    interrupts();
+}
