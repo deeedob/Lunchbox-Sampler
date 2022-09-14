@@ -53,7 +53,8 @@ namespace lbs {
         static std::vector<String> getSampleNamesFromPack(const String &pack_name);
 
         static void loadSamplepack(const String &pack_name);
-        //static String getLoadedPackName();
+
+        static String getLoadedPackName();
         //static String getSampleFromNote(uint8_t note);
         //static bool setSampleForNote(const String &sampleName, uint8_t midiNote);
 

@@ -642,12 +642,19 @@ bool MainMemory::createStdMappingFile(const String &packName) {
 		interrupts();
 		return true;
 #ifdef VERBOSE
-	} else {
-		Serial.print("createStdMappingFile(): Mapping ");
-		Serial.print(settingsPath.c_str());
-		Serial.println(" exists and will not be overwritten, either change manually or delete");
+    } else {
+        Serial.print("createStdMappingFile(): Mapping ");
+        Serial.print(settingsPath.c_str());
+        Serial.println(" exists and will not be overwritten, either change manually or delete");
 #endif
-	}
-	interrupts();
-	return false;
+    }
+    interrupts();
+    return false;
+}
+
+/**
+ * @return name of loaded samplepack on flash
+ */
+String MainMemory::getLoadedPackName() {
+    return currentPack;
 }
