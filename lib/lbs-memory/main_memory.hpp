@@ -56,7 +56,7 @@ namespace lbs {
 
         static String getLoadedPackName();
 
-        static String getSampleFromNote(uint8_t note);
+        static String getSample(uint8_t note);
 
         static bool setSampleForNote(const String &sampleName, uint8_t midiNote);
 

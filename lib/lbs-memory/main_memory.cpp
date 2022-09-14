@@ -708,7 +708,7 @@ String MainMemory::getLoadedPackName() {
  * @param note: note as unsigned byte [0, 127]
  * @return sample name as string
  */
-String MainMemory::getSampleFromNote(uint8_t note) {
+String MainMemory::getSample(uint8_t note) {
     noInterrupts();
     String res = sampleMapping[note];
     interrupts();
