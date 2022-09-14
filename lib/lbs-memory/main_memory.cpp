@@ -670,3 +670,34 @@ String MainMemory::getSampleFromNote(uint8_t note) {
     interrupts();
     return res;
 }
+
+/**
+ * @brief changes sample for note in current mapping
+ * @param sampleName: name of the sample to be set
+ * @param midiNote: midi note for which the sample is to be set
+ * @return success or failure
+ */
+bool MainMemory::setSampleForNote(const String &sampleName, uint8_t midiNote) {
+    noInterrupts();
+    if (currentPack == "") {
+#ifdef VERBOSE
+        Serial.println("setSampleForNote(): No samplepack loaded, load a samplepack");
+#endif
+        interrupts();
+        return false;
+    }
+
+    if (!SerialFlashChip::exists(sampleName.substring(0, sampleName.lastIndexOf('.')).c_str())) {
+#ifdef VERBOSE
+        Serial.print("setSampleForNote(): sample");
+        Serial.print(sampleName);
+        Serial.println(" does not exist");
+#endif
+        interrupts();
+        return false;
+    }
+
+    sampleMapping[midiNote] = sampleName.substring(0, sampleName.lastIndexOf("."));
+    interrupts();
+    return true;
+}
