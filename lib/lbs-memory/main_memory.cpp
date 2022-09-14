@@ -658,3 +658,15 @@ bool MainMemory::createStdMappingFile(const String &packName) {
 String MainMemory::getLoadedPackName() {
     return currentPack;
 }
+
+/**
+ * @brief returns the sample mapped to the given note (from loaded mapping)
+ * @param note: note as unsigned byte [0, 127]
+ * @return sample name as string
+ */
+String MainMemory::getSampleFromNote(uint8_t note) {
+    noInterrupts();
+    String res = sampleMapping[note];
+    interrupts();
+    return res;
+}
