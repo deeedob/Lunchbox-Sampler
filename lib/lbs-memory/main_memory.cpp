@@ -142,6 +142,7 @@ void MainMemory::init() {
 	delay( 200 );
 	interrupts();
 }
+
 /**
  * @brief  returns a filelist of files on flash
  * @return a vector of strings containing all files on flash
@@ -780,4 +781,20 @@ bool MainMemory::saveCurrentMappingToFile() {
     mapping.close();
     interrupts();
     return false;
+}
+
+/**
+ * @brief prints loaded mapping
+ */
+void MainMemory::printMapping() {
+    noInterrupts();
+    for (int i = 0; i < 128; i++) {
+        Serial.print("Midi Note ");
+        Serial.print(i);
+        Serial.print(": ");
+        Serial.print(sampleMapping[i]);
+        Serial.print(", ");
+        Serial.println(modeMapping[i]);
+    }
+    interrupts();
 }
