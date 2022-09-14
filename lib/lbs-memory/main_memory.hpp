@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <string>
 #include <vector>
+#include <map>
 #include <observer.hpp>
 
 namespace lbs {
@@ -15,25 +16,15 @@ namespace lbs {
         RAW = 2
     };
 
-/*
     enum playbackMode {
         ONESHOT = 0,
         LOOP = 1,
     };
-*/
 
-/*
     struct PitchVal {
         int8_t value = -1;
     };
-*/
 
-/*
-    struct mapping {
-        String sample;
-        playbackMode mode;
-    };
-*/
     class MainMemory : public Observable<std::pair<uint32_t, uint32_t>> {
 
     public:
@@ -80,10 +71,11 @@ namespace lbs {
         static MainMemory *m_glue;
         static String currentPack;
         static uint freeSpaceFlash;
-        //static String sampleMapping[128];
-        //static playbackMode modeMapping[128];
+        static const std::map<String, PitchVal> pitches;
+        static String sampleMapping[128];
+        static playbackMode modeMapping[128];
 
-        //static void loadMappingFile(const String &packName);
+        static void loadMappingFile(const String &packName);
 
     };
 }// namespace lbs

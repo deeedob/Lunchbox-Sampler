@@ -5,7 +5,24 @@ using namespace lbs;
 const String MainMemory::m_packRootDir = "/samplepacks/";
 MainMemory *MainMemory::m_glue = nullptr;
 
+const std::map<String, PitchVal> MainMemory::pitches = {{"c",  PitchVal{0}},
+                                                        {"c#", PitchVal{1}},
+                                                        {"d",  PitchVal{2}},
+                                                        {"d#", PitchVal{3}},
+                                                        {"e",  PitchVal{4}},
+                                                        {"f",  PitchVal{5}},
+                                                        {"f#", PitchVal{6}},
+                                                        {"g",  PitchVal{7}},
+                                                        {"g#", PitchVal{8}},
+                                                        {"a",  PitchVal{9}},
+                                                        {"a#", PitchVal{10}},
+                                                        {"b",  PitchVal{11}}};
+
 uint MainMemory::freeSpaceFlash = 0;
+String MainMemory::currentPack = "";
+
+String MainMemory::sampleMapping[] = {""};
+playbackMode MainMemory::modeMapping[] = {ONESHOT};
 
 /**
  * @brief determines filetype of an audio file by extension
@@ -13,9 +30,9 @@ uint MainMemory::freeSpaceFlash = 0;
  * @return audiotype (RAW, WAVE or INVALID)
  */
 AUDIOTYPE getAudioType(const String &sampleName) {
-	noInterrupts();
-	String ext = sampleName.substring(sampleName.lastIndexOf(".")).toLowerCase();
-	if (ext.compareTo(".wav") == 0) {
+    noInterrupts();
+    String ext = sampleName.substring(sampleName.lastIndexOf(".")).toLowerCase();
+    if (ext.compareTo(".wav") == 0) {
 		return AUDIOTYPE::WAV;
 	} else if (ext.compareTo(".raw") == 0) {
 		return AUDIOTYPE::RAW;
@@ -64,14 +81,26 @@ size_t findPayload(File &f) {
  * @return the size of the wave payload/audio data
  */
 size_t getRawAudioSize(const String &fullpath) {
-	noInterrupts();
-	File f = SD.open(fullpath.c_str());
-	size_t audioPos = findPayload(f);
-	if (audioPos > 0) {
-		audioPos--;
-	}
-	interrupts();
-	return f.size() - audioPos;
+    noInterrupts();
+    File f = SD.open(fullpath.c_str());
+    size_t audioPos = findPayload(f);
+    if (audioPos > 0) {
+        audioPos--;
+    }
+    interrupts();
+    return f.size() - audioPos;
+}
+
+/**
+ * @brief converts the input string into a viable playback mode
+ * @param string: string describing playbackmode
+ * @return enum of playbackMode
+ */
+playbackMode parsePlaybackMode(const String &string) {
+    if (string == "LOOP") {
+        return lbs::LOOP;
+    }
+    return lbs::ONESHOT;
 }
 
 MainMemory::MainMemory() {
@@ -212,11 +241,125 @@ void MainMemory::eraseFlash()
     interrupts();
 }
 
+/**
+ * @brief loads a mapping file into RAM for triggering samples
+ * @param packName: samplepack to be loaded
+ */
+void MainMemory::loadMappingFile(const String &packName) {
+    noInterrupts();
+    const String pack = m_packRootDir + packName + "/";
+    const String path = pack + C_SETTINGS_FILE;
+
+    // Check pack exists
+    if (!SD.exists(path.c_str())) {
+#ifdef VERBOSE
+        Serial.print("ERROR in loadMappingFile: filepath ");
+        Serial.print(path.c_str());
+        Serial.println(" does not exist!");
+#endif
+        interrupts();
+        return;
+    }
+
+    // Check file readable
+    File settings = SD.open(path.c_str(), FILE_READ);
+    if (!settings) {
+#ifdef VERBOSE
+        Serial.println("ERROR in loadMappingFile: could not read file!");
+#endif
+        interrupts();
+        return;
+    }
+
+    //Parse CSV file
+    String sample;
+    String note, mode;
+    size_t pos, pos2;
+    auto result = std::vector<std::tuple<String, String, String>>();
+    auto res = std::tuple<String, String, String>();
+    String line;
+    int8_t midiNote;
+    int8_t octave;
+
+    while (settings.available()) {
+        line = settings.readStringUntil('\n');
+        pos = line.indexOf(',');
+        pos2 = line.indexOf(',', pos + 1);
+
+        sample = line.substring(pos + 1, pos2).replace(" ", "");
+
+        //Check Sample valid
+        if (sample.length() <= 0 || !SD.exists((pack + sample).c_str())) {
+#ifdef VERBOSE
+            Serial.print("CSV PARSE SKIP: invalid sample ");
+            Serial.println(sample);
+#endif
+            continue;
+        }
+
+        //PARSE NOTE TO MIDI VALUE AND TEST VALIDITY
+        note = line.substring(0, pos).replace(" ", "");
+
+        if (note.length() < 2) {
+#ifdef VERBOSE
+            Serial.print("CSV PARSE SKIP: invalid note ");
+            Serial.println(note);
+#endif
+            continue;
+        }
+
+        octave = note.substring(note.length() - 1, note.length()).toInt();
+        note = note.substring(0, note.length() - 1).toLowerCase();
+
+        if (octave < 0 || octave > 9 || MainMemory::pitches.at(note).value < 0) {
+#ifdef VERBOSE
+            Serial.print("CSV PARSE SKIP: invalid note value or octave ");
+            Serial.println(note);
+            Serial.print(" ");
+            Serial.print(octave);
+#endif
+            continue;
+        }
+
+        //Calculate midi value (C4 = 60)
+        midiNote = 12 * (octave + 1) + MainMemory::pitches.at(note).value;
+
+        //Parse playback mode
+        mode = line.substring(pos2 + 1, line.length());
+        if (mode.length() <= 0) {
+            mode = "ONESHOT";
+        }
+
+#ifdef VERBOSE
+        Serial.print("loadMappingFile(): PARSED: ");
+        Serial.print(note);
+        Serial.print(octave);
+        Serial.print(" ");
+        Serial.print(sample);
+        Serial.print(" ");
+        Serial.print(mode);
+        Serial.print(" Note: ");
+        Serial.print(" ");
+        Serial.println(midiNote);
+#endif
+
+        // Save name without wave extension (as named on flash)
+        sampleMapping[midiNote] = sample;
+        modeMapping[midiNote] = parsePlaybackMode(mode);
+    }
+
+#ifdef VERBOSE
+    Serial.println("Finished reading settings");
+#endif
+    interrupts();
+}
+
 void MainMemory::loadSamplepack( const String& pack_name ) {
 	noInterrupts();
 	eraseFlash();
 	createStdMappingFile(pack_name);
 	String fullpath;
+    loadMappingFile(pack_name);
 	auto list = getSampleNamesFromPack(pack_name);
 
 	uint sum = 0;
@@ -237,13 +380,36 @@ void MainMemory::loadSamplepack( const String& pack_name ) {
 	uint32_t size = list.size();
 	uint32_t current = 0;
 	for (auto &i: list) {
-		fullpath = m_packRootDir + pack_name;
-		fullpath += "/" + i;
-		transferSingleToFlash(fullpath);
-		m_glue->notify(std::pair<uint32_t, uint32_t>(current, size));
-		current++;
-	}
-	interrupts();
+        fullpath = m_packRootDir + pack_name;
+        //i must not be empty string
+        if (i.length() > 0) {
+            fullpath += "/" + i;
+            if ((sampleSize = transferSingleToFlash(fullpath,
+                                                    round(getRawAudioSize(fullpath) * stripFactor)))) {
+                m_glue->notify(std::pair<uint32_t, uint32_t>(current, size));
+                current++;
+                freeSpaceFlash -= sampleSize;
+            }
+        }
+    }
+
+    for (auto &i: sampleMapping) {
+        if (i.length() > 0) {
+            i = i.substring(0, i.lastIndexOf('.'));
+        }
+    }
+
+    currentPack = pack_name;
+
+#ifdef VERBOSE
+    Serial.print(pack_name);
+    Serial.print(", ");
+    Serial.print(current);
+    Serial.println(" Samples loaded!");
+    Serial.print("Free Space on Flash: ");
+    Serial.println(freeSpaceFlash);
+#endif
+    interrupts();
 }
 
 std::vector<String> MainMemory::getSampleNamesFromPack( const String& pack_name )
