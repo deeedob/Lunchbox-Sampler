@@ -62,7 +62,8 @@ namespace lbs {
 
         static bool createStdMappingFile(const String &packName);
 
-        //static bool deleteMappingFile(const String &packName);
+        static bool deleteMappingFile(const String &packName);
+
         //static void createAllStdMappingFiles();
         //static bool saveCurrentMappingToFile();
         //static void printMapping();

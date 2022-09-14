@@ -701,3 +701,25 @@ bool MainMemory::setSampleForNote(const String &sampleName, uint8_t midiNote) {
     interrupts();
     return true;
 }
+
+/**
+ * @brief deletes mapping file for given samplepack if exists
+ * @param packName: samplepack name (relative to pack folder)
+ * @return success or failure
+ */
+bool MainMemory::deleteMappingFile(const String &packName) {
+    noInterrupts();
+    String settingspath = m_packRootDir + "/" + packName + "/" + C_SETTINGS_FILE;
+    if (SD.exists(settingspath.c_str())) {
+#ifdef VERBOSE
+        Serial.println("deleteMappingFile(): mapping exists... deleting");
+#endif
+        interrupts();
+        return SD.remove(settingspath.c_str());
+    }
+#ifdef VERBOSE
+    Serial.println("deleteMappingFile(): No mapping existing... nothing to do");
+#endif
+    interrupts();
+    return false;
+}
