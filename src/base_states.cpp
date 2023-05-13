@@ -1,8 +1,8 @@
 #include "base_states.hpp"
 #include <define_t40.hpp>
 
-BaseStates::BaseStates()
-	: m_current( 0 ), m_inModule( false )
+BaseStates::BaseStates( const std::shared_ptr<Audio>& audio )
+	: m_audio( audio ), m_current( 0 ), m_inModule( false )
 {
 	m_graphics = std::make_unique<Graphics>( C_DISPLAY_WIDTH, C_DISPLAY_HEIGHT, &Wire1, C_DISPLAY_RST, 1000000, 1000000 );
 	
@@ -12,7 +12,7 @@ BaseStates::BaseStates()
 	/* init the individual modules */
 	auto module_load = std::make_unique<ModuleLoad>();
 	auto module_sound_manager = std::make_unique<ModuleSoundManager>();
-	auto module_audio = std::make_unique<ModuleAudio>();
+	auto module_audio = std::make_unique<ModuleAudio>( m_audio );
 	auto module_recorder = std::make_unique<ModuleRecorder>();
 	auto module_main_settings = std::make_unique<ModuleMainSettings>();
 	/* get notified on exit */

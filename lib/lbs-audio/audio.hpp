@@ -32,10 +32,15 @@ namespace lbs
 			BIG = 16,
 		};
 		explicit Audio( POLYPHONY poly = POLYPHONY::SMALL );
-		Audio();
+		
 		static bool playNote( const Note& n );
-		static void stopNote( const Note& n );
 		static bool playSingleRaw( const String& file, float gain = 1.0f );
+		static void stopNote( const Note& n );
+		
+		void setMasterVolume( float volume );
+		void setBitCrush( float crush_bits );
+		void setRoomSize( float size );
+		void setLowPassFreq( float freq );
 	private:
 		void initialize_connections( POLYPHONY p );
 		void sort_audio_files_ascending();
@@ -53,6 +58,11 @@ namespace lbs
 		PatchBank m_patchBank;
 		MixerBank m_mixBank;
 		
+		AudioMixer4 m_fxMixer;
+		AudioEffectBitcrusher m_bitcrusher;
+		AudioEffectFreeverb m_freeverb;
+		AudioFilterLadder m_filter;
+		AudioEffectEnvelope m_masteEnv;
 		/* what is right or wrong i dont know anymore ...
 		 * This somehow works because we call the audio instance from
 		 * a static function in the MidiListener wrapped inside a member function called from a seperate thread -- pure madness ---

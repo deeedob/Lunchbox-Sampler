@@ -284,6 +284,7 @@ void ModuleLoad::emit( const std::pair<uint32_t, uint32_t>& src )
 	} else if( m_inLoading ) {
 		draw_load_progress( src );
 	}
+	m_graphics->clearDisplay();
 	m_graphics->drawWindow( m_top );
 	m_graphics->drawWindow( m_bottom );
 	m_graphics->display();

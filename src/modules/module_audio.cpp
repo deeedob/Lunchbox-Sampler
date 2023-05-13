@@ -1,9 +1,11 @@
 #include "module_audio.hpp"
 
+#include <utility>
+
 using namespace lbs;
 
-ModuleAudio::ModuleAudio()
-	: AbstractModule( "Audio" )
+ModuleAudio::ModuleAudio( std::shared_ptr<Audio> audio )
+	: AbstractModule( "Audio" ), m_audio( std::move( audio ))
 {
 	auto split_screens = WindowSize::createSplitScreen( UTIL::HORIZONTAL, 0.15f );
 	m_top = Window( split_screens.first );
@@ -52,23 +54,23 @@ ModuleAudio::ModuleAudio()
 	} );
 	
 	m_transitionTable.setFunction( STATE::MASTER, [ = ]() {
-		this->draw_master( Events::Analog::POTS::LAST, { 0, 0 } );
+		this->draw_master( Events::Analog::POTS::LAST );
 	} );
 	
 	m_transitionTable.setFunction( STATE::CHANNEL_1, [ = ]() {
-		this->draw_channel1();
+		//this->draw_channel1();
 	} );
 	
 	m_transitionTable.setFunction( STATE::CHANNEL_2, [ = ]() {
-		this->draw_channel2();
+		//this->draw_channel2();
 	} );
 	
 	m_transitionTable.setFunction( STATE::CHANNEL_3, [ = ]() {
-		this->draw_channel3();
+		//this->draw_channel3();
 	} );
 	
 	m_transitionTable.setFunction( STATE::CHANNEL_4, [ = ]() {
-		this->draw_channel4();
+		//this->draw_channel4();
 	} );
 	
 	m_transitionTable.get()[ STATE::MAIN ] = {
@@ -77,6 +79,9 @@ ModuleAudio::ModuleAudio()
 		{ Events::DIGITAL::BTN_ENTER, STATE::CHANNEL_2 },
 		{ Events::DIGITAL::BTN_ENTER, STATE::CHANNEL_3 },
 		{ Events::DIGITAL::BTN_ENTER, STATE::CHANNEL_4 },
+	};
+	m_transitionTable.get()[ STATE::MASTER ] = {
+		{ Events::DIGITAL::BTN_RETURN, STATE::MAIN },
 	};
 	m_transitionTable.setCurrent( STATE::MAIN );
 	
@@ -88,16 +93,6 @@ ModuleAudio::~ModuleAudio()
 void ModuleAudio::enter( Graphics* g )
 {
 	g->clearDisplay();
-	/*
-	frequency = 200;
-	m_currentMainState = m_mainStates.begin();
-	m_currentChannel = m_channels.begin();
-	m_currentEffect = m_effects.begin();
-	m_currentDetailFilter = m_detailFilter.begin();
-	m_currentDetailDelay = m_detailDelay.begin();
-	m_currentDetailCompressor = m_detailCompressor.begin();
-	draw_audio_module_main( g );
-	*/
 	draw_main();
 	g->drawWindow( m_top );
 	g->drawWindow( m_bottom );
@@ -108,8 +103,6 @@ void ModuleAudio::update( Graphics* g, Events::DIGITAL e )
 {
 	/* decide if to use internal vec size or external size like a list. */
 	switch( m_transitionTable.current()) {
-		case STATE::MASTER:
-			return;
 		default:
 			m_transitionTable.setSelectionSize( m_transitionTable.getCurrentVecSize());
 			break;
@@ -147,8 +140,13 @@ void ModuleAudio::update( Graphics* g, Events::DIGITAL e )
 			break;
 	}
 	
-	g->drawWindow( m_top );
-	g->drawWindow( m_bottom );
+	if( m_transitionTable.current() == STATE::MASTER ) {
+		g->drawWindow( m_left );
+		g->drawWindow( m_right );
+	} else {
+		g->drawWindow( m_top );
+		g->drawWindow( m_bottom );
+	}
 	g->display();
 }
 
@@ -157,11 +155,33 @@ void ModuleAudio::update( Graphics* g, Events::Analog::POTS pots, const AnalogDa
 	g->clearDisplay();
 	switch( m_transitionTable.current()) {
 		case STATE::MASTER:
-			draw_master( pots, data );
+			float volume, bitcrush, lowpass, reverb;
+			switch( pots ) {
+				case Events::Analog::POTS::POT_0:
+					bitcrush = static_cast<float>(data.m_data) / 1023.0f;
+					m_oldPot0 = (int8_t) ( bitcrush * 100.0f );
+					m_audio->setBitCrush( bitcrush );
+					break;
+				case Events::Analog::POTS::POT_1:
+					lowpass = static_cast<float>(data.m_data) / 1023.0f;
+					m_oldPot1 = (int8_t) ( lowpass * 100.0f );
+					m_audio->setLowPassFreq( lowpass );
+					break;
+				case Events::Analog::POTS::POT_2:
+					reverb = static_cast<float>(data.m_data) / 1023.0f;
+					m_oldPot2 = (int8_t) ( reverb * 100.0f );
+					m_audio->setRoomSize( reverb );
+					break;
+				case Events::Analog::POTS::POT_3:
+					volume = static_cast<float>(data.m_data) / 1023.0f;
+					m_oldPot3 = (int8_t) ( volume * 100.0f );
+					m_audio->setMasterVolume( volume );
+					break;
+			}
+			draw_master( pots );
 			break;
 	}
 	
-	g->drawWindow( m_top );
 	g->drawWindow( m_left );
 	g->drawWindow( m_right );
 	g->display();
@@ -191,51 +211,79 @@ void ModuleAudio::draw_main()
 	}
 }
 
-void ModuleAudio::draw_master( Events::Analog::POTS e, const AnalogData& data )
+void ModuleAudio::draw_master( Events::Analog::POTS e )
 {
+	uint16_t color1_rot0 = 0xFF;
+	uint16_t color1_rot1 = 0xFF;
+	uint16_t color1_rot2 = 0xFF;
+	uint16_t color1_rot3 = 0xFF;
+	
+	uint16_t color2_rot0 = 0x33;
+	uint16_t color2_rot1 = 0x33;
+	uint16_t color2_rot2 = 0x33;
+	uint16_t color2_rot3 = 0x33;
+	
+	uint16_t color3_rot0 = 0x33;
+	uint16_t color3_rot1 = 0x33;
+	uint16_t color3_rot2 = 0x33;
+	uint16_t color3_rot3 = 0x33;
 	switch( e ) {
 		case Events::Analog::POTS::POT_0:
-			m_oldPot0 = (int8_t) (( static_cast<float>(data.m_data) / 1023.0f ) * 100.0f );
+			color1_rot0 = 0x22;
+			color2_rot0 = 0xFF;
+			color3_rot0 = 0xEE;
 			break;
 		case Events::Analog::POTS::POT_1:
-			m_oldPot1 = (int8_t) (( static_cast<float>(data.m_data) / 1023.0f ) * 100.0f );
+			color1_rot1 = 0x22;
+			color2_rot1 = 0xFF;
+			color3_rot1 = 0xEE;
 			break;
 		case Events::Analog::POTS::POT_2:
-			m_oldPot2 = (int8_t) (( static_cast<float>(data.m_data) / 1023.0f ) * 100.0f );
+			color1_rot2 = 0x22;
+			color2_rot2 = 0xFF;
+			color3_rot2 = 0xEE;
 			break;
 		case Events::Analog::POTS::POT_3:
-			m_oldPot3 = (int8_t) (( static_cast<float>(data.m_data) / 1023.0f ) * 100.0f );
+			color1_rot3 = 0x22;
+			color2_rot3 = 0xFF;
+			color3_rot3 = 0xEE;
 			break;
 	}
-	
-	m_top.fillScreen( 0xff );
-	m_top.drawWindowBorder( { 2, 2 }, 0, 0x00, 1 );
-	m_top.printlnCentered( m_transitionTable.name( STATE::MASTER ).c_str());
-	m_left.fillScreen( 0x44 );
-	m_right.fillScreen( 0x44 );
-	m_left.drawLine( 0, 74, 64, 74, 0xFF );
-	m_right.drawLine( 0, 74, 64, 74, 0xFF );
-	
 	//ROT0
-	uint16_t color1_rot0 = 0xFF;
-	uint16_t color2_rot0 = 0x00;
-	
-	m_left.fillRect( 0, 0, 74, 74, 0xEE );
-	color1_rot0 = 0x33;
-	color2_rot0 = 0xFF;
-	
+	m_left.fillRect( 0, 0, 64, 64, color3_rot0 );
 	m_left.setTextColor( color1_rot0 );
-	m_left.setCursor( 14, 22 );
+	m_left.setCursor( 8, 5 );
 	m_left.setFont();
-	m_left.println( "Volume" );
+	m_left.println( "Bit-crush" );
 	
-	m_left.drawRotary( 32, 46, 15, 0xAA, color1_rot0 );
-	m_left.drawCircle( 32, 46, 15, color1_rot0, color2_rot0, m_oldPot0 );
+	m_left.drawRotary( 32, 32, 15, 0xAA, color1_rot0 );
+	m_left.drawCircle( 32, 32, 15, color1_rot0, color1_rot0, m_oldPot0 );
+	//ROT1
+	m_right.fillRect( 0, 0, 64, 64, color3_rot1 );
+	m_right.setTextColor( color1_rot1 );
+	m_right.setCursor( 8, 5 );
+	m_right.setFont();
+	m_right.println( "Low-pass" );
 	
-	m_left.setTextColor( color1_rot0 );
-	m_left.setCursor( 22, 64 );
+	m_right.drawRotary( 32, 32, 15, 0xAA, color1_rot1 );
+	m_right.drawCircle( 32, 32, 15, color1_rot1, color1_rot1, m_oldPot1 );
+	
+	//ROT2
+	m_left.fillRect( 0, 64, 64, 64, color3_rot2 );
+	m_left.setTextColor( color1_rot2 );
+	m_left.setCursor( 15, 70 );
 	m_left.setFont();
-	m_left.println( "MIX" );
+	m_left.println( "Reverb" );
+	m_left.drawRotary( 32, 100, 15, 0xAA, color1_rot2 );
+	m_left.drawCircle( 32, 100, 15, color1_rot2, color1_rot2, m_oldPot2 );
+	//ROT3
+	m_right.fillRect( 0, 64, 64, 64, color3_rot3 );
+	m_right.setTextColor( color1_rot3 );
+	m_right.setCursor( 15, 70 );
+	m_right.setFont();
+	m_right.println( "Volume" );
+	m_right.drawRotary( 32, 100, 15, 0xAA, color1_rot3 );
+	m_right.drawCircle( 32, 100, 15, color1_rot3, color1_rot3, m_oldPot3 );
 }
 
 void ModuleAudio::draw_channel1()

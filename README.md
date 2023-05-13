@@ -1,8 +1,11 @@
 # Lunchbox Sampler
 
-This device plays back audio files, records them, loads samples packs, and visualizes everything on a screen while trying to be **blazingly fast**. We tried to incorporate as many features as we could from classic samplers like the MPC, Korg Volca, and many more. The Lunchbox Sampler lives up to its
+This device plays back audio files, records them, loads samples packs, and visualizes everything on a screen.
+We tried to incorporate as many features as we could from classic samplers like the
+MPC, Korg Volca, and many more. The Lunchbox Sampler lives up to its
 name and puts an emphasis on ***mobility*** and ***
-extensibility***. There's everything you need to rebuild this device yourself - and maybe even extend it. *Give it a shot!*
+extensibility***. There's everything you need to rebuild this device yourself - and maybe even extend it. *Give it a
+shot!*
 
 Overview :
 
@@ -18,12 +21,12 @@ The following pins are used :
 
 | **Teensy Pins** |    **Mode**     | **descriptions**         | 
 |:---------------:|:---------------:|--------------------------|
-|        0        |       RX1       | Midi IN, Serial          |
-|        1        |       TX1       | Midi OUT, Serial         |
-|        2        |      Dig 2      | Rotary A                 |
-|        3        |      Dig 3      | Rotary B                 | 
-|        4        |      Dig 4      | Button Enter             |
-|        5        |      Dig 5      | Button Return            |
+|        0        |       RX1       | **Midi IN, Serial**      |
+|        1        |       TX1       | **Midi OUT, Serial**     |
+|        2        |      Dig 2      | **Rotary A**             |
+|        3        |      Dig 3      | **Rotary B**             | 
+|        4        |      Dig 4      | **Button Enter**         |
+|        5        |      Dig 5      | **Button Return**        |
 |       *6*       |   *RESERVED*    | *Audio-Shield, MEMCS*    |
 |       *7*       |   *RESERVED*    | *Audio-Shield, DIN*      |
 |       *8*       |   *RESERVED*    | *Audio-Shield, DOUT*     |
@@ -32,15 +35,15 @@ The following pins are used :
 |      *11*       |   *RESERVED*    | *Audio-Shield, SD::MOSI* |
 |      *12*       |   *RESERVED*    | *Audio-Shield, MISO*     |
 |      *13*       |   *RESERVED*    | *Audio-Shield, SD::SCK*  |
-|       14        |       A0        | POT_0, ADC0              |
-|       15        |       A1        | POT1, ADC0               |
-|       16        |      SCL1       | Display, I2C Clock       |
-|       17        |      SDA1       | Display, I2C Data        |
+|       14        |       A0        | **POT_0, ADC0**          |
+|       15        |       A1        | **POT1, ADC0**           |
+|       16        |      SCL1       | **Display, I2C Clock**   |
+|       17        |      SDA1       | **Display, I2C Data**    |
 |      *18*       |   *RESERVED*    | *Audio-Shield, SDA*      |
 |      *19*       |   *RESERVED*    | *Audio-Shield, SCL*      |
 |      *20*       |   *RESERVED*    | *Audio-Shield, LRCLK*    |
 |      *21*       |   *RESERVED*    | *Audio-Shield, BCLK*     |
-|       22        |       A8        | FSR Poll, ADC1           |
+|       22        |       A8        | **FSR Poll, ADC1**       |
 |      *23*       |   *RESERVED*    | *Audio-Shield, MCLK*     |
 |                 | **Bottom Pins** |                          |
 |       24        |       A10       | POT2, ADC0               |
@@ -56,7 +59,8 @@ The following pins are used :
 
 ## Building
 
-The following describes the build process for the [Teensy Platform](https://www.pjrc.com/) using platformio. Please install this program and the teensy-loader on your system and add them to your System Paths variable.
+The following describes the build process for the [Teensy Platform](https://www.pjrc.com/) using platformio. Please
+install this program and the teensy-loader on your system and add them to your System Paths variable.
 
 Clone this repo :
 
@@ -71,15 +75,16 @@ Clone this repo :
 Run platformio :
 
 ```bash
-    # pio run
+    pio run
 ```
 
-This will generate a hidden folder called **.pio**. In this directory, all the compiled libraries and sources are linked and the final hex file is produced.
+This will generate a hidden folder called **.pio**. In this directory, all the compiled libraries and sources are linked
+and the final hex file is produced.
 
 Then simply upload it to the teensy board :
 
 ```bash
-    # pio run --target upload
+    pio run --target upload
 ```
 
 ## Contribution Policy
@@ -98,7 +103,8 @@ When working on features, it is necessary to work in a subbranch, e.g. :
     git checkout -b feature-xyz development #create a new feature branch from development
 ```
 
-The master branch gets merged regularly from the development branch! To update your feature branch when working on bigger features use a **rebase technique** to do so!
+The master branch gets merged regularly from the development branch! To update your feature branch when working on
+bigger features use a **rebase technique** to do so!
 
 ```bash
     git checkout development
@@ -124,12 +130,14 @@ When a feature is finished - merge it back into development.
 
 ## Clion Setup Guide
 
-We currently use [platformio](https://docs.platformio.org) as a build system. We may switch to a pure CMake based system in the future though. In order to work with embedded projects following requirement have to be met :
+We currently use [platformio](https://docs.platformio.org) as a build system. We may switch to a pure CMake based system
+in the future though. In order to work with embedded projects following requirement have to be met :
 
 - install `PlatformIO for CLion` plugin
 - install `Serial Port Monitor` plugin
 
-1. Then you have to `Re-Init` the platformio.ini file in order to generate the **CMakeLists.txt** file. You may have to `Reload CMake Project` to let CLion properly detect the project!
+1. Then you have to `Re-Init` the platformio.ini file in order to generate the **CMakeLists.txt** file. You may have
+   to `Reload CMake Project` to let CLion properly detect the project!
 2. To build custom targets for platformio you have to set the proper `Build type`
    in `File > Settings > Build, Execution, Deployment > CMake`. This has to match the [platformio.ini](platformio.ini)
    environments that you declare.

@@ -3,8 +3,8 @@
 # Copyright (c) 2022. Dennis Oberst
 ####################################################################################################
 
-# for formats
-# ffmpeg -formats | grep PCM
+# This script is batch converting all wav files inside a directory to 16 bit, as this is the maximum bit depth we
+# can support
 
 shopt -s globstar nullglob
 for f in *.wav **/*.wav

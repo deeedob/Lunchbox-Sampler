@@ -9,14 +9,10 @@ FSR::FSR( AnalogInterrupts* const parent, u_int8_t mpxPin0, u_int8_t mpxPin1, u_
 	: m_parent( parent ), m_values( { 0, 0, 0, 0 } ), m_delta( delta )
 {
 	m_position = 0;
-	m_pads[ 0 ].first = Multiplex( mpxPin0 );
-	m_pads[ 0 ].second = false;
-	m_pads[ 1 ].first = Multiplex( mpxPin1 );
-	m_pads[ 1 ].second = false;
-	m_pads[ 2 ].first = Multiplex( mpxPin2 );
-	m_pads[ 2 ].second = false;
-	m_pads[ 3 ].first = Multiplex( mpxPin3 );
-	m_pads[ 3 ].second = false;
+	m_pads[ 0 ] = std::make_tuple( Multiplex( mpxPin0 ), false, 480 );
+	m_pads[ 1 ] = std::make_tuple( Multiplex( mpxPin1 ), false, 550 );
+	m_pads[ 2 ] = std::make_tuple( Multiplex( mpxPin2 ), false, 530 );
+	m_pads[ 3 ] = std::make_tuple( Multiplex( mpxPin3 ), false, 420 );
 	rescanAll();
 	m_isrInstance = this;
 }
@@ -36,19 +32,15 @@ void FSR::isr()
 	
 	if( last_interrupt_time - interrupt_time > 5 ) {
 		/* TODO: construct MIDI event and enqueue? */
-		auto& note = i->m_pads[ i->m_position ].second;
+		auto& note = std::get<STATE>( i->m_pads[ i->m_position ] );
 		if( !note ) {
-			//Serial.println( "1" );
 			note = true; // Trigger is ON
 		} else {
-			//Serial.println( "0" );
 			note = false; // Trigger is OFF
 		}
 		i->m_parent->getEventSystem()
 		 ->enqueueAnalog( static_cast<Events::Analog::FSR>(i->m_position), { note, val } );
 		i->update();
-		//Serial.print( "u" );
-		//Serial.println( note );
 	}
 	
 	last_interrupt_time = interrupt_time;
@@ -68,15 +60,12 @@ void FSR::update()
 {
 	noInterrupts();
 	stopScan();
-	m_pads[ m_position ].first.setActive();      // set the mpx pin to read active
-	//int oldVal = m_values[ m_position ];
-	//m_parent->getAdc()->adc1->enableCompareRange( oldVal - m_delta, oldVal + m_delta, false, true );
-	if( !m_pads[ m_position ].second ) { // if the pad is Note Off then wait for a trigger
-		m_parent->getAdc()->adc1->enableCompareRange( 870, 1024, true, true );
+	std::get<MPX>( m_pads[ m_position ] ).setActive();      // set the mpx pin to read active
+	if( !std::get<STATE>( m_pads[ m_position ] )) { // if the pad is Note Off then wait for a trigger
+		m_parent->getAdc()->adc1->enableCompareRange( std::get<LOW_BORDER>( m_pads[ m_position ] ), 1024, true, true );
 	} else { //else wait till the value is back to normal state
-		m_parent->getAdc()->adc1->enableCompareRange( 750, 1024, false, true );
+		m_parent->getAdc()->adc1->enableCompareRange( std::get<LOW_BORDER>( m_pads[ m_position ] ) - 170, 1024, false, true );
 	}
-	
 	m_parent->getAdc()->adc1->startContinuous( C_FSR_POLL );
 	interrupts();
 }
@@ -116,7 +105,7 @@ u_int16_t FSR::recalibrateDelta( u_int16_t padding, u_int16_t samples )
 	std::array<u_int16_t, 4> deltas { 0, 0, 0, 0 };
 	
 	for( int i = 0; i < 4; i++ ) {       //cycle through the 4 pots
-		m_pads[ i ].first.setActive();      // select different mpx out
+		std::get<MPX>( m_pads[ i ] ).setActive();      // select different mpx out
 		lowest = m_parent->getAdc()->adc1->analogRead( C_FSR_POLL );
 		highest = m_parent->getAdc()->adc1->analogRead( C_FSR_POLL );
 		for( int j = 0; j < samples; j++ ) {   //average out of 20
@@ -158,7 +147,7 @@ void FSR::rescanAll()
 {
 	stopScan();
 	for( int i = 0; i < m_pads.size(); i++ ) {
-		m_pads[ i ].first.setActive();
+		std::get<MPX>( m_pads[ i ] ).setActive();
 		m_values[ i ] = m_parent->getAdc()->analogRead( C_FSR_POLL );
 #ifdef VERBOSE
 		Serial.print( "FSR: " );

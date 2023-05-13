@@ -26,7 +26,7 @@ namespace lbs
 		virtual void exit()
 		{ notify( *this ); }
 		
-		virtual String& getModuleName()
+		virtual const String& getModuleName()
 		{ return m_moduleName; };
 		
 		virtual ~AbstractModule() = default;
@@ -34,4 +34,4 @@ namespace lbs
 	protected:
 		String m_moduleName;
 	};
-}// namespace lbs
+}

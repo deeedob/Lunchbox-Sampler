@@ -13,7 +13,6 @@ MainMemory::MainMemory()
 
 void MainMemory::init()
 {
-	noInterrupts();
 	SPI.setMOSI( C_SDCARD_MOSI_PIN );
 	SPI.setSCK( C_SDCARD_SCK_PIN );
 	
@@ -29,12 +28,10 @@ void MainMemory::init()
 		#endif
 	}
 	delay( 200 );
-	interrupts();
 }
 
 std::vector<String> MainMemory::getFilelistFromFlash()
 {
-	noInterrupts();
 	unsigned int count = 0;
 	char filename[64];
 	uint32_t filesize;
@@ -46,13 +43,11 @@ std::vector<String> MainMemory::getFilelistFromFlash()
 		filelist.emplace_back( filename );
 		count++;
 	}
-	interrupts();
 	return filelist;
 }
 
 void MainMemory::transferSingleToFlash( const String& filepath )
 {
-	noInterrupts();
 	File f = SD.open( filepath.c_str());
 	
 	if( !f ) {
@@ -93,12 +88,10 @@ void MainMemory::transferSingleToFlash( const String& filepath )
 	
 	f.close();
 	ff.close();
-	interrupts();
 }
 
 void MainMemory::eraseFlash()
 {
-	noInterrupts();
 	uint32_t i, blocksize, capacity;
 	blocksize = SerialFlashChip::blockSize();
 	
@@ -111,12 +104,10 @@ void MainMemory::eraseFlash()
 	}
 	m_glue->notify( std::pair<uint32_t, uint32_t>( capacity, capacity ));
 	while ( !SerialFlashChip::ready()) { }
-	interrupts();
 }
 
 void MainMemory::loadSamplepack( const String& pack_name )
 {
-	noInterrupts();
 	String fullpath;
 	auto list = getSampleNamesFromPack( pack_name );
 	uint32_t size = list.size();
@@ -128,12 +119,10 @@ void MainMemory::loadSamplepack( const String& pack_name )
 		m_glue->notify( std::pair<uint32_t, uint32_t>( current, size ));
 		current++;
 	}
-	interrupts();
 }
 
 std::vector<String> MainMemory::getSampleNamesFromPack( const String& pack_name )
 {
-	noInterrupts();
 	std::vector<String> filelist;
 	String path = m_packRootDir + pack_name;
 	
@@ -149,13 +138,11 @@ std::vector<String> MainMemory::getSampleNamesFromPack( const String& pack_name 
 	entry.close();
 	sample_dir.close();
 	
-	interrupts();
 	return filelist;
 }
 
 std::vector<String> MainMemory::getSamplePacksFromSD()
 {
-	noInterrupts();
 	std::vector<String> list;
 	auto sample_dir = SD.open( m_packRootDir.c_str());
 	if( !sample_dir || !sample_dir.isDirectory()) {
@@ -169,7 +156,6 @@ std::vector<String> MainMemory::getSamplePacksFromSD()
 		list.emplace_back( item.name());
 	}
 	sample_dir.close();
-	interrupts();
 	return list;
 }
 

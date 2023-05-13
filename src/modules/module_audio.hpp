@@ -7,13 +7,6 @@ using namespace lbs;
 class ModuleAudio : public AbstractModule
 {
 public:
-	struct MidiData
-	{
-		uint8_t type;
-		uint8_t channel;
-		uint8_t data1;
-		uint8_t data2;
-	};
 	enum class STATE
 	{
 		//MainStates
@@ -51,7 +44,7 @@ public:
 		RATIO,
 		GAIN,
 	};
-	ModuleAudio();
+	explicit ModuleAudio( std::shared_ptr<Audio> audio );
 	void enter( Graphics* g ) override;
 	void update( Graphics* g, Events::DIGITAL e ) override;
 	void draw_audio_module_main( Graphics* g );
@@ -62,7 +55,7 @@ public:
 	void update( Graphics* g, Events::Analog::POTS pots, const AnalogData& data ) override;
 private:
 	void draw_main();
-	void draw_master( Events::Analog::POTS e, const AnalogData& data );
+	void draw_master( Events::Analog::POTS e );
 	void draw_channel1();
 	void draw_channel2();
 	void draw_channel3();
@@ -70,7 +63,8 @@ private:
 private:
 	TransitionTable<STATE, Events::DIGITAL, void()> m_transitionTable;
 	bool m_return { false };
-	int8_t m_oldPot0, m_oldPot1, m_oldPot2, m_oldPot3 = 0;
+	int8_t m_oldPot0 { 0 }, m_oldPot1 { 0 }, m_oldPot2 { 0 }, m_oldPot3 { 0 };
+	std::shared_ptr<Audio> m_audio;
 	Window m_top;
 	Window m_bottom;
 	Window m_left;

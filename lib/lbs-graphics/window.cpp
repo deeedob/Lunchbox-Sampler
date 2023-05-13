@@ -467,17 +467,17 @@ void Window::drawCircle( int16_t x0, int16_t y0, int16_t r, uint16_t color1, uin
 		}
 	}
 	if( percentage < 10 ) {
-		setCursor( x0 - 3, y0 );
+		setCursor( x0 - 3, y0 + 18 );
 		setTextColor( color2 );
 		println( percentage );
-		setCursor( x0 + 5, y0 );
+		setCursor( x0 + 5, y0 + 18 );
 		setTextColor( color2 );
 		println( '%' );
 	} else {
-		setCursor( x0 - 7, y0 );
+		setCursor( x0 - 7, y0 + 18 );
 		setTextColor( color2 );
 		println( percentage );
-		setCursor( x0 + 5, y0 );
+		setCursor( x0 + 5, y0 + 18 );
 		setTextColor( color2 );
 		println( '%' );
 	}

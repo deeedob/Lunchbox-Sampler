@@ -10,7 +10,6 @@ namespace lbs
 	template<class Func>
 	class Worker : public Runnable
 	{
-	
 	public:
 		explicit Worker( int waitTime = 50 )
 			: m_done( false ), m_dispatchQueue( waitTime )
@@ -25,8 +24,8 @@ namespace lbs
 		};
 		Worker( const Worker& ) = delete;
 		Worker& operator=( Worker& ) = delete;
-		Worker(Worker&&) = delete;
-		Worker& operator=(Worker&& ) = delete;
+		Worker( Worker&& ) = delete;
+		Worker& operator=( Worker&& ) = delete;
 		
 		void runTarget( void* arg ) override
 		{

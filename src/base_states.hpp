@@ -29,7 +29,7 @@ class BaseStates : public Observer<AbstractModule>
 	using TransitionList = std::vector<Transition>;
 
 public:
-	BaseStates();
+	explicit BaseStates( const std::shared_ptr<Audio>& audio );
 	void baseUpdate( Events::DIGITAL e );
 	void baseUpdate( Events::Analog::POTS e, const AnalogData& d );
 
@@ -46,6 +46,7 @@ private:
 
 private:
 	std::unique_ptr<Graphics> m_graphics;
+	std::shared_ptr<Audio> m_audio;
 	TransitionList m_transitionList;
 	uint8_t m_current;
 	Window m_top;

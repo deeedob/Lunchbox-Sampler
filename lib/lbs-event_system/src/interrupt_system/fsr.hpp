@@ -14,6 +14,12 @@ namespace lbs
 	
 	class FSR
 	{
+		enum PADS
+		{
+			MPX = 0,
+			STATE = 1,
+			LOW_BORDER = 2
+		};
 	public:
 		explicit FSR( AnalogInterrupts* parent, u_int8_t mpxPin0, u_int8_t mpxPin1, u_int8_t mpxPin2, u_int8_t mpxPin3, u_int16_t delta );
 		~FSR();
@@ -36,7 +42,7 @@ namespace lbs
 		std::array<volatile u_int16_t, 4> m_values;
 		volatile u_int8_t m_position;
 		/** <Multiplex Control, Triggered On| Off > relates to Note On/Off */
-		std::array<std::pair<Multiplex, bool>, 4> m_pads;
+		std::array<std::tuple<Multiplex, bool, int16_t>, 4> m_pads;
 		u_int16_t m_delta;
 		static FSR* m_isrInstance;
 	};
