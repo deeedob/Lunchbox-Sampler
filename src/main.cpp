@@ -1,14 +1,17 @@
-#include <lunchbox_sampler.hpp>
+#include <Arduino.h>
+#include <TeensyDebug.h>
 
-/* Arduino ... why u do this shit?! */
 #undef main
 
 int main()
 {
-#ifdef VERBOSE
-	Serial.begin( 9600 );
-	Serial.println( ":::Lunchbox Sampler:::" );
-#endif
-	LunchboxSampler& sampler = LunchboxSampler::getInstance();
-	sampler.run();
+	Serial.begin(19200);
+	Serial.println("Start debug session");
+	
+	halt_cpu();
+	
+	while(true) {
+		Serial.println("LBS");
+		delay(1000);
+	}
 }

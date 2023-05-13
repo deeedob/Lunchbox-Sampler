@@ -2,9 +2,7 @@
 <project version="4">
   <component name="CMakeSharedSettings">
     <configurations>
-      <configuration PROFILE_NAME="Test_Events" ENABLED="true" CONFIG_NAME="test_events" />
-      <configuration PROFILE_NAME="Release" ENABLED="true" CONFIG_NAME="release" />
-      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="debug" />
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="lbs-debug" TOOLCHAIN_NAME="arm-none-eabi" GENERATION_OPTIONS="--profiling-format=google-trace --profiling-output=CMakeFiles/clion-event-trace.json" NO_GENERATOR="true" />
     </configurations>
   </component>
 </project>
