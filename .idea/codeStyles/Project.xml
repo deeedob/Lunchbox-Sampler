@@ -29,7 +29,6 @@
       <option name="USE_GENERAL_STYLE" value="false" />
     </MySQLCodeStyleSettings>
     <Objective-C>
-      <option name="INDENT_NAMESPACE_MEMBERS" value="0" />
       <option name="KEEP_STRUCTURES_IN_ONE_LINE" value="true" />
       <option name="KEEP_CASE_EXPRESSIONS_IN_ONE_LINE" value="true" />
       <option name="NAMESPACE_BRACE_PLACEMENT" value="2" />
@@ -202,7 +201,6 @@
       <option name="WRAP_ON_TYPING" value="0" />
       <indentOptions>
         <option name="CONTINUATION_INDENT_SIZE" value="4" />
-        <option name="USE_TAB_CHARACTER" value="true" />
         <option name="LABEL_INDENT_SIZE" value="4" />
       </indentOptions>
     </codeStyleSettings>

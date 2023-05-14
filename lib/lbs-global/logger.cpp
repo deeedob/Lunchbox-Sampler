@@ -1,21 +1,8 @@
 /**************************************************************************************************
  * Copyright (c) 2023. Dennis Oberst                                                              *
  **************************************************************************************************/
-#include <Arduino.h>
-#include <graphics.hpp>
-#include <logger.hpp>
+#include "logger.hpp"
 
-using namespace lbs;
+std::mutex lbs::Logger::m_mutex;
 
-#undef main
-
-int main()
-{
-    Serial.begin(21600);
-    delay(1000);
-    LOG_INFO("Starting Lunchbox Sampler");
-
-    Graphics g;
-
-    return 0;
-}
+const std::chrono::system_clock::time_point lbs::Logger::start_time = std::chrono::system_clock::now();

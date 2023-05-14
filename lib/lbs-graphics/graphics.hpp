@@ -1,21 +1,17 @@
 /**************************************************************************************************
  * Copyright (c) 2023. Dennis Oberst                                                              *
  **************************************************************************************************/
-#include <Arduino.h>
-#include <graphics.hpp>
-#include <logger.hpp>
+#pragma once
+#include "WireIMXRT.h"
+#include <Adafruit_SSD1327.h>
 
-using namespace lbs;
-
-#undef main
-
-int main()
+namespace lbs
 {
-    Serial.begin(21600);
-    delay(1000);
-    LOG_INFO("Starting Lunchbox Sampler");
 
-    Graphics g;
+    class Graphics: public Adafruit_SSD1327
+    {
+    public:
+        Graphics(uint16_t w = 128, uint16_t h = 128);
+    };
 
-    return 0;
-}
+} // namespace lbs
