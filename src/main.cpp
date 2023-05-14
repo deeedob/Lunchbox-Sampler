@@ -1,17 +1,17 @@
+/**************************************************************************************************
+ * Copyright (c) 2023. Dennis Oberst                                                              *
+ **************************************************************************************************/
 #include <Arduino.h>
-#include <TeensyDebug.h>
+#include "logger.hpp"
+
+using namespace lbs;
 
 #undef main
 
 int main()
 {
-	Serial.begin(19200);
-	Serial.println("Start debug session");
-	
-	halt_cpu();
-	
-	while(true) {
-		Serial.println("LBS");
-		delay(1000);
-	}
+	Serial.begin(921600);
+	delay(1000);
+	LOG_INFO("Starting Lunchbox Sampler");
+	return 0;
 }
